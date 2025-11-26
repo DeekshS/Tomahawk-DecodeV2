@@ -8,12 +8,13 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.robotcore.external.navigation.Pose3D;
+import org.firstinspires.ftc.teamcode.subsystems.Turret.Turret;
 
 public class LimelightCamera {
 
     LinearOpMode mode;
 
-    Limelight3A limelight;
+    public Limelight3A limelight;
 
     LLResult result;
     double error;

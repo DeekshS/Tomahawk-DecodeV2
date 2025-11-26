@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode.subsystems;
+package org.firstinspires.ftc.teamcode.subsystems.DriveTrain;
 
 
 
@@ -7,6 +7,7 @@ import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
+import org.firstinspires.ftc.teamcode.subsystems.IMUGyro;
 
 public class DriveTrain {
 
@@ -56,7 +57,7 @@ public class DriveTrain {
         double y = -mode.gamepad1.left_stick_y;
         double x = mode.gamepad1.left_stick_x * 1.1;
         double rx = mode.gamepad1.right_stick_x;
-        double denominator;
+        // double denominator;
         double flPower = 0.0;
         double frPower = 0.0;
         double blPower = 0.0;
