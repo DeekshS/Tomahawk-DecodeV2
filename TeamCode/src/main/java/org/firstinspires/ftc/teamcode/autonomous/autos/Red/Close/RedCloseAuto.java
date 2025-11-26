@@ -1,19 +1,16 @@
 package org.firstinspires.ftc.teamcode.autonomous.autos.Red.Close;
 
-import org.firstinspires.ftc.teamcode.autonomous.autos.FieldConstants;
-
 import com.acmerobotics.dashboard.config.Config;
 import com.acmerobotics.roadrunner.Action;
 import com.acmerobotics.roadrunner.ParallelAction;
 import com.acmerobotics.roadrunner.Pose2d;
 import com.acmerobotics.roadrunner.SequentialAction;
-import com.acmerobotics.roadrunner.SleepAction;
 import com.acmerobotics.roadrunner.TranslationalVelConstraint;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
-import org.firstinspires.ftc.teamcode.MecanumDrive;
-import org.firstinspires.ftc.teamcode.subsystems.Subsystems;
+import org.firstinspires.ftc.teamcode.drive.MecanumDrive;
+import org.firstinspires.ftc.teamcode.subsystems.Robot;
 
 @Autonomous
 @Config
@@ -27,8 +24,8 @@ public class RedCloseAuto extends LinearOpMode implements FIELD {
 
     public void runOpMode() throws InterruptedException {
 
-        Subsystems subsystems = new Subsystems(this);
-        BotActions botActions = new BotActions(subsystems);
+        Robot robot = new Robot(this);
+        BotActions botActions = new BotActions(robot);
 
         MecanumDrive drive = new MecanumDrive(hardwareMap, RED_CLOSE_START);
 
@@ -84,53 +81,53 @@ public class RedCloseAuto extends LinearOpMode implements FIELD {
 
                         new ParallelAction(
 //                                subsystems.outtake.shoot_close_time(SHOOTER_TIME),
-                                subsystems.intake.intake(SHOOTER_TIME)
+                                robot.intake.intake(SHOOTER_TIME)
 
                         ),
-                        subsystems.outtake.shoot_stop(),
+                        robot.outtake.shoot_stop(),
 
                         new ParallelAction(
                                 artifact1,
 
-                                subsystems.intake.intake(INTAKE_WAIT_TIME),
-                                subsystems.outtake.shoot_reverse(INTAKE_WAIT_TIME)
+                                robot.intake.intake(INTAKE_WAIT_TIME),
+                                robot.outtake.shoot_reverse(INTAKE_WAIT_TIME)
                         ),
 
-                        subsystems.intake.stop(),
+                        robot.intake.stop(),
 
 
                         new ParallelAction(
                                 artifact1_return,
 //                                subsystems.intake.intakeReverse(0.5),
-                                subsystems.outtake.shoot_reverse(1)
+                                robot.outtake.shoot_reverse(1)
                         ),
-                        subsystems.outtake.shoot_stop(),
+                        robot.outtake.shoot_stop(),
 
                         new SequentialAction(
-                                subsystems.outtake.shoot_velocity(ARTIFACT_SHOOT_VEL),
-                                subsystems.intake.intake(SHOOTER_TIME)
+                                robot.outtake.shoot_velocity(ARTIFACT_SHOOT_VEL),
+                                robot.intake.intake(SHOOTER_TIME)
                         ),
 
-                        subsystems.outtake.shoot_stop(),
+                        robot.outtake.shoot_stop(),
 
                         new ParallelAction(
                                 artifact2,
 
-                                subsystems.intake.intake(INTAKE_WAIT_TIME+1),
-                                subsystems.outtake.shoot_reverse(INTAKE_WAIT_TIME+1)
+                                robot.intake.intake(INTAKE_WAIT_TIME+1),
+                                robot.outtake.shoot_reverse(INTAKE_WAIT_TIME+1)
                         ),
 
-                        subsystems.intake.stop(),
+                        robot.intake.stop(),
 
                         new ParallelAction(
                                 artifact2_return,
 //                                subsystems.intake.intakeReverse(0.5),
-                                subsystems.outtake.shoot_reverse(1)
+                                robot.outtake.shoot_reverse(1)
                         ),
 
                         new SequentialAction(
-                                subsystems.outtake.shoot_velocity(ARTIFACT_SHOOT_VEL),
-                                subsystems.intake.intake(SHOOTER_TIME)
+                                robot.outtake.shoot_velocity(ARTIFACT_SHOOT_VEL),
+                                robot.intake.intake(SHOOTER_TIME)
                         ),
 
                         park

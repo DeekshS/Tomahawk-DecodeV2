@@ -1,24 +1,19 @@
 package org.firstinspires.ftc.teamcode.autonomous.autos.Blue.Far;
 
-import org.firstinspires.ftc.teamcode.autonomous.autos.FieldConstants;
-
 
 import com.acmerobotics.dashboard.config.Config;
 import com.acmerobotics.roadrunner.Action;
-import com.acmerobotics.roadrunner.InstantAction;
 import com.acmerobotics.roadrunner.ParallelAction;
 import com.acmerobotics.roadrunner.Pose2d;
 import com.acmerobotics.roadrunner.SequentialAction;
-import com.acmerobotics.roadrunner.SleepAction;
-import com.acmerobotics.roadrunner.TimeTrajectory;
 import com.acmerobotics.roadrunner.TranslationalVelConstraint;
 import com.acmerobotics.roadrunner.Vector2d;
 import com.acmerobotics.roadrunner.ftc.Actions;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
-import org.firstinspires.ftc.teamcode.MecanumDrive;
-import org.firstinspires.ftc.teamcode.subsystems.Subsystems;
+import org.firstinspires.ftc.teamcode.drive.MecanumDrive;
+import org.firstinspires.ftc.teamcode.subsystems.Robot;
 
 @Autonomous
 @Config
@@ -30,7 +25,7 @@ public class BlueFarAuto extends LinearOpMode implements FIELD {
 
     public void runOpMode() throws InterruptedException {
 
-        Subsystems subsystems = new Subsystems(this);
+        Robot robot = new Robot(this);
 
         MecanumDrive drive = new MecanumDrive(hardwareMap, BLUE_FAR_START);
 
@@ -86,26 +81,26 @@ public class BlueFarAuto extends LinearOpMode implements FIELD {
         Actions.runBlocking(
             new SequentialAction(
                 new SequentialAction(
-                    subsystems.turret.turretBlue(),
-                    subsystems.outtake.shoot_far(),
-                    subsystems.intake.intake(SHOOTER_TIME),
-                    subsystems.outtake.shoot_stop(),
+                    robot.turret.turretBlue(),
+                    robot.outtake.shoot_far(),
+                    robot.intake.intake(SHOOTER_TIME),
+                    robot.outtake.shoot_stop(),
                     new ParallelAction(
                         artifact1,
-                        subsystems.intake.intake(3)
+                        robot.intake.intake(3)
                     ),
                     artifact1_return,
-                    subsystems.outtake.shoot_far(),
-                    subsystems.intake.intake(SHOOTER_TIME),
-                    subsystems.outtake.shoot_stop(),
+                    robot.outtake.shoot_far(),
+                    robot.intake.intake(SHOOTER_TIME),
+                    robot.outtake.shoot_stop(),
                     new ParallelAction(
                         human,
-                        subsystems.intake.intake(5)
+                        robot.intake.intake(5)
                     ),
                     human_return,
-                    subsystems.outtake.shoot_far(),
-                    subsystems.intake.intake(SHOOTER_TIME),
-                    subsystems.outtake.shoot_stop()
+                    robot.outtake.shoot_far(),
+                    robot.intake.intake(SHOOTER_TIME),
+                    robot.outtake.shoot_stop()
                 )
             )
         );

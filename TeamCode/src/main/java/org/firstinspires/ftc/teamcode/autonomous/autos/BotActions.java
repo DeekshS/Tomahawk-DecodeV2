@@ -4,26 +4,26 @@ import com.acmerobotics.roadrunner.Action;
 import com.acmerobotics.roadrunner.ParallelAction;
 import com.acmerobotics.roadrunner.SequentialAction;
 
-import org.firstinspires.ftc.teamcode.subsystems.Subsystems;
+import org.firstinspires.ftc.teamcode.subsystems.Robot;
 
 public class BotActions {
 
-    Subsystems subsystems;
+    Robot robot;
 
     public static double INTAKE_WAIT_TIME = 3;
     public static double SHOOTER_TIME = 2.5;
 
 
 
-    public BotActions(Subsystems subsystems) {
-        this.subsystems = subsystems;
+    public BotActions(Robot robot) {
+        this.robot = robot;
     }
 
     public Action preload_parallel_blue(Action path) {
 
         return new ParallelAction(
                 path,
-                subsystems.outtake.shoot_close()
+                robot.outtake.shoot_close()
 //                subsystems.turret.blue_init()
         );
     }
@@ -33,7 +33,7 @@ public class BotActions {
 
         return new ParallelAction(
                 path,
-                subsystems.outtake.shoot_close()
+                robot.outtake.shoot_close()
 //                subsystems.turret.red_init()
         );
     }
@@ -41,15 +41,14 @@ public class BotActions {
     public Action shoot_parallel() {
 
         return new ParallelAction(
-//                subsystems.outtake.shoot_close_time(SHOOTER_TIME),
-                subsystems.intake.intake(SHOOTER_TIME)
+                robot.intake.intakeTime(2)
         );
     }
 
     public Action shoot_close_spin_up() {
 
         return new SequentialAction(
-                subsystems.outtake.shoot_close()
+                robot.outtake.shoot_close()
 //                subsystems.intake.intake(SHOOTER_TIME)
         );
     }
@@ -60,8 +59,8 @@ public class BotActions {
 
         return new ParallelAction(
                 path,
-                subsystems.intake.intake(INTAKE_WAIT_TIME),
-                subsystems.outtake.shoot_reverse(INTAKE_WAIT_TIME)
+                robot.intake.intake(INTAKE_WAIT_TIME),
+                robot.outtake.shoot_reverse(INTAKE_WAIT_TIME)
         );
 
     }
@@ -71,7 +70,7 @@ public class BotActions {
 
         return new ParallelAction(
                 path,
-                subsystems.outtake.shoot_reverse(1)
+                robot.outtake.shoot_reverse(1)
         );
 
     }

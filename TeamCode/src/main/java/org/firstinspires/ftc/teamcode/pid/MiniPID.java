@@ -1,11 +1,11 @@
-package org.firstinspires.ftc.teamcode;
+package org.firstinspires.ftc.teamcode.pid;
 
 import com.acmerobotics.dashboard.config.Config;
 
 /*
  * Small, easy to use PID implementation with advanced controller capability.<br>
  * Minimal usage:<br>
- * org.firstinspires.ftc.teamcode.MiniPID pid = new org.firstinspires.ftc.teamcode.MiniPID(p,i,d); <br>
+ * org.firstinspires.ftc.teamcode.pid.MiniPID pid = new org.firstinspires.ftc.teamcode.pid.MiniPID(p,i,d); <br>
  * ...looping code...{ <br>
  *   output= pid.getOutput(sensorvalue,target); <br>
  * }
@@ -56,7 +56,7 @@ public class MiniPID {
     //**********************************
 
     /*
-     * Create a org.firstinspires.ftc.teamcode.MiniPID class object.
+     * Create a org.firstinspires.ftc.teamcode.pid.MiniPID class object.
      * See setP, setI, setD methods for more detailed parameters.
      * @param p Proportional gain. Large if large difference between setpoint and target.
      * @param i Integral gain.  Becomes large if setpoint cannot reach target quickly.
@@ -68,7 +68,7 @@ public class MiniPID {
     }
 
     /*
-     * Create a org.firstinspires.ftc.teamcode.MiniPID class object.
+     * Create a org.firstinspires.ftc.teamcode.pid.MiniPID class object.
      * See setP, setI, setD, setF methods for more detailed parameters.
      * @param p Proportional gain. Large if large difference between setpoint and target.
      * @param i Integral gain.  Becomes large if setpoint cannot reach target quickly.
@@ -256,7 +256,7 @@ public class MiniPID {
      * Configure setpoint for the PID calculations<br>
      * This represents the target for the PID system's, such as a
      * position, velocity, or angle. <br>
-     * @see org.firstinspires.ftc.teamcode.MiniPID#getOutput(actual) <br>
+     * @see org.firstinspires.ftc.teamcode.pid.MiniPID#getOutput(actual) <br>
      * @param setpoint
      */
     public void setSetpoint(double setpoint){
@@ -429,7 +429,7 @@ public class MiniPID {
     /*
      * Calculate the output value for the current PID cycle.<br>
      * In one parameter mode, the last configured setpoint will be used.<br>
-     * @see org.firstinspires.ftc.teamcode.MiniPID#setSetpoint()
+     * @see org.firstinspires.ftc.teamcode.pid.MiniPID#setSetpoint()
      * @param actual The monitored value, typically as a sensor input.
      * @param setpoint The target value for the system
      * @return calculated output value for driving the system

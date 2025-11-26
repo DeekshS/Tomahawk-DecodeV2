@@ -6,14 +6,12 @@ import com.acmerobotics.roadrunner.Action;
 import com.acmerobotics.roadrunner.ParallelAction;
 import com.acmerobotics.roadrunner.Pose2d;
 import com.acmerobotics.roadrunner.SequentialAction;
-import com.acmerobotics.roadrunner.SleepAction;
-import com.acmerobotics.roadrunner.TranslationalVelConstraint;
 import com.acmerobotics.roadrunner.ftc.Actions;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
-import org.firstinspires.ftc.teamcode.MecanumDrive;
-import org.firstinspires.ftc.teamcode.subsystems.Subsystems;
+import org.firstinspires.ftc.teamcode.drive.MecanumDrive;
+import org.firstinspires.ftc.teamcode.subsystems.Robot;
 import org.firstinspires.ftc.teamcode.autonomous.autos.BotActions;
 
 @Autonomous
@@ -24,8 +22,8 @@ public class BlueCloseAuto extends LinearOpMode implements FieldConstants {
 
     public void runOpMode() throws InterruptedException {
 
-        Subsystems subsystems = new Subsystems(this);
-        BotActions botActions = new BotActions(subsystems);
+        Robot robot = new Robot(this);
+        BotActions botActions = new BotActions(robot);
 
         MecanumDrive drive = new MecanumDrive(hardwareMap, BLUE_CLOSE_START);
 
@@ -97,7 +95,7 @@ public class BlueCloseAuto extends LinearOpMode implements FieldConstants {
 
                         botActions.shoot_parallel(),
 
-                        subsystems.outtake.shoot_stop(),
+                        robot.outtake.shoot_stop(),
 
 
 
@@ -107,7 +105,7 @@ public class BlueCloseAuto extends LinearOpMode implements FieldConstants {
 
                         botActions.intake_parallel(artifact1),
 
-                        subsystems.intake.stop(),
+                        robot.intake.stop(),
 
                         new ParallelAction(
                                 artifact1_return,
@@ -115,8 +113,8 @@ public class BlueCloseAuto extends LinearOpMode implements FieldConstants {
 
                                 new SequentialAction(
 
-                                        subsystems.outtake.shoot_reverse(.5),
-                                        subsystems.outtake.shoot_close()
+                                        robot.outtake.shoot_reverse(.5),
+                                        robot.outtake.shoot_close()
 
                                 )
                         ),
@@ -126,13 +124,13 @@ public class BlueCloseAuto extends LinearOpMode implements FieldConstants {
                         new SequentialAction(
 //                                subsystems.outtake.shoot_close(),
                                 new ParallelAction(
-                                        subsystems.outtake.shoot_close_time(SHOOTER_TIME),
-                                        subsystems.intake.intake(SHOOTER_TIME)
+                                        robot.outtake.shoot_close_time(SHOOTER_TIME),
+                                        robot.intake.intake(SHOOTER_TIME)
                                 )
 
                         ),
 
-                        subsystems.outtake.shoot_stop(),
+                        robot.outtake.shoot_stop(),
 
 
 
@@ -142,10 +140,10 @@ public class BlueCloseAuto extends LinearOpMode implements FieldConstants {
 
                         new ParallelAction(
                                 artifact2,
-                                subsystems.intake.intake(INTAKE_WAIT_TIME),
-                                subsystems.outtake.shoot_reverse(INTAKE_WAIT_TIME)
+                                robot.intake.intake(INTAKE_WAIT_TIME),
+                                robot.outtake.shoot_reverse(INTAKE_WAIT_TIME)
                         ),
-                        subsystems.intake.stop(),
+                        robot.intake.stop(),
 
                         new ParallelAction(
                                 artifact2_return,
@@ -153,8 +151,8 @@ public class BlueCloseAuto extends LinearOpMode implements FieldConstants {
 
                                 new SequentialAction(
 
-                                        subsystems.outtake.shoot_reverse(.5),
-                                        subsystems.outtake.shoot_close()
+                                        robot.outtake.shoot_reverse(.5),
+                                        robot.outtake.shoot_close()
 
                                 )
                         ),
@@ -162,12 +160,12 @@ public class BlueCloseAuto extends LinearOpMode implements FieldConstants {
                         new SequentialAction(
 //                                subsystems.outtake.shoot_close(),
                                 new ParallelAction(
-                                        subsystems.outtake.shoot_close_time(SHOOTER_TIME),
-                                        subsystems.intake.intake(SHOOTER_TIME)
+                                        robot.outtake.shoot_close_time(SHOOTER_TIME),
+                                        robot.intake.intake(SHOOTER_TIME)
                                 )
 
                         ),
-                        subsystems.outtake.shoot_stop(),
+                        robot.outtake.shoot_stop(),
 
 
 
@@ -177,10 +175,10 @@ public class BlueCloseAuto extends LinearOpMode implements FieldConstants {
 
                         new ParallelAction(
                                 artifact3,
-                                subsystems.intake.intake(INTAKE_WAIT_TIME-.5),
-                                subsystems.outtake.shoot_reverse(INTAKE_WAIT_TIME-.5)
+                                robot.intake.intake(INTAKE_WAIT_TIME-.5),
+                                robot.outtake.shoot_reverse(INTAKE_WAIT_TIME-.5)
                         ),
-                        subsystems.intake.stop(),
+                        robot.intake.stop(),
 
                         new ParallelAction(
                                 artifact3_return,
@@ -188,15 +186,15 @@ public class BlueCloseAuto extends LinearOpMode implements FieldConstants {
 
                                 new SequentialAction(
 
-                                        subsystems.outtake.shoot_reverse(.5),
-                                        subsystems.outtake.shoot_close()
+                                        robot.outtake.shoot_reverse(.5),
+                                        robot.outtake.shoot_close()
 
                                 )
                         ),
 
                         new SequentialAction(
-                                subsystems.outtake.shoot_close(),
-                                subsystems.intake.intake(SHOOTER_TIME)
+                                robot.outtake.shoot_close(),
+                                robot.intake.intake(SHOOTER_TIME)
                         )
                 )
 
