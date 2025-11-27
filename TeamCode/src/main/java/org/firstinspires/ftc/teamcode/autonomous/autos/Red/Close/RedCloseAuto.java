@@ -6,15 +6,18 @@ import com.acmerobotics.roadrunner.ParallelAction;
 import com.acmerobotics.roadrunner.Pose2d;
 import com.acmerobotics.roadrunner.SequentialAction;
 import com.acmerobotics.roadrunner.TranslationalVelConstraint;
+import com.acmerobotics.roadrunner.ftc.Actions;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
+import org.firstinspires.ftc.teamcode.autonomous.autos.BotActions;
+import org.firstinspires.ftc.teamcode.autonomous.autos.FieldConstants;
 import org.firstinspires.ftc.teamcode.drive.MecanumDrive;
 import org.firstinspires.ftc.teamcode.subsystems.Robot;
 
 @Autonomous
 @Config
-public class RedCloseAuto extends LinearOpMode implements FIELD {
+public class RedCloseAuto extends LinearOpMode implements FieldConstants {
 
     public static double INTAKE_WAIT_TIME = 3;
     public static double SHOOTER_TIME = 2.5;
@@ -81,16 +84,16 @@ public class RedCloseAuto extends LinearOpMode implements FIELD {
 
                         new ParallelAction(
 //                                subsystems.outtake.shoot_close_time(SHOOTER_TIME),
-                                robot.intake.intake(SHOOTER_TIME)
+                                robot.intake.intakeTimeAction(SHOOTER_TIME)
 
                         ),
-                        robot.outtake.shoot_stop(),
+                        robot.outtake.stopAction(),
 
                         new ParallelAction(
                                 artifact1,
 
-                                robot.intake.intake(INTAKE_WAIT_TIME),
-                                robot.outtake.shoot_reverse(INTAKE_WAIT_TIME)
+                                robot.intake.intakeTimeAction(INTAKE_WAIT_TIME),
+                                robot.outtake.reverseTimeAction(INTAKE_WAIT_TIME)
                         ),
 
                         robot.intake.stop(),
@@ -99,22 +102,22 @@ public class RedCloseAuto extends LinearOpMode implements FIELD {
                         new ParallelAction(
                                 artifact1_return,
 //                                subsystems.intake.intakeReverse(0.5),
-                                robot.outtake.shoot_reverse(1)
+                                robot.outtake.reverseTimeAction(1)
                         ),
-                        robot.outtake.shoot_stop(),
+                        robot.outtake.stopAction(),
 
                         new SequentialAction(
-                                robot.outtake.shoot_velocity(ARTIFACT_SHOOT_VEL),
-                                robot.intake.intake(SHOOTER_TIME)
+                                robot.outtake.shootVelocityAction(ARTIFACT_SHOOT_VEL),
+                                robot.intake.intakeTimeAction(SHOOTER_TIME)
                         ),
 
-                        robot.outtake.shoot_stop(),
+                        robot.outtake.stopAction(),
 
                         new ParallelAction(
                                 artifact2,
 
-                                robot.intake.intake(INTAKE_WAIT_TIME+1),
-                                robot.outtake.shoot_reverse(INTAKE_WAIT_TIME+1)
+                                robot.intake.intakeTimeAction(INTAKE_WAIT_TIME+1),
+                                robot.outtake.reverseTimeAction(INTAKE_WAIT_TIME+1)
                         ),
 
                         robot.intake.stop(),
@@ -122,12 +125,12 @@ public class RedCloseAuto extends LinearOpMode implements FIELD {
                         new ParallelAction(
                                 artifact2_return,
 //                                subsystems.intake.intakeReverse(0.5),
-                                robot.outtake.shoot_reverse(1)
+                                robot.outtake.reverseTimeAction(1)
                         ),
 
                         new SequentialAction(
-                                robot.outtake.shoot_velocity(ARTIFACT_SHOOT_VEL),
-                                robot.intake.intake(SHOOTER_TIME)
+                                robot.outtake.shootVelocityAction(ARTIFACT_SHOOT_VEL),
+                                robot.intake.intakeTimeAction(SHOOTER_TIME)
                         ),
 
                         park
@@ -141,7 +144,7 @@ public class RedCloseAuto extends LinearOpMode implements FIELD {
 //                        new ParallelAction(
 //                                artifact3_return,
 //                                subsystems.intake.intakeReverse(0.5),
-//                                subsystems.outtake.shoot_reverse(1)
+//                                subsystems.outtake.reverseTimeAction(1)
 //                        ),
 //                        new SequentialAction(
 //                                subsystems.outtake.shoot_close(),

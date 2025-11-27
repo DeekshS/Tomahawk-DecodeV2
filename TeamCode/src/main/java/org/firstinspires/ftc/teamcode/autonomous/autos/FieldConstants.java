@@ -21,6 +21,10 @@ public interface FieldConstants {
     double BLUE_FAR_ANGLE = Math.toRadians(0);
     double BLUE_ARTIFACT_ANGLE = Math.toRadians(90);
 
+    //-------------------------------Velocities------------------------------------------
+    int CLOSE_VELOCITY = 1770;
+    int FAR_VELOCITY = 2500;
+
     //-------------------------------Coordinates------------------------------------------
 
     // ======Artifact Length======

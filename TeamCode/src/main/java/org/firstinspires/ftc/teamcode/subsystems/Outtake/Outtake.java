@@ -7,6 +7,7 @@ import com.acmerobotics.roadrunner.Action;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
+import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.teamcode.pid.MiniPID;
 
@@ -64,7 +65,58 @@ public class Outtake {
         return hoodPos;
     }
 
-    public Action shoot_velocity(int vel) {
+    public Action stopAction() {
+        return new Action() {
+            @Override
+            public boolean run(@NonNull TelemetryPacket telemetryPacket) {
+                flywheel1.setPower(0);
+                flywheel2.setPower(0);
+                return false;
+            }
+        };
+    }
+
+    public Action shootVelocityTimeAction(int vel, double time) {
+
+        return new Action() {
+
+            private boolean init = false;
+            ElapsedTime timer = new ElapsedTime();
+
+            @Override
+            public boolean run(@NonNull TelemetryPacket telemetryPacket) {
+
+                if (!init) {
+                    init = true;
+                }
+
+
+                SETPOINT = vel;
+                velocityController.setSetpoint(SETPOINT);
+                error = SETPOINT - Math.abs(getVelocity());
+
+                pidOutput = velocityController.getOutput(Math.abs(getVelocity()));
+                if (timer.seconds() < time) {
+                    setPower(pidOutput);
+                    timer.reset();
+                }
+                else {
+                    setPower(0);
+                    timer.reset();
+                }
+
+
+                telemetryPacket.put("VELOCITY", Math.abs(getVelocity()));
+                telemetryPacket.put("ERROR", error);
+                telemetryPacket.put("SETPOINT", SETPOINT);
+
+
+                return error >= 50;
+            }
+
+        };
+    }
+    public Action shootVelocityAction(int vel) {
 
         return new Action() {
 
@@ -83,10 +135,8 @@ public class Outtake {
                 error = SETPOINT - Math.abs(getVelocity());
 
                 pidOutput = velocityController.getOutput(Math.abs(getVelocity()));
-
                 setPower(pidOutput);
 
-//                setVelocity(1650);
 
 
                 telemetryPacket.put("VELOCITY", Math.abs(getVelocity()));
@@ -97,6 +147,44 @@ public class Outtake {
                 return error >= 50;
             }
 
+        };
+    }
+    public Action reverseAction(double time) {
+        return new Action() {
+            private boolean init = false;
+            ElapsedTime timer = new ElapsedTime();
+            @Override
+            public boolean run(@NonNull TelemetryPacket telemetryPacket) {
+                if (!init) {
+                    init = true;
+                }
+                if (timer.seconds() < time) {
+                    setPower(-0.5);
+                    timer.reset();
+                }
+                else {
+                    setPower(0);
+                    timer.reset();
+                }
+                return false;
+            }
+        };
+    }
+    public Action reverseTimeAction(double time) {
+        return  new Action() {
+            ElapsedTime timer = new ElapsedTime();
+            @Override
+            public boolean run(@NonNull TelemetryPacket telemetryPacket) {
+                if (timer.seconds() < time) {
+                    flywheel1.setPower(-0.5);
+                    flywheel2.setPower(-0.5);
+                }
+                else {
+                    flywheel1.setPower(0);
+                    flywheel2.setPower(0);
+                }
+                return false;
+            }
         };
     }
 

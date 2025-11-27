@@ -36,7 +36,7 @@ public class Intake {
         intakeMotor.setPower(0);
     }
 
-    public Action intakeTime(double time) {
+    public Action intakeTimeAction(double time) {
         return new Action() {
             ElapsedTime timer = new ElapsedTime();
             boolean init = false;
@@ -60,6 +60,15 @@ public class Intake {
                 }
 
 
+                return false;
+            }
+        };
+    }
+    public Action stop() {
+        return new Action() {
+            @Override
+            public boolean run(@NonNull TelemetryPacket telemetryPacket) {
+                intakeMotor.setPower(0);
                 return false;
             }
         };
