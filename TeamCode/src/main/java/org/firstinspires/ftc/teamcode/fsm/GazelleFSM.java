@@ -44,9 +44,9 @@ public class GazelleFSM {
                 robot.intake.intakeStop();
                 robot.intake.blockerClose();
                 robot.outtake.shootStop();
-                if (controls.intake.value()){
+                if (controls.intake.locked()){
                     gazelleState = GazelleState.INTAKING;
-                } else if (controls.intakeReverse.value()){
+                } else if (controls.intakeReverse.locked()){
                     gazelleState = GazelleState.INTAKING;
                 }
 
@@ -55,9 +55,9 @@ public class GazelleFSM {
             case INTAKING:
 
                 intake.blockerClose();
-                if (controls.intake.value()) {
+                if (controls.intake.locked()) {
                     intake.intake();
-                } else if (controls.intakeReverse.value()){
+                } else if (controls.intakeReverse.locked()){
                     intake.intakeReverse();
                 } else if (controls.servoBlocker.value()){
                     gazelleState = GazelleState.TRANSFERRING;
@@ -72,9 +72,9 @@ public class GazelleFSM {
                 outtake.autoVelocity(pinpoint.getPose().position.x, pinpoint.getPose().position.y);
                 if (controls.servoBlocker.value()) {
                     gazelleState= GazelleState.TRANSFERRING;
-                } else if (controls.intake.value()){
+                } else if (controls.intake.locked()){
                     gazelleState = GazelleState.INTAKING;
-                } else if (controls.intakeReverse.value()){
+                } else if (controls.intakeReverse.locked()){
                     gazelleState = GazelleState.INTAKING;
                 } else if(controls.flywheel.value()){
                     gazelleState = GazelleState.BASE_STATE;
@@ -84,9 +84,9 @@ public class GazelleFSM {
                 break;
             case TRANSFERRING:
                 intake.blockerOpen();
-                if (controls.intake.value()){
+                if (controls.intake.locked()){
                     intake.intake();
-                } else if (controls.intakeReverse.value()){
+                } else if (controls.intakeReverse.locked()){
                     gazelleState=GazelleState.INTAKING;
                 } else if (controls.flywheel.value()){
                     gazelleState = GazelleState.SPINUP;
