@@ -49,7 +49,7 @@ public class Outtake {
     }
 
 
-    public void shootVelocity(double Rx, double Ry) {
+    public void autoVelocity(double Rx, double Ry) {
         // calculate hood first
         double hoodPos = hoodCalc(Rx, Ry);  // hoodCalc just returns a value
         hood.setPosition(hoodPos);          // then apply it to the servo
@@ -58,6 +58,12 @@ public class Outtake {
         int velocity = veloCalc(Rx, Ry, hoodPos);  // use hoodPos as input
 
         // apply PID to reach velocity
+        velocityController.setSetpoint(velocity);
+        pidOutput = velocityController.getOutput(Math.abs(getVelocity()));
+        setPower(pidOutput);
+    }
+
+    public void shootVelocity(int velocity) {
         velocityController.setSetpoint(velocity);
         pidOutput = velocityController.getOutput(Math.abs(getVelocity()));
         setPower(pidOutput);
