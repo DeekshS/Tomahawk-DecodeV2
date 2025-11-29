@@ -7,10 +7,8 @@ import androidx.annotation.NonNull;
 
 import com.acmerobotics.dashboard.telemetry.TelemetryPacket;
 import com.acmerobotics.roadrunner.Action;
-import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
-import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.util.ElapsedTime;
@@ -18,19 +16,34 @@ import com.qualcomm.robotcore.util.ElapsedTime;
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 
 public class Intake {
-    Telemetry telemetry;
-    public DcMotorEx intakeMotor;
-    public Servo blocker;
 
-    public Intake(LinearOpMode mode) {
+    private final DcMotorEx intakeMotor;
+    private final Servo blocker;
+    private final Telemetry telemetry;
 
-        intakeMotor = mode.hardwareMap.get(DcMotorEx.class, "intake");
+    // Optional: pass telemetry if you want dashboard/logs
+    public Intake(HardwareMap hardwareMap, Telemetry telemetry) {
+        this.telemetry = telemetry;
+
+        // Initialize motor
+        intakeMotor = hardwareMap.get(DcMotorEx.class, "intake");
         intakeMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+
+        // Initialize servo
+        blocker = hardwareMap.get(Servo.class, "blocker");
+        blocker.setPosition(BLOCKER_CLOSED); // start in a safe position
     }
 
+    // Overloaded constructor if telemetry is not needed
+    public Intake(HardwareMap hardwareMap) {
+        this(hardwareMap, null);
+    }
+
+    // Motor controls
     public void intake() {
         intakeMotor.setPower(1);
     }
+
     public void intakeReverse() {
         intakeMotor.setPower(-0.5);
     }
@@ -38,21 +51,26 @@ public class Intake {
     public void intakeStop() {
         intakeMotor.setPower(0);
     }
-    public void blockerOpen (){
-        blocker.setPosition(BLOCKER_OPEN);
-    }
-    public void blockerClose (){
-        blocker.setPosition(BLOCKER_CLOSED);
+
+    // Blocker controls
+    public void blockerOpen() {
+        if (blocker != null) blocker.setPosition(BLOCKER_OPEN);
+        if (telemetry != null) telemetry.addData("Blocker", "Open");
     }
 
+    public void blockerClose() {
+        if (blocker != null) blocker.setPosition(BLOCKER_CLOSED);
+        if (telemetry != null) telemetry.addData("Blocker", "Closed");
+    }
+
+    // Actions for timing sequences
     public Action intakeTimeAction(double time) {
         return new Action() {
-            ElapsedTime timer = new ElapsedTime();
+            final ElapsedTime timer = new ElapsedTime();
             boolean init = false;
 
             @Override
             public boolean run(@NonNull TelemetryPacket telemetryPacket) {
-
                 if (!init) {
                     intake();
                     timer.reset();
@@ -60,27 +78,21 @@ public class Intake {
                 }
                 if (timer.seconds() < time) {
                     return true;
-                }
-
-                else if (timer.seconds() >= time) {
+                } else {
                     intakeStop();
-                    timer.reset();
                     return false;
                 }
-
-
-                return false;
             }
         };
     }
+
     public Action stop() {
         return new Action() {
             @Override
             public boolean run(@NonNull TelemetryPacket telemetryPacket) {
-                intakeMotor.setPower(0);
+                intakeStop();
                 return false;
             }
         };
     }
-
 }

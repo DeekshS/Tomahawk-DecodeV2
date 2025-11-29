@@ -7,6 +7,7 @@ import com.acmerobotics.roadrunner.Action;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
+import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
@@ -21,13 +22,13 @@ public class Outtake {
     double error;
     public double SETPOINT;
 
-    public static double P = 0,I = 0, D = 0, F = 0;
+    public static double P = 0.0025,I = 0, D = 0, F = .00035;
 
 
-    public Outtake(LinearOpMode mode) {
-        flywheel1 = mode.hardwareMap.get(DcMotorEx.class, "flywheel1");
-        flywheel2 = mode.hardwareMap.get(DcMotorEx.class, "flywheel2");
-        hood = mode.hardwareMap.get(Servo.class, "hood");
+    public Outtake(HardwareMap hardwareMap) {
+        flywheel1 = hardwareMap.get(DcMotorEx.class, "flywheel1");
+        flywheel2 = hardwareMap.get(DcMotorEx.class, "flywheel2");
+        hood = hardwareMap.get(Servo.class, "hood");
 
         flywheel1.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         flywheel2.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);

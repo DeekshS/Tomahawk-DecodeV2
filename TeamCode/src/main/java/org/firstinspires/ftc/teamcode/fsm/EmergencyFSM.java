@@ -1,5 +1,7 @@
 package org.firstinspires.ftc.teamcode.fsm;
 
+import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
+import com.qualcomm.robotcore.hardware.HardwareMap;
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.teamcode.drive.localizers.PinpointLocalizer;
 import org.firstinspires.ftc.teamcode.gamepad.GamepadMappings;
@@ -12,12 +14,14 @@ public class EmergencyFSM {
 
     private Intake intake;
     private Outtake outtake;
-    private GamepadMappings controls;
-    private Robot robot;
     private Turret turret;
+    private Robot robot;
+    private GamepadMappings controls;
     private Telemetry telemetry;
     private PinpointLocalizer pinpoint;
-    private EmergencyFSM.GazelleState gazelleState;
+    private GazelleState gazelleState;
+
+    // Constructor: only pass initialized Robot
     public EmergencyFSM(Telemetry telemetry, GamepadMappings controls, Robot robot) {
         this.robot = robot;
         this.intake = robot.intake;
@@ -27,95 +31,60 @@ public class EmergencyFSM {
         this.controls = controls;
         this.telemetry = telemetry;
 
-        gazelleState = EmergencyFSM.GazelleState.BASE_STATE;
-
+        this.gazelleState = GazelleState.BASE_STATE;
     }
-    public void gazelleUpdate(){
+
+    public void gazelleUpdate() {
         controls.update();
         robot.driveTrain.update();
-
-
-        switch (gazelleState){
+        if (controls.flywheel.value()) outtake.shootVelocity(1770);
+        if (!controls.flywheel.value()) outtake.shootVelocity(0);
+        switch (gazelleState) {
             case BASE_STATE:
-                robot.intake.intakeStop();
-                robot.intake.blockerClose();
-                robot.outtake.shootStop();
-                if (controls.intake.locked()){
-                    gazelleState = EmergencyFSM.GazelleState.INTAKING;
-                } else if (controls.intakeReverse.locked()){
-                    gazelleState = EmergencyFSM.GazelleState.INTAKING;
-                }
+                intake.intakeStop();
+                intake.blockerClose();
+                outtake.shootStop();
 
-                //intake off, blocker closed, flywheel off
+                if (controls.intake.locked() || controls.intakeReverse.locked()) {
+                    gazelleState = GazelleState.INTAKING;
+                }
+                if (controls.servoBlocker.value()) gazelleState = GazelleState.TRANSFERRING;
                 break;
+
             case INTAKING:
 
-                intake.blockerClose();
-                if (controls.intake.locked()) {
-                    intake.intake();
-                } else if (controls.intakeReverse.locked()){
-                    intake.intakeReverse();
-                } else if (controls.servoBlocker.value()){
-                    gazelleState = EmergencyFSM.GazelleState.TRANSFERRING;
-                } else if (controls.flywheel.value()){
-                    gazelleState = EmergencyFSM.GazelleState.SPINUP;
-                } else {
-                    intake.intakeStop();
-                }
-                //intake on, blocker closed
+                if (controls.intake.locked()) {intake.intake(); intake.blockerClose();}
+                else if (controls.intakeReverse.locked()) intake.intakeReverse();
+
+                else intake.intakeStop();
+                 //if (controls.flywheel.value()) gazelleState = GazelleState.SPINUP;
+                if (controls.servoBlocker.value()) gazelleState = GazelleState.TRANSFERRING;
                 break;
+/*
             case SPINUP:
                 outtake.shootVelocity(1770);
-                if (controls.servoBlocker.value()) {
-                    gazelleState= EmergencyFSM.GazelleState.TRANSFERRING;
-                } else if (controls.intake.locked()){
-                    gazelleState = EmergencyFSM.GazelleState.INTAKING;
-                } else if (controls.intakeReverse.locked()){
-                    gazelleState = EmergencyFSM.GazelleState.INTAKING;
-                } else if(controls.flywheel.value()){
-                    gazelleState = EmergencyFSM.GazelleState.BASE_STATE;
-                }
-                //flywheel on
-                //if done and right trigger, allow transfer
+                if (controls.servoBlocker.value()) gazelleState = GazelleState.TRANSFERRING;
+                else if (controls.intake.locked() || controls.intakeReverse.locked()) gazelleState = GazelleState.INTAKING;
+                else if (!controls.flywheel.value()) gazelleState = GazelleState.BASE_STATE;
+
                 break;
+*/
             case TRANSFERRING:
                 intake.blockerOpen();
-                if (controls.intake.locked()){
-                    intake.intake();
-                } else if (controls.intakeReverse.locked()){
-                    gazelleState= EmergencyFSM.GazelleState.INTAKING;
-                } else if (controls.flywheel.value()){
-                    gazelleState = EmergencyFSM.GazelleState.SPINUP;
-                }
-                else {
-                    intake.intakeStop();
-                }
+                if (controls.intake.locked()) intake.intake();
+                else if (controls.intakeReverse.locked()) gazelleState = GazelleState.INTAKING;
+                //else if (controls.flywheel.value()) gazelleState = GazelleState.SPINUP;
 
-                //intake on, blocker up, flywheel on
+                else intake.intakeStop();
+                if (!controls.servoBlocker.value()) gazelleState = GazelleState.INTAKING;
                 break;
         }
     }
-    public EmergencyFSM.GazelleState getState(){
-        return gazelleState;
-    }
-    public void setState (EmergencyFSM.GazelleState newState) {
-        gazelleState = newState;
-    }
+
+    public GazelleState getState() { return gazelleState; }
+    public void setState(GazelleState newState) { gazelleState = newState; }
 
     public enum GazelleState {
-        BASE_STATE("BASE_STATE"),
-        INTAKING ("INTAKING"),
-        SPINUP ("SPINUP"),
-        TRANSFERRING ("TRANSFERRING");
-
-
-        private String state;
-
-        GazelleState (String stateName){
-            state = stateName;
-        }
-        public String stateName() {
-            return state;
-        }
+        BASE_STATE, INTAKING, TRANSFERRING
     }
 }

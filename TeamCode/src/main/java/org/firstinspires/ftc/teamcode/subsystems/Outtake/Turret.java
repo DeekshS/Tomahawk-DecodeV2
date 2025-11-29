@@ -10,6 +10,7 @@ import com.acmerobotics.roadrunner.Vector2d;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
+import com.qualcomm.robotcore.hardware.HardwareMap;
 
 import org.firstinspires.ftc.teamcode.pid.MiniPID;
 
@@ -32,8 +33,8 @@ public class Turret {
     public double TICKS_PER_DEGREE = 4.57777;
 
 
-    public Turret(LinearOpMode mode) {
-        turretMotor = mode.hardwareMap.get(DcMotorEx.class, "turret");
+    public Turret(HardwareMap hardwareMap) {
+        turretMotor = hardwareMap.get(DcMotorEx.class, "turret");
 
         turretMotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
 

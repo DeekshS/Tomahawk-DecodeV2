@@ -113,5 +113,13 @@ android {
 }
 
 repositories {
+    google()
+    mavenCentral()
+    maven { url 'https://maven.acmerobotics.com/releases' }
 }
+
+dependencies {
+    implementation 'com.acmerobotics.dashboard:dashboard:0.5.1'
+}
+
 

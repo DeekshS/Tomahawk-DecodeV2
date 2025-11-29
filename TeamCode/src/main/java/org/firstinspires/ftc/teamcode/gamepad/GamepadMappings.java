@@ -78,6 +78,8 @@ public class GamepadMappings {
         intakeUpdate();
 
         servoBlocker.update(gamepad1.left_bumper);
+        intakeReverseUpdate();
+        outtakeUpdate();
     }
 
     public void resetControls(Toggle... toggles) {

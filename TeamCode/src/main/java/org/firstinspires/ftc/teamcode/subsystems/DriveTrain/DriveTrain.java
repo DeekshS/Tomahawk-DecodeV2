@@ -1,12 +1,10 @@
 package org.firstinspires.ftc.teamcode.subsystems.DriveTrain;
 
-
-
-import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
+import com.qualcomm.robotcore.hardware.HardwareMap;
 
-import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
+import org.firstinspires.ftc.teamcode.gamepad.GamepadMappings;
 import org.firstinspires.ftc.teamcode.subsystems.IMUGyro;
 
 public class DriveTrain {
@@ -21,23 +19,21 @@ public class DriveTrain {
     private final DcMotorEx[] motors;
     private final DcMotorEx[] reversedMotors;
 
-    private final LinearOpMode mode;
+    private final GamepadMappings controls;
 
     public State s = State.ROBOTCENTRIC;
 
+    public DriveTrain(HardwareMap hardwareMap, GamepadMappings controls) {
 
+        this.controls = controls;
 
+        fl = hardwareMap.get(DcMotorEx.class, "fl");
+        fr = hardwareMap.get(DcMotorEx.class, "fr");
+        bl = hardwareMap.get(DcMotorEx.class, "bl");
+        br = hardwareMap.get(DcMotorEx.class, "br");
 
-    public DriveTrain(LinearOpMode mode) {
-        this.mode = mode;
-
-        fl = mode.hardwareMap.get(DcMotorEx.class, "fl");
-        fr = mode.hardwareMap.get(DcMotorEx.class, "fr");
-        bl = mode.hardwareMap.get(DcMotorEx.class, "bl");
-        br = mode.hardwareMap.get(DcMotorEx.class, "br");
-
-        imu = new IMUGyro(mode);
-
+        // Correct IMU instantiation
+        imu = new IMUGyro(hardwareMap);
 
         motors = new DcMotorEx[]{fl, fr, bl, br};
         reversedMotors = new DcMotorEx[]{bl, fl};
@@ -49,38 +45,17 @@ public class DriveTrain {
         for (DcMotorEx motor : reversedMotors) {
             motor.setDirection(DcMotorEx.Direction.REVERSE);
         }
-
     }
 
     public void update() {
+        double x = controls.strafe;
+        double y = -controls.drive;
+        double rx = controls.turn;
 
-        double y = -mode.gamepad1.left_stick_y;
-        double x = mode.gamepad1.left_stick_x * 1.1;
-        double rx = mode.gamepad1.right_stick_x;
-        // double denominator;
-        double flPower = 0.0;
-        double frPower = 0.0;
-        double blPower = 0.0;
-        double brPower = 0.0;
-        switch (s) {
-            case ROBOTCENTRIC:
-                flPower = (y + x + rx) ;
-                frPower = (y - x - rx) ;
-                blPower = (y - x + rx) ;
-                brPower = (y + x - rx) ;
-                break;
-
-            case FIELDCENTRIC:
-                double botHeading = imu.getYaw(AngleUnit.RADIANS);
-                double rotX = (x * Math.cos(-botHeading) - y * Math.sin(-botHeading)) * 1.1;
-                double rotY = x * Math.sin(-botHeading) + y * Math.cos(-botHeading);
-                flPower = (rotY + rotX + rx) ;
-                frPower = (rotY - rotX - rx) ;
-                blPower = (rotY - rotX + rx) ;
-                brPower = (rotY + rotX - rx) ;
-                break;
-        }
-
+        double flPower = y + x + rx;
+        double frPower = y - x - rx;
+        double blPower = y - x + rx;
+        double brPower = y + x - rx;
 
         fl.setPower(flPower);
         fr.setPower(frPower);
@@ -89,7 +64,7 @@ public class DriveTrain {
     }
 
     public void addTelemetry() {
-        mode.telemetry.addData("Drivetrain State", s);
+        // Add any telemetry here if needed
     }
 
     public void resetIMU() {
@@ -97,6 +72,6 @@ public class DriveTrain {
     }
 
     public enum State {
-        ROBOTCENTRIC, FIELDCENTRIC
+        ROBOTCENTRIC
     }
 }
