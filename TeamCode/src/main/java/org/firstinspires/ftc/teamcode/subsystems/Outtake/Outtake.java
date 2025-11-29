@@ -69,18 +69,18 @@ public class Outtake {
         // apply PID to reach velocity
         velocityController.setSetpoint(velocity);
         pidOutput = velocityController.getOutput(Math.abs(getVelocity()));
-        telemetry.addData("PID Output", pidOutput);
-        telemetry.addData("Setpoint", velocity);
-        telemetry.addData("Error", velocity - (flywheel1.getVelocity()+ flywheel2.getVelocity())/2);
+//        telemetry.addData("PID Output", pidOutput);
+//        telemetry.addData("Setpoint", velocity);
+//        telemetry.addData("Error", velocity - (flywheel1.getVelocity()+ flywheel2.getVelocity())/2);
         setPower(pidOutput);
     }
 
     public void shootVelocity(int velocity) {
         velocityController.setSetpoint(velocity);
         pidOutput = velocityController.getOutput(Math.abs(getVelocity()));
-        telemetry.addData("PID Output", pidOutput);
-        telemetry.addData("Setpoint", velocity);
-        telemetry.addData("Error", velocity - (flywheel1.getVelocity()+ flywheel2.getVelocity())/2);
+//        telemetry.addData("PID Output", pidOutput);
+//        telemetry.addData("Setpoint", velocity);
+//        telemetry.addData("Error", velocity - (flywheel1.getVelocity()+ flywheel2.getVelocity())/2);
         setPower(pidOutput);
     }
     public void shootStop() {
