@@ -1,5 +1,7 @@
 package org.firstinspires.ftc.teamcode.subsystems.Outtake;
 
+import static org.firstinspires.ftc.teamcode.drive.PoseTransfer.PoseStorage.side;
+
 import androidx.annotation.NonNull;
 
 import com.acmerobotics.dashboard.telemetry.TelemetryPacket;
@@ -11,6 +13,7 @@ import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
+import org.firstinspires.ftc.teamcode.drive.PoseTransfer.PoseStorage;
 import org.firstinspires.ftc.teamcode.pid.MiniPID;
 
 public class Outtake {
@@ -22,7 +25,11 @@ public class Outtake {
     double error;
     public double SETPOINT;
 
-    public static double P = 0.0025,I = 0, D = 0, F = .00035;
+    public static double P = 0.0025, I = 0, D = 0, F = 0.00035;
+    public static double K = 0.0035; // saturation rate for the hood function, needs to be tuned
+    double MIN_HOOD = 20; // need to determine this, btw these are all in degrees
+    double MAX_HOOD = 60; // need to determine this
+
 
 
     public Outtake(HardwareMap hardwareMap) {
@@ -74,12 +81,25 @@ public class Outtake {
         flywheel2.setPower(0);
     }
     public int veloCalc(double Rx, double Ry, double hoodPos) {
-        int velocity = 0/* formula that depends on hoodPos, Rx, Ry */;
+        int velocity = 5500; /* formula that depends on hoodPos, Rx, Ry */
         return velocity;
     }
     public double hoodCalc(double Rx, double Ry) {
-        double hoodPos = 0/*formula here */;
-        return hoodPos;  
+        double GOAL_X = 72;
+        double GOAL_Y = 72;
+        if (side.equals(PoseStorage.SIDE.RED)) {
+            GOAL_Y = -72;
+        }
+
+        double dx = GOAL_X - Rx;
+        double dy = GOAL_Y - Ry;
+        double d = Math.sqrt(dx*dx + dy*dy);
+
+        double rawHood = MIN_HOOD + (MAX_HOOD - MIN_HOOD) * (1 - Math.exp(-K * d)); // saturating exponential model, depends on K constant to determine rate of flattening out
+
+        double hood = Math.max(MIN_HOOD, Math.min(rawHood, MAX_HOOD));
+
+        return (hood - MIN_HOOD) / (MAX_HOOD - MIN_HOOD); // this gives a range between 0 and 1 for the servo, will define constraints later
     }
 
     public Action stopAction() {

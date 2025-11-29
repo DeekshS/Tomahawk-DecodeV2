@@ -1,5 +1,7 @@
 package org.firstinspires.ftc.teamcode.subsystems.Outtake;
 
+import static org.firstinspires.ftc.teamcode.drive.PoseTransfer.PoseStorage.side;
+
 import androidx.annotation.NonNull;
 
 import com.acmerobotics.dashboard.telemetry.TelemetryPacket;
@@ -12,14 +14,15 @@ import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 
+import org.firstinspires.ftc.teamcode.drive.PoseTransfer.PoseStorage;
 import org.firstinspires.ftc.teamcode.pid.MiniPID;
 
 public class Turret {
     DcMotorEx turretMotor;
     MiniPID velocityController;
     public double pidOutput;
-    private int aimAngle = 0;
-    public static double P = 0,I = 0, D = 0, F = 0;
+    private double aimAngle = 0;
+    public static double P = 0, I = 0, D = 0, F = 0;
     private double lineX;
     private double lineY;
     private Rotation2d heading;
@@ -30,6 +33,7 @@ public class Turret {
     public int pos;
     public double error;
     public double tx;
+    public double angle;
     public double TICKS_PER_DEGREE = 4.57777;
 
 
@@ -50,7 +54,7 @@ public class Turret {
         double currentPos = turretMotor.getCurrentPosition();
 
 
-        error = tx*TICKS_PER_DEGREE;
+        error = degToTicks(tx);
 
         velocityController.setSetpoint(currentPos - error);
         pidOutput = velocityController.getOutput(error);
@@ -67,24 +71,27 @@ public class Turret {
         velocityController.setF(F);
 
     }
-    public int degToTicks(int deg) {
+    public int degToTicks(double deg) {
         return (int) Math.round(deg * (537.7/360) * 3);
     }
 
     public double getVelocity() {
         return turretMotor.getVelocity();
     }
+    public double getAimAngle() {return aimAngle;}
     public void autoAim(Pose2d botPos) {
         aimAngle = angleCalc(botPos);
         updatePID(aimAngle);
     }
 
-    public int angleCalc(Pose2d botPos) {
-        lineX = 72 - (botPos.position.x+turretOffsetX);
-        lineY = 72 - (botPos.position.y+turretOffsetY);
-        heading = botPos.heading;
-        aimAngle = (int) Math.round(Math.atan(lineX/lineY));
-        return degToTicks(aimAngle);
+    public double angleCalc(Pose2d pose) {
+        if (side.equals(PoseStorage.SIDE.BLUE)) {
+            angle = Math.atan2(72 - pose.position.x, 72 - pose.position.y) * 360 / Math.PI;
+        } else if (side.equals(PoseStorage.SIDE.RED)) {
+            angle = Math.atan2(-72 - pose.position.x, -72 - pose.position.y) * 360 / Math.PI;
+        }
+        angle -= pose.heading.log() * 360 / Math.PI;
+        return angle;
     }
 
     public Action turretBlueClose() {
@@ -93,6 +100,39 @@ public class Turret {
             @Override
             public boolean run(@NonNull TelemetryPacket telemetryPacket) {
                 updatePID(blueClose);
+                return false;
+            }
+        };
+    }
+
+    public Action turretBlueFar() {
+        return new Action() {
+
+            @Override
+            public boolean run(@NonNull TelemetryPacket telemetryPacket) {
+                updatePID(blueFar);
+                return false;
+            }
+        };
+    }
+
+    public Action turretRedClose() {
+        return new Action() {
+
+            @Override
+            public boolean run(@NonNull TelemetryPacket telemetryPacket) {
+                updatePID(redClose);
+                return false;
+            }
+        };
+    }
+
+    public Action turretRedFar() {
+        return new Action() {
+
+            @Override
+            public boolean run(@NonNull TelemetryPacket telemetryPacket) {
+                updatePID(redFar);
                 return false;
             }
         };
