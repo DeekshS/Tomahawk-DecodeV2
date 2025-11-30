@@ -19,7 +19,7 @@ public class FlywheelTuner extends LinearOpMode {
     public static double FAR_VELOCITY = 2380;
     public static double CLOSE_VELOCITY = 1600;
 
-    public static double P = 1, I = 0, D = 0, V = 10;
+    public static double P = 1, I = 0, D = 0, F = 10;
 
     Outtake flywheel;
 
@@ -46,8 +46,8 @@ public class FlywheelTuner extends LinearOpMode {
             telemetry.addData("Set point", CLOSE_VELOCITY);
 //            telemetry.addData("PID Output", pidOutput);
 
-            flywheel.motor1.setPIDFCoefficients(DcMotor.RunMode.RUN_USING_ENCODER, new PIDFCoefficients(P, I, D, V));
-            flywheel.motor2.setPIDFCoefficients(DcMotor.RunMode.RUN_USING_ENCODER, new PIDFCoefficients(P, I, D, V));
+            flywheel.motor1.setPIDFCoefficients(DcMotor.RunMode.RUN_USING_ENCODER, new PIDFCoefficients(P, I, D, F));
+            flywheel.motor2.setPIDFCoefficients(DcMotor.RunMode.RUN_USING_ENCODER, new PIDFCoefficients(P, I, D, F));
 
             flywheel.setVelocity(CLOSE_VELOCITY);
 
