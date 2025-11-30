@@ -38,8 +38,8 @@ public class Outtake {
         motor2 = hardwareMap.get(DcMotorEx.class, "flywheel2");
         hood = hardwareMap.get(Servo.class, "hood");
 
-        motor1.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-        motor2.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        motor1.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        motor2.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
 
         motor1.setDirection(DcMotorEx.Direction.FORWARD);
         motor2.setDirection(DcMotorEx.Direction.REVERSE);
