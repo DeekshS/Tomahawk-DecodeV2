@@ -10,6 +10,7 @@ import com.acmerobotics.roadrunner.Action;
 import com.qualcomm.robotcore.hardware.CRServo;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
+import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.util.ElapsedTime;
@@ -19,7 +20,7 @@ import org.firstinspires.ftc.robotcore.external.Telemetry;
 public class Intake {
 
     private final DcMotorEx intakeMotor;
-    private final DcMotorEx blocker;
+    private final DcMotorEx transfer;
     private final Telemetry telemetry;
 
     // Optional: pass telemetry if you want dashboard/logs
@@ -31,7 +32,9 @@ public class Intake {
         intakeMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
 
         // Initialize motor
-        blocker = hardwareMap.get(DcMotorEx.class, "blocker");
+        transfer = hardwareMap.get(DcMotorEx.class, "transfer");
+        transfer.setDirection(DcMotorSimple.Direction.REVERSE);
+        transfer.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
 
     }
 
@@ -54,14 +57,19 @@ public class Intake {
     }
 
     // Blocker controls
-    public void blockerOpen() {
-        if (blocker != null) blocker.setPower(1);
-        if (telemetry != null) telemetry.addData("Blocker", "Open");
+    public void transferIn(double power) {
+        if (transfer != null) transfer.setPower(power);
+        if (telemetry != null) telemetry.addData("Transfer", "Forward");
     }
 
-    public void blockerClose() {
-        if (blocker != null) blocker.setPower(-1);
-        if (telemetry != null) telemetry.addData("Blocker", "Closed");
+    public void transferOut(double power) {
+        if (transfer != null) transfer.setPower(-power);
+        if (telemetry != null) telemetry.addData("Transfer", "Reverse");
+    }
+
+    public void transferStop() {
+        if (transfer != null) transfer.setPower(0);
+        if (telemetry != null) telemetry.addData("Transfer", "Stopped");
     }
 
     // Actions for timing sequences

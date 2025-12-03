@@ -50,23 +50,23 @@ public class EmergencyFSM {
         switch (gazelleState) {
             case BASE_STATE:
                 intake.intakeStop();
-                intake.blockerClose();
+                intake.transferStop();
                 outtake.shootStop();
 
                 if (controls.intake.locked() || controls.intakeReverse.locked()) {
                     gazelleState = GazelleState.INTAKING;
                 }
-                if (controls.servoBlocker.value()) gazelleState = GazelleState.TRANSFERRING;
+                if (controls.transfer.value()) gazelleState = GazelleState.TRANSFERRING;
                 break;
 
             case INTAKING:
 
-                if (controls.intake.locked()) {intake.intake(); intake.blockerClose();}
-                else if (controls.intakeReverse.locked()) intake.intakeReverse();
+                if (controls.intake.locked()) {intake.intake(); intake.transferIn(0.2);}
+                else if (controls.intakeReverse.locked()) {intake.intakeReverse(); intake.transferOut(1);}
 
                 else intake.intakeStop();
                  //if (controls.flywheel.value()) gazelleState = GazelleState.SPINUP;
-                if (controls.servoBlocker.value()) gazelleState = GazelleState.TRANSFERRING;
+                if (controls.transfer.value()) gazelleState = GazelleState.TRANSFERRING;
                 break;
 /*
             case SPINUP:
@@ -78,13 +78,13 @@ public class EmergencyFSM {
                 break;
 */
             case TRANSFERRING:
-                intake.blockerOpen();
+                intake.transferIn(1);
                 if (controls.intake.locked()) intake.intake();
                 else if (controls.intakeReverse.locked()) gazelleState = GazelleState.INTAKING;
                 //else if (controls.flywheel.value()) gazelleState = GazelleState.SPINUP;
 
                 else intake.intakeStop();
-                if (!controls.servoBlocker.value()) gazelleState = GazelleState.INTAKING;
+                if (!controls.transfer.value()) gazelleState = GazelleState.INTAKING;
                 break;
         }
     }

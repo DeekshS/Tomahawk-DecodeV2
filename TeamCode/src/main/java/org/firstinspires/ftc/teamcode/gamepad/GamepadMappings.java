@@ -8,13 +8,14 @@ public class GamepadMappings {
     private Gamepad gamepad2;
 
     //Write mappings here
-    //Intake -
-    //Intake Reverse -
-    //Servo Blocker -
-    //Transfer -
-    //Transfer Reverse -
-    //Flywheel -
-    //Auto Aim Toggle -
+    //---------Gamepad 1---------
+    //Intake & Transfer- Right Trigger
+    //Intake & Transfer Reverse - Left Trigger
+    //---------Gamepad 2---------
+    //FlywheelClose - A
+    //FlywheelFar - Y
+    //FlywheelOff - B
+    //Auto Aim Toggle - Dpad Up (Not in Use)
 
 
 
@@ -26,7 +27,7 @@ public class GamepadMappings {
     //=============== INTAKE ===============
     public Toggle intake;
     public Toggle intakeReverse;
-    public Toggle servoBlocker;
+//    public Toggle servoBlocker;
     public Toggle transfer;
     public Toggle transferReverse;
 
@@ -45,7 +46,7 @@ public class GamepadMappings {
         //=============== INTAKE ===============
         intake = new Toggle(false);
         intakeReverse = new Toggle(false);
-        servoBlocker = new Toggle(false);
+//        servoBlocker = new Toggle(false);
         transfer = new Toggle(false);
         transferReverse = new Toggle(false);
 
@@ -74,7 +75,7 @@ public class GamepadMappings {
         flywheelClose.update(gamepad2.a);
         flywheelFar.update(gamepad2.y);
         flywheelOff.update(gamepad2.b);
-        autoAim.update(gamepad1.dpad_up);
+//        autoAim.update(gamepad1.dpad_up);
     }
 
     // v1 robot
@@ -83,7 +84,7 @@ public class GamepadMappings {
 
         intakeUpdate();
 
-        servoBlocker.update(gamepad1.left_bumper);
+//        servoBlocker.update(gamepad1.left_bumper);
         intakeReverseUpdate();
         outtakeUpdate();
     }
