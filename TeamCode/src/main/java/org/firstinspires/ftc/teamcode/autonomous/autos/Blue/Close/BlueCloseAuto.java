@@ -11,7 +11,6 @@
  import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
  import org.firstinspires.ftc.teamcode.drive.MecanumDrive;
- import org.firstinspires.ftc.teamcode.drive.pinpoint.GoBildaPinpointDriver;
  import org.firstinspires.ftc.teamcode.subsystems.Robot;
  import org.firstinspires.ftc.teamcode.autonomous.autos.BotActions;
  import org.firstinspires.ftc.teamcode.drive.PoseTransfer.PoseStorage;
@@ -24,7 +23,7 @@
 
      public void runOpMode() throws InterruptedException {
 
-         Robot robot = new Robot(this.hardwareMap, null);
+         Robot robot = new Robot(hardwareMap, null);
          BotActions botActions = new BotActions(robot);
 
          MecanumDrive drive = new MecanumDrive(hardwareMap, BLUE_CLOSE_START);

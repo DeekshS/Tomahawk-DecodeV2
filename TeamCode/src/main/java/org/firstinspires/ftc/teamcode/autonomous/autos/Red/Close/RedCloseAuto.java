@@ -156,6 +156,7 @@
                  )
 
          );
+//         PoseStorage.currentPose = robot.pinpoint.getPose();
          PoseStorage.currentPose = robot.pinpoint.getPose();
      }
 

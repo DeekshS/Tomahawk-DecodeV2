@@ -23,7 +23,7 @@
 
          return new ParallelAction(
                  path,
-                 robot.outtake.shootVelocityAction(1770)
+                 robot.outtake.shootVelocityAction(FieldConstants.CLOSE_VELOCITY)
  //                subsystems.turret.blue_init()
          );
      }
@@ -33,7 +33,7 @@
 
          return new ParallelAction(
                  path,
-                 robot.outtake.shootVelocityAction(1770)
+                 robot.outtake.shootVelocityAction(FieldConstants.CLOSE_VELOCITY)
  //                subsystems.turret.red_init()
          );
      }
@@ -48,7 +48,7 @@
      public Action shoot_close_spin_up() {
 
          return new SequentialAction(
-                 robot.outtake.shootVelocityAction(1770)
+                 robot.outtake.shootVelocityAction(FieldConstants.CLOSE_VELOCITY)
  //                subsystems.intake.intake(SHOOTER_TIME)
          );
      }
@@ -61,7 +61,6 @@
                  path,
                  robot.intake.intakeTimeAction(INTAKE_WAIT_TIME),
                  robot.outtake.reverseTimeAction(INTAKE_WAIT_TIME)
-
          );
 
      }
