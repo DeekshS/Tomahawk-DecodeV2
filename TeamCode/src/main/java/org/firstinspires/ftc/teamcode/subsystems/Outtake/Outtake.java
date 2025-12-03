@@ -11,6 +11,7 @@ import com.acmerobotics.roadrunner.Action;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
+import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.util.ElapsedTime;
@@ -29,9 +30,9 @@ public class Outtake {
     MultipleTelemetry telemetry;
 
     public static double P = 578, I = 0, D = 0, F = 19.5;
-    public static double K = 0.0035; // saturation rate for the hood function, needs to be tuned
-    double MIN_HOOD = 20; // need to determine this, btw these are all in degrees
-    double MAX_HOOD = 60; // need to determine this
+//    public static double K = 0.0035; // saturation rate for the hood function, needs to be tuned
+//    double MIN_HOOD = 20; // need to determine this, btw these are all in degrees
+//    double MAX_HOOD = 60; // need to determine this
 
     public Outtake(HardwareMap hardwareMap) {
         motor1 = hardwareMap.get(DcMotorEx.class, "flywheel1");
@@ -65,8 +66,9 @@ public class Outtake {
 
     public void autoVelocity(double Rx, double Ry) {
         // calculate hood first
-        double hoodPos = hoodCalc(Rx, Ry);  // hoodCalc just returns a value
-        hood.setPosition(hoodPos);          // then apply it to the servo
+//        double hoodPos = hoodCalc(Rx, Ry);  // hoodCalc just returns a value
+//        hood.setPosition(hoodPos);          // then apply it to the servo
+        double hoodPos = 0;
 
         // calculate velocity based on hood
         int velocity = veloCalc(Rx, Ry, hoodPos);  // use hoodPos as input
@@ -96,23 +98,23 @@ public class Outtake {
         int velocity = 5500; /* formula that depends on hoodPos, Rx, Ry */
         return velocity;
     }
-    public double hoodCalc(double Rx, double Ry) {
-        double GOAL_X = 72;
-        double GOAL_Y = 72;
-        if (side.equals(PoseStorage.SIDE.RED)) {
-            GOAL_Y = -72;
-        }
-
-        double dx = GOAL_X - Rx;
-        double dy = GOAL_Y - Ry;
-        double d = Math.sqrt(dx*dx + dy*dy);
-
-        double rawHood = MIN_HOOD + (MAX_HOOD - MIN_HOOD) * (1 - Math.exp(-K * d)); // saturating exponential model, depends on K constant to determine rate of flattening out
-
-        double hood = Math.max(MIN_HOOD, Math.min(rawHood, MAX_HOOD));
-
-        return (hood - MIN_HOOD) / (MAX_HOOD - MIN_HOOD); // this gives a range between 0 and 1 for the servo, will define constraints later
-    }
+//    public double hoodCalc(double Rx, double Ry) {
+//        double GOAL_X = 72;
+//        double GOAL_Y = 72;
+//        if (side.equals(PoseStorage.SIDE.RED)) {
+//            GOAL_Y = -72;
+//        }
+//
+//        double dx = GOAL_X - Rx;
+//        double dy = GOAL_Y - Ry;
+//        double d = Math.sqrt(dx*dx + dy*dy);
+//
+//        double rawHood = MIN_HOOD + (MAX_HOOD - MIN_HOOD) * (1 - Math.exp(-K * d)); // saturating exponential model, depends on K constant to determine rate of flattening out
+//
+//        double hood = Math.max(MIN_HOOD, Math.min(rawHood, MAX_HOOD));
+//
+//        return (hood - MIN_HOOD) / (MAX_HOOD - MIN_HOOD); // this gives a range between 0 and 1 for the servo, will define constraints later
+//    }
 
     public Action stopAction() {
         return new Action() {

@@ -7,6 +7,7 @@ import androidx.annotation.NonNull;
 
 import com.acmerobotics.dashboard.telemetry.TelemetryPacket;
 import com.acmerobotics.roadrunner.Action;
+import com.qualcomm.robotcore.hardware.CRServo;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.HardwareMap;
@@ -18,7 +19,7 @@ import org.firstinspires.ftc.robotcore.external.Telemetry;
 public class Intake {
 
     private final DcMotorEx intakeMotor;
-    private final Servo blocker;
+    private final DcMotorEx blocker;
     private final Telemetry telemetry;
 
     // Optional: pass telemetry if you want dashboard/logs
@@ -29,9 +30,9 @@ public class Intake {
         intakeMotor = hardwareMap.get(DcMotorEx.class, "intake");
         intakeMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
 
-        // Initialize servo
-        blocker = hardwareMap.get(Servo.class, "blocker");
-        blocker.setPosition(BLOCKER_CLOSED); // start in a safe position
+        // Initialize motor
+        blocker = hardwareMap.get(DcMotorEx.class, "blocker");
+
     }
 
     // Overloaded constructor if telemetry is not needed
@@ -54,12 +55,12 @@ public class Intake {
 
     // Blocker controls
     public void blockerOpen() {
-        if (blocker != null) blocker.setPosition(BLOCKER_OPEN);
+        if (blocker != null) blocker.setPower(1);
         if (telemetry != null) telemetry.addData("Blocker", "Open");
     }
 
     public void blockerClose() {
-        if (blocker != null) blocker.setPosition(BLOCKER_CLOSED);
+        if (blocker != null) blocker.setPower(-1);
         if (telemetry != null) telemetry.addData("Blocker", "Closed");
     }
 
