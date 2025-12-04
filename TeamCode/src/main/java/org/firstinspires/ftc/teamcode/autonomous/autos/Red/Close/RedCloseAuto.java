@@ -33,41 +33,61 @@
 
          MecanumDrive drive = new MecanumDrive(hardwareMap, RED_CLOSE_START);
 
-         Action preload = drive.actionBuilder(RED_CLOSE_START)
-                 .strafeToLinearHeading(RED_CLOSE_SHOOT, RED_CLOSE_ANGLE+Math.toRadians(5))
-                 .build();
+         Action preload = drive.actionBuilder(FieldConstants.RED_CLOSE_START)
+             .strafeToLinearHeading(FieldConstants.RED_CLOSE_SHOOT, FieldConstants.RED_CLOSE_ANGLE)
+             .build();
 
-         Action artifact1 = drive.actionBuilder(new Pose2d(RED_CLOSE_SHOOT.x, RED_CLOSE_SHOOT.y, RED_CLOSE_ANGLE+Math.toRadians(5)))
- //                .strafeToLinearHeading(PPG_RED_ARTIFACT, RED_ARTIFACT_ANGLE+Math.toRadians(10))
-                 .strafeToLinearHeading(PPG_RED_ARTIFACT, RED_ARTIFACT_ANGLE)
-                 .setTangent(Math.PI/2)
-                 .lineToY(PPG_RED_ARTIFACT.y-ARTIFACT_DIST-22, new TranslationalVelConstraint(90))
+         Action artifact1 = drive.actionBuilder(new Pose2d(FieldConstants.RED_CLOSE_SHOOT.x, FieldConstants.RED_CLOSE_SHOOT.y, FieldConstants.RED_CLOSE_ANGLE))
+             .strafeToLinearHeading(FieldConstants.PPG_RED_ARTIFACT, FieldConstants.RED_ARTIFACT_ANGLE)
 
-                 .build();
+             .build();
 
-         Action artifact1_return = drive.actionBuilder(new Pose2d(PPG_RED_ARTIFACT.x, PPG_RED_ARTIFACT.y-ARTIFACT_DIST-12, RED_ARTIFACT_ANGLE+Math.toRadians(10)))
+         Action artifact1_return = drive.actionBuilder(new Pose2d(FieldConstants.PPG_RED_ARTIFACT.x, FieldConstants.PPG_RED_ARTIFACT.y, FieldConstants.RED_ARTIFACT_ANGLE))
 
-                 .strafeToLinearHeading(RED_CLOSE_SHOOT, RED_CLOSE_ANGLE+Math.toRadians(11))
- //                .waitSeconds(0.85)
+             .strafeToLinearHeading(FieldConstants.RED_CLOSE_SHOOT, FieldConstants.RED_CLOSE_ANGLE)
+             .waitSeconds(0.85)
 
-                 .build();
+             .build();
 
 
-         Action artifact2 = drive.actionBuilder(new Pose2d(RED_CLOSE_SHOOT.x, RED_CLOSE_SHOOT.y, RED_CLOSE_ANGLE+Math.toRadians(12)))
-                 .strafeToLinearHeading(PGP_RED_ARTIFACT, RED_ARTIFACT_ANGLE)
-                 .setTangent(Math.PI/2)
-                 .lineToY(PGP_RED_ARTIFACT.y-ARTIFACT_DIST-25, new TranslationalVelConstraint(90))
+         Action artifact2 = drive.actionBuilder(new Pose2d(FieldConstants.RED_CLOSE_SHOOT.x, FieldConstants.RED_CLOSE_SHOOT.y, FieldConstants.RED_CLOSE_ANGLE))
+             .strafeToLinearHeading(FieldConstants.PGP_RED_ARTIFACT, FieldConstants.RED_ARTIFACT_ANGLE)
 
-                 .build();
+             .setTangent(FieldConstants.RED_ARTIFACT_ANGLE)
+             //
+             .lineToY(FieldConstants.PGP_RED_ARTIFACT.y-FieldConstants.ARTIFACT_DIST+10)
 
-         Action artifact2_return = drive.actionBuilder(new Pose2d(PGP_RED_ARTIFACT.x, PGP_RED_ARTIFACT.y-ARTIFACT_DIST-21, RED_ARTIFACT_ANGLE))
+             .build();
 
-                 .strafeTo(PGP_RED_ARTIFACT)
-                 .strafeToLinearHeading(RED_CLOSE_SHOOT, RED_CLOSE_ANGLE+Math.toRadians(13))
- //                .setTangent(180)
- //                .splineTo(RED_CLOSE_SHOOT, RED_CLOSE_ANGLE+Math.toRadians(13))
+         Action artifact2_return = drive.actionBuilder(new Pose2d(FieldConstants.PGP_RED_ARTIFACT.x, FieldConstants.PGP_RED_ARTIFACT.y-FieldConstants.ARTIFACT_DIST+10, FieldConstants.RED_ARTIFACT_ANGLE))
 
-                 .build();
+             .strafeTo(FieldConstants.PGP_RED_ARTIFACT)
+             .strafeToLinearHeading(FieldConstants.RED_CLOSE_SHOOT, FieldConstants.RED_CLOSE_ANGLE-Math.toRadians(5-2))
+
+//                            .splineToLinearHeading(new Pose2d(FieldConstants.RED_CLOSE_SHOOT, FieldConstants.RED_CLOSE_ANGLE))
+             .setReversed(true)
+             .splineToConstantHeading(FieldConstants.RED_CLOSE_SHOOT, 0)
+
+             .build();
+
+
+
+         Action artifact3 = drive.actionBuilder(new Pose2d(FieldConstants.RED_CLOSE_SHOOT.x, FieldConstants.RED_CLOSE_SHOOT.y, FieldConstants.RED_CLOSE_ANGLE))
+             .strafeToLinearHeading(FieldConstants.GPP_RED_ARTIFACT, FieldConstants.RED_ARTIFACT_ANGLE)
+
+//            .setTangent(0)
+//            .splineToConstantHeading(FieldConstants.GPP_RED_ARTIFACT, -0.75*Math.PI)
+             .waitSeconds(.2)
+             .lineToY(FieldConstants.GPP_RED_ARTIFACT.y-26)
+
+             .build();
+
+         Action artifact3_return = drive.actionBuilder(new Pose2d(FieldConstants.GPP_RED_ARTIFACT.x, FieldConstants.GPP_RED_ARTIFACT.y-26, FieldConstants.RED_ARTIFACT_ANGLE))
+
+             //                .setReversed(true)
+             .strafeToLinearHeading(FieldConstants.RED_CLOSE_SHOOT, FieldConstants.RED_CLOSE_ANGLE)
+
+             .build();
 
          Action park = drive.actionBuilder(new Pose2d(RED_CLOSE_SHOOT.x, RED_CLOSE_SHOOT.y, RED_CLOSE_ANGLE+Math.toRadians(15)))
                  .strafeTo(PGP_RED_ARTIFACT)
@@ -134,23 +154,23 @@
                                  robot.intake.intakeTimeAction(SHOOTER_TIME)
                          ),
 
-                         park
+//                         park
 
- //                        new ParallelAction(
- //                                artifact3,
- //                                subsystems.intake.intake(4)
- //                        ),
- //
- //                        subsystems.intake.stop(),
- //                        new ParallelAction(
- //                                artifact3_return,
- //                                subsystems.intake.intakeReverse(0.5),
- //                                subsystems.outtake.reverseTimeAction(1)
- //                        ),
- //                        new SequentialAction(
- //                                subsystems.outtake.shoot_close(),
- //                                subsystems.intake.intake(5)
- //                        )
+                         new ParallelAction(
+                                 artifact3,
+                                 robot.intake.intakeTimeAction(4)
+                         ),
+
+                         robot.intake.stop(),
+                         new ParallelAction(
+                                 artifact3_return,
+                                 robot.intake.intakeReverse(0.5),
+                                 robot.outtake.reverseTimeAction(1)
+                         ),
+                         new SequentialAction(
+                                 robot.outtake.shoot_close(),
+                                 robot.intake.intakeTimeAction(5)
+                         )
 
 
                  )

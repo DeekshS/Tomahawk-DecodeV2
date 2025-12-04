@@ -27,10 +27,13 @@ public class Toggle {
                 changed = true;
                 return;
             }
-        } else { buttonLock = false; }
-        changed = false;
-        risingEdge = false;
-        fallingEdge = false;
+        } else {
+            buttonLock = false;
+            changed = false;
+            risingEdge = false;
+            fallingEdge = false;
+        }
+
     }
 
     public void set(boolean value) { this.value = value; }

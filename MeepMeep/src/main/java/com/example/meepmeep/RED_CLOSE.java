@@ -65,10 +65,10 @@ public class RED_CLOSE {
 
 
         Action artifact3 = myBot.getDrive().actionBuilder(new Pose2d(FieldConstants.RED_CLOSE_SHOOT.x, FieldConstants.RED_CLOSE_SHOOT.y, FieldConstants.RED_CLOSE_ANGLE))
-            //                .strafeToLinearHeading(GPP_RED_ARTIFACT, RED_ARTIFACT_ANGLE)
+                            .strafeToLinearHeading(FieldConstants.GPP_RED_ARTIFACT, FieldConstants.RED_ARTIFACT_ANGLE)
 
 //            .setTangent(0)
-            .splineToConstantHeading(FieldConstants.GPP_RED_ARTIFACT, -0.75*Math.PI)
+//            .splineToConstantHeading(FieldConstants.GPP_RED_ARTIFACT, -0.75*Math.PI)
             .waitSeconds(.2)
             .lineToY(FieldConstants.GPP_RED_ARTIFACT.y-26)
 

@@ -95,6 +95,28 @@ public class Intake {
         };
     }
 
+    public Action intakeTimeAction(double time) {
+        return new Action() {
+            final ElapsedTime timer = new ElapsedTime();
+            boolean init = false;
+
+            @Override
+            public boolean run(@NonNull TelemetryPacket telemetryPacket) {
+                if (!init) {
+                    intake();
+                    timer.reset();
+                    init = true;
+                }
+                if (timer.seconds() < time) {
+                    return true;
+                } else {
+                    intakeStop();
+                    return false;
+                }
+            }
+        };
+    }
+
     public Action stop() {
         return new Action() {
             @Override
