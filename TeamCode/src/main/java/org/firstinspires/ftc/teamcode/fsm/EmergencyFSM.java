@@ -8,14 +8,14 @@ import org.firstinspires.ftc.teamcode.gamepad.GamepadMappings;
 import org.firstinspires.ftc.teamcode.subsystems.Intake.Intake;
 import org.firstinspires.ftc.teamcode.subsystems.Outtake.Outtake;
 import org.firstinspires.ftc.teamcode.subsystems.Outtake.OuttakeConstants;
-import org.firstinspires.ftc.teamcode.subsystems.Outtake.Turret;
+//import org.firstinspires.ftc.teamcode.subsystems.Outtake.Turret;
 import org.firstinspires.ftc.teamcode.subsystems.Robot;
 
 public class EmergencyFSM {
 
     private Intake intake;
     private Outtake outtake;
-    private Turret turret;
+//    private Turret turret;
     private Robot robot;
     private GamepadMappings controls;
     private Telemetry telemetry;
@@ -27,7 +27,7 @@ public class EmergencyFSM {
         this.robot = robot;
         this.intake = robot.intake;
         this.outtake = robot.outtake;
-        this.turret = robot.turret;
+//        this.turret = robot.turret;
         this.pinpoint = robot.pinpoint;
         this.controls = controls;
         this.telemetry = telemetry;
@@ -41,12 +41,13 @@ public class EmergencyFSM {
         if (controls.flywheelClose.value()) {
             outtake.shootVelocity(OuttakeConstants.CLOSE_VELOCITY);
         }
-        else if (controls.flywheelFar.value()) {
-            outtake.shootVelocity(OuttakeConstants.FAR_VELOCITY);
-        }
-        else if (controls.flywheelOff.value()) {
+        if (controls.flywheelOff.value()) {
             outtake.shootVelocity(OuttakeConstants.OFF_VELOCITY);
         }
+//        else if (controls.flywheelFar.value()) {
+//            outtake.shootVelocity(OuttakeConstants.FAR_VELOCITY);
+//        }
+
         switch (gazelleState) {
             case BASE_STATE:
                 intake.intakeStop();
@@ -61,12 +62,13 @@ public class EmergencyFSM {
 
             case INTAKING:
 
-                if (controls.intake.locked()) {intake.intake(); intake.transferIn(0.2);}
+                if (controls.intake.locked()) {intake.intake(); intake.transferIn(0);}
                 else if (controls.intakeReverse.locked()) {intake.intakeReverse(); intake.transferOut(1);}
+                else if (!controls.intake.locked()) {intake.intakeStop(); intake.transferStop();}
 
                 else intake.intakeStop();
                  //if (controls.flywheel.value()) gazelleState = GazelleState.SPINUP;
-                if (controls.transfer.value()) gazelleState = GazelleState.TRANSFERRING;
+                if (controls.transfer.locked()) gazelleState = GazelleState.TRANSFERRING;
                 break;
 /*
             case SPINUP:
@@ -79,12 +81,11 @@ public class EmergencyFSM {
 */
             case TRANSFERRING:
                 intake.transferIn(1);
+                intake.intake();
                 if (controls.intake.locked()) intake.intake();
                 else if (controls.intakeReverse.locked()) gazelleState = GazelleState.INTAKING;
-                //else if (controls.flywheel.value()) gazelleState = GazelleState.SPINUP;
-
-                else intake.intakeStop();
-                if (!controls.transfer.value()) gazelleState = GazelleState.INTAKING;
+//                else intake.intakeStop();
+                if (!controls.transfer.locked()) gazelleState = GazelleState.INTAKING; intake.transferStop();
                 break;
         }
     }

@@ -5,7 +5,7 @@ import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.teamcode.gamepad.GamepadMappings;
 import org.firstinspires.ftc.teamcode.subsystems.Intake.Intake;
 import org.firstinspires.ftc.teamcode.subsystems.Outtake.Outtake;
-import org.firstinspires.ftc.teamcode.subsystems.Outtake.Turret;
+//import org.firstinspires.ftc.teamcode.subsystems.Outtake.Turret;
 import org.firstinspires.ftc.teamcode.subsystems.Robot;
 import org.firstinspires.ftc.teamcode.drive.localizers.PinpointLocalizer;
 
@@ -16,7 +16,7 @@ public class GazelleFSM {
     private Outtake outtake;
     private GamepadMappings controls;
     private Robot robot;
-    private Turret turret;
+//    private Turret turret;
     private Telemetry telemetry;
     private PinpointLocalizer pinpoint;
     private GazelleState gazelleState;
@@ -24,7 +24,7 @@ public class GazelleFSM {
         this.robot = robot;
         this.intake = robot.intake;
         this.outtake = robot.outtake;
-        this.turret = robot.turret;
+//        this.turret = robot.turret;
         this.pinpoint = robot.pinpoint;
         this.controls = controls;
         this.telemetry = telemetry;
@@ -36,13 +36,13 @@ public class GazelleFSM {
         controls.update();
         robot.driveTrain.update();
 
-        robot.turret.autoAim(pinpoint.getPose());
+//        robot.turret.autoAim(pinpoint.getPose());
 
 
         switch (gazelleState){
             case BASE_STATE:
                 robot.intake.intakeStop();
-                robot.intake.blockerClose();
+//                robot.intake.blockerClose();
                 robot.outtake.shootStop();
                 if (controls.intake.locked()){
                     gazelleState = GazelleState.INTAKING;
@@ -54,12 +54,12 @@ public class GazelleFSM {
                 break;
             case INTAKING:
 
-                intake.blockerClose();
+//                intake.blockerClose();
                 if (controls.intake.locked()) {
                     intake.intake();
                 } else if (controls.intakeReverse.locked()){
                     intake.intakeReverse();
-                } else if (controls.servoBlocker.value()){
+                } else if (controls.transfer.value()){
                     gazelleState = GazelleState.TRANSFERRING;
                 } else if (controls.flywheelClose.value()){
                     gazelleState = GazelleState.SPINUP;
@@ -70,7 +70,7 @@ public class GazelleFSM {
                 break;
             case SPINUP:
                 outtake.setVelocity(1770);
-                if (controls.servoBlocker.value()) {
+                if (controls.transfer.value()) {
                     gazelleState= GazelleState.TRANSFERRING;
                 } else if (controls.intake.locked()){
                     gazelleState = GazelleState.INTAKING;
@@ -83,7 +83,7 @@ public class GazelleFSM {
                 //if done and right trigger, allow transfer
                 break;
             case TRANSFERRING:
-                intake.blockerOpen();
+                intake.transferIn(0.3);
                 if (controls.intake.locked()){
                     intake.intake();
                 } else if (controls.intakeReverse.locked()){

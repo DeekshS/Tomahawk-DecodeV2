@@ -49,7 +49,7 @@ public class Intake {
     }
 
     public void intakeReverse() {
-        intakeMotor.setPower(-0.5);
+        intakeMotor.setPower(-1);
     }
 
     public void intakeStop() {

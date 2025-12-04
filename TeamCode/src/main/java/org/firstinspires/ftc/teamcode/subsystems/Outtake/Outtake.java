@@ -13,6 +13,7 @@ import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.HardwareMap;
+import com.qualcomm.robotcore.hardware.PIDFCoefficients;
 import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
@@ -29,7 +30,7 @@ public class Outtake {
     public double SETPOINT;
     MultipleTelemetry telemetry;
 
-    public static double P = 578, I = 0, D = 0, F = 19.5;
+    public static double P = 0, I = 0, D = 0, F = 19.5;
 //    public static double K = 0.0035; // saturation rate for the hood function, needs to be tuned
 //    double MIN_HOOD = 20; // need to determine this, btw these are all in degrees
 //    double MAX_HOOD = 60; // need to determine this
@@ -42,11 +43,14 @@ public class Outtake {
         motor1.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         motor2.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
 
-        motor1.setDirection(DcMotorEx.Direction.FORWARD);
+        motor1.setDirection(DcMotorEx.Direction.REVERSE);
         motor2.setDirection(DcMotorEx.Direction.REVERSE);
 
         motor1.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         motor2.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+
+        motor1.setPIDFCoefficients(DcMotor.RunMode.RUN_USING_ENCODER, new PIDFCoefficients(P, I, D, F));
+        motor2.setPIDFCoefficients(DcMotor.RunMode.RUN_USING_ENCODER, new PIDFCoefficients(P, I, D, F));
 
         velocityController = new MiniPID(P, I, D, F);
         telemetry = new MultipleTelemetry(FtcDashboard.getInstance().getTelemetry());

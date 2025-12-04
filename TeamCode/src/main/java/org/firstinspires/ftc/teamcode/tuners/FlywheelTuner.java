@@ -20,7 +20,7 @@ public class FlywheelTuner extends LinearOpMode {
     public static double FAR_VELOCITY = 2380;
     public static double CLOSE_VELOCITY = 1000;
 
-    public static double P = 578, I = 0, D = 0, F = 19.5;
+    public static double P = 0, I = 0, D = 0, F = 19.5;
 
     Outtake flywheel;
     Intake intake;
