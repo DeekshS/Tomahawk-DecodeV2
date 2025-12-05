@@ -39,7 +39,7 @@ public class EmergencyFSM {
         controls.update();
         robot.driveTrain.update();
         if (controls.flywheelClose.value()) {
-            outtake.shootVelocity(OuttakeConstants.CLOSE_VELOCITY);
+            outtake.shootVelocity(1000);
         }
         else {
             outtake.shootVelocity(OuttakeConstants.OFF_VELOCITY);

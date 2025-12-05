@@ -1,183 +1,98 @@
- package org.firstinspires.ftc.teamcode.autonomous.autos.Red.Close;
+package org.firstinspires.ftc.teamcode.autonomous.autos.Red.Close;
 
- import com.acmerobotics.dashboard.config.Config;
- import com.acmerobotics.roadrunner.Action;
- import com.acmerobotics.roadrunner.ParallelAction;
- import com.acmerobotics.roadrunner.Pose2d;
- import com.acmerobotics.roadrunner.SequentialAction;
- import com.acmerobotics.roadrunner.TranslationalVelConstraint;
- import com.acmerobotics.roadrunner.ftc.Actions;
- import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
- import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
+import com.acmerobotics.dashboard.config.Config;
+import com.acmerobotics.roadrunner.Action;
+import com.acmerobotics.roadrunner.ParallelAction;
+import com.acmerobotics.roadrunner.Pose2d;
+import com.acmerobotics.roadrunner.SequentialAction;
+import com.acmerobotics.roadrunner.ftc.Actions;
+import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
+import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
- import org.firstinspires.ftc.teamcode.autonomous.autos.BotActions;
- import org.firstinspires.ftc.teamcode.autonomous.autos.FieldConstants;
- import org.firstinspires.ftc.teamcode.drive.MecanumDrive;
- import org.firstinspires.ftc.teamcode.subsystems.Robot;
- import org.firstinspires.ftc.teamcode.drive.PoseTransfer.PoseStorage;
+import org.firstinspires.ftc.teamcode.autonomous.autos.BotActions;
+import org.firstinspires.ftc.teamcode.autonomous.autos.FieldConstants;
+import org.firstinspires.ftc.teamcode.drive.MecanumDrive;
+import org.firstinspires.ftc.teamcode.subsystems.Robot;
+import org.firstinspires.ftc.teamcode.drive.PoseTransfer.PoseStorage;
 
- @Autonomous
- @Config
- public class RedCloseAuto extends LinearOpMode implements FieldConstants {
+@Autonomous
+@Config
+public class RedCloseAuto extends LinearOpMode implements FieldConstants {
 
-     public static double INTAKE_WAIT_TIME = 3;
-     public static double SHOOTER_TIME = 2.5;
+    public static double INTAKE_WAIT_TIME = 3;
+    public static double SHOOTER_TIME = 2.5;
 
-     public static int ARTIFACT_SHOOT_VEL = 1765;
+    public static int ARTIFACT_SHOOT_VEL = 1765;
 
+    @Override
+    public void runOpMode() throws InterruptedException {
 
-     public void runOpMode() throws InterruptedException {
+        Robot robot = new Robot(hardwareMap, null);
+        BotActions botActions = new BotActions(robot);
 
-         Robot robot = new Robot(hardwareMap, null);
-         BotActions botActions = new BotActions(robot);
+        MecanumDrive drive = new MecanumDrive(hardwareMap, RED_CLOSE_START);
 
-         MecanumDrive drive = new MecanumDrive(hardwareMap, RED_CLOSE_START);
+        // --- Trajectories ---
+        Action preload = drive.actionBuilder(RED_CLOSE_START)
+                .strafeToLinearHeading(RED_CLOSE_SHOOT, RED_CLOSE_ANGLE)
+                .build();
 
-         Action preload = drive.actionBuilder(FieldConstants.RED_CLOSE_START)
-             .strafeToLinearHeading(FieldConstants.RED_CLOSE_SHOOT, FieldConstants.RED_CLOSE_ANGLE)
-             .build();
+        Action spike1 = drive.actionBuilder(new Pose2d(RED_CLOSE_SHOOT.x, RED_CLOSE_SHOOT.y, RED_CLOSE_ANGLE))
+                .strafeToLinearHeading(PPG_RED_ARTIFACT, RED_ARTIFACT_ANGLE)
+                .build();
 
-         Action artifact1 = drive.actionBuilder(new Pose2d(FieldConstants.RED_CLOSE_SHOOT.x, FieldConstants.RED_CLOSE_SHOOT.y, FieldConstants.RED_CLOSE_ANGLE))
-             .strafeToLinearHeading(FieldConstants.PPG_RED_ARTIFACT, FieldConstants.RED_ARTIFACT_ANGLE)
+        Action spike1_return = drive.actionBuilder(new Pose2d(PPG_RED_ARTIFACT.x, PPG_RED_ARTIFACT.y, RED_ARTIFACT_ANGLE))
+                .strafeToLinearHeading(RED_CLOSE_SHOOT, RED_CLOSE_ANGLE)
+                .build();
 
-             .build();
+        Action spike2 = drive.actionBuilder(new Pose2d(RED_CLOSE_SHOOT.x, RED_CLOSE_SHOOT.y, RED_CLOSE_ANGLE))
+                .strafeToLinearHeading(PGP_RED_ARTIFACT, RED_ARTIFACT_ANGLE)
+                .build();
 
-         Action artifact1_return = drive.actionBuilder(new Pose2d(FieldConstants.PPG_RED_ARTIFACT.x, FieldConstants.PPG_RED_ARTIFACT.y, FieldConstants.RED_ARTIFACT_ANGLE))
+        Action spike2_return = drive.actionBuilder(new Pose2d(PGP_RED_ARTIFACT.x, PGP_RED_ARTIFACT.y, RED_ARTIFACT_ANGLE))
+                .strafeToLinearHeading(RED_CLOSE_SHOOT, RED_CLOSE_ANGLE)
+                .build();
 
-             .strafeToLinearHeading(FieldConstants.RED_CLOSE_SHOOT, FieldConstants.RED_CLOSE_ANGLE)
-             .waitSeconds(0.85)
+        waitForStart();
+        if (isStopRequested()) return;
 
-             .build();
+        // --- Autonomous Sequence ---
+        Actions.runBlocking(
+                new SequentialAction(
 
+                        // Start outtake once, keep it running
+                        robot.outtake.shootVelocityAction(ARTIFACT_SHOOT_VEL),
 
-         Action artifact2 = drive.actionBuilder(new Pose2d(FieldConstants.RED_CLOSE_SHOOT.x, FieldConstants.RED_CLOSE_SHOOT.y, FieldConstants.RED_CLOSE_ANGLE))
-             .strafeToLinearHeading(FieldConstants.PGP_RED_ARTIFACT, FieldConstants.RED_ARTIFACT_ANGLE)
+                        // Step 1: Preload
+                        botActions.preload_parallel_red(preload),
+                        robot.intake.intakeTimeAction(SHOOTER_TIME),
+                        robot.intake.stop(),
 
-             .setTangent(FieldConstants.RED_ARTIFACT_ANGLE)
-             //
-             .lineToY(FieldConstants.PGP_RED_ARTIFACT.y-FieldConstants.ARTIFACT_DIST+10)
+                        // Step 2: Spike 1 cycle
+                        new ParallelAction(
+                                spike1,
+                                robot.intake.intakeTimeAction(INTAKE_WAIT_TIME)
+                        ),
+                        robot.intake.stop(),
+                        spike1_return,
+                        robot.intake.intakeTimeAction(SHOOTER_TIME),
+                        robot.intake.stop(),
 
-             .build();
+                        // Step 3: Spike 2 cycle
+                        new ParallelAction(
+                                spike2,
+                                robot.intake.intakeTimeAction(INTAKE_WAIT_TIME)
+                        ),
+                        robot.intake.stop(),
+                        spike2_return,
+                        robot.intake.intakeTimeAction(SHOOTER_TIME),
+                        robot.intake.stop()
 
-         Action artifact2_return = drive.actionBuilder(new Pose2d(FieldConstants.PGP_RED_ARTIFACT.x, FieldConstants.PGP_RED_ARTIFACT.y-FieldConstants.ARTIFACT_DIST+10, FieldConstants.RED_ARTIFACT_ANGLE))
+                        // Outtake keeps running the whole time, no stopAction
+                )
+        );
 
-             .strafeTo(FieldConstants.PGP_RED_ARTIFACT)
-             .strafeToLinearHeading(FieldConstants.RED_CLOSE_SHOOT, FieldConstants.RED_CLOSE_ANGLE-Math.toRadians(5-2))
-
-//                            .splineToLinearHeading(new Pose2d(FieldConstants.RED_CLOSE_SHOOT, FieldConstants.RED_CLOSE_ANGLE))
-             .setReversed(true)
-             .splineToConstantHeading(FieldConstants.RED_CLOSE_SHOOT, 0)
-
-             .build();
-
-
-
-         Action artifact3 = drive.actionBuilder(new Pose2d(FieldConstants.RED_CLOSE_SHOOT.x, FieldConstants.RED_CLOSE_SHOOT.y, FieldConstants.RED_CLOSE_ANGLE))
-             .strafeToLinearHeading(FieldConstants.GPP_RED_ARTIFACT, FieldConstants.RED_ARTIFACT_ANGLE)
-
-//            .setTangent(0)
-//            .splineToConstantHeading(FieldConstants.GPP_RED_ARTIFACT, -0.75*Math.PI)
-             .waitSeconds(.2)
-             .lineToY(FieldConstants.GPP_RED_ARTIFACT.y-26)
-
-             .build();
-
-         Action artifact3_return = drive.actionBuilder(new Pose2d(FieldConstants.GPP_RED_ARTIFACT.x, FieldConstants.GPP_RED_ARTIFACT.y-26, FieldConstants.RED_ARTIFACT_ANGLE))
-
-             //                .setReversed(true)
-             .strafeToLinearHeading(FieldConstants.RED_CLOSE_SHOOT, FieldConstants.RED_CLOSE_ANGLE)
-
-             .build();
-
-         Action park = drive.actionBuilder(new Pose2d(RED_CLOSE_SHOOT.x, RED_CLOSE_SHOOT.y, RED_CLOSE_ANGLE+Math.toRadians(15)))
-                 .strafeTo(PGP_RED_ARTIFACT)
-                 .build();
-
-
-         waitForStart();
-         if (isStopRequested()) return;
-
-
-         Actions.runBlocking(
-                 new SequentialAction(
-
-                         botActions.preload_parallel_red(preload),
-
-                         new ParallelAction(
- //                                subsystems.outtake.shoot_close_time(SHOOTER_TIME),
-                                 robot.intake.intakeTimeAction(SHOOTER_TIME)
-
-                         ),
-                         robot.outtake.stopAction(),
-
-                         new ParallelAction(
-                                 artifact1,
-
-                                 robot.intake.intakeTimeAction(INTAKE_WAIT_TIME),
-                                 robot.outtake.reverseTimeAction(INTAKE_WAIT_TIME)
-                         ),
-
-                         robot.intake.stop(),
-
-
-                         new ParallelAction(
-                                 artifact1_return,
- //                                subsystems.intake.intakeReverse(0.5),
-                                 robot.outtake.reverseTimeAction(1)
-                         ),
-                         robot.outtake.stopAction(),
-
-                         new SequentialAction(
-                                 robot.outtake.shootVelocityAction(ARTIFACT_SHOOT_VEL),
-                                 robot.intake.intakeTimeAction(SHOOTER_TIME)
-                         ),
-
-                         robot.outtake.stopAction(),
-
-                         new ParallelAction(
-                                 artifact2,
-
-                                 robot.intake.intakeTimeAction(INTAKE_WAIT_TIME+1),
-                                 robot.outtake.reverseTimeAction(INTAKE_WAIT_TIME+1)
-                         ),
-
-                         robot.intake.stop(),
-
-                         new ParallelAction(
-                                 artifact2_return,
- //                                subsystems.intake.intakeReverse(0.5),
-                                 robot.outtake.reverseTimeAction(1)
-                         ),
-
-                         new SequentialAction(
-                                 robot.outtake.shootVelocityAction(ARTIFACT_SHOOT_VEL),
-                                 robot.intake.intakeTimeAction(SHOOTER_TIME)
-                         ),
-
-//                         park
-
-                         new ParallelAction(
-                                 artifact3,
-                                 robot.intake.intakeTimeAction(4)
-                         ),
-
-                         robot.intake.stop(),
-                         new ParallelAction(
-                                 artifact3_return,
-                                 robot.intake.intakeReverseTimeAction(0.5),
-                                 robot.outtake.reverseTimeAction(1)
-                         ),
-                         new SequentialAction(
-                                 robot.outtake.shootVelocityAction(1000),
-                                 robot.intake.intakeTimeAction(5)
-                         )
-
-
-                 )
-
-         );
-//         PoseStorage.currentPose = robot.pinpoint.getPose();
-         PoseStorage.currentPose = robot.pinpoint.getPose();
-     }
-
- }
+        // Save final pose for teleop
+        PoseStorage.currentPose = robot.pinpoint.getPose();
+    }
+}

@@ -1,6 +1,7 @@
 package org.firstinspires.ftc.teamcode.subsystems.Outtake;
 
 import static org.firstinspires.ftc.teamcode.drive.PoseTransfer.PoseStorage.side;
+import static org.firstinspires.ftc.teamcode.subsystems.Outtake.OuttakeConstants.CLOSE_VELOCITY;
 
 import androidx.annotation.NonNull;
 
@@ -30,7 +31,7 @@ public class Outtake {
     public double SETPOINT;
     MultipleTelemetry telemetry;
 
-    public static double P = 0, I = 0, D = 0, F = 19.5;
+    public static double P = 500, I = 0, D = 0, F = 14.3;
 //    public static double K = 0.0035; // saturation rate for the hood function, needs to be tuned
 //    double MIN_HOOD = 20; // need to determine this, btw these are all in degrees
 //    double MAX_HOOD = 60; // need to determine this
@@ -87,12 +88,21 @@ public class Outtake {
     }
 
     public void shootVelocity(int velocity) {
+        /*
         velocityController.setSetpoint(velocity);
         pidOutput = velocityController.getOutput(Math.abs(getVelocity()));
-//        telemetry.addData("PID Output", pidOutput);
-//        telemetry.addData("Setpoint", velocity);
-//        telemetry.addData("Error", velocity - (motor1.getVelocity()+ motor2.getVelocity())/2);
+        telemetry.addData("PID Output", pidOutput);
+        telemetry.addData("Setpoint", velocity);
+        telemetry.addData("Error", velocity - (motor1.getVelocity()+ motor2.getVelocity())/2);
         setPower(pidOutput);
+        */
+
+        motor1.setPIDFCoefficients(DcMotor.RunMode.RUN_USING_ENCODER, new PIDFCoefficients(P, I, D, F));
+        motor2.setPIDFCoefficients(DcMotor.RunMode.RUN_USING_ENCODER, new PIDFCoefficients(P, I, D, F));
+
+        motor1.setVelocity(velocity);
+        motor2.setVelocity(velocity);
+
     }
     public void shootStop() {
         motor1.setPower(0);

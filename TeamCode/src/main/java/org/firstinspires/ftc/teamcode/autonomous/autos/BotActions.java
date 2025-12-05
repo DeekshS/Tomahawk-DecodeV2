@@ -59,8 +59,8 @@
 
          return new ParallelAction(
                  path,
-                 robot.intake.intakeTimeAction(INTAKE_WAIT_TIME),
-                 robot.outtake.reverseTimeAction(INTAKE_WAIT_TIME)
+                 robot.intake.intakeTimeAction(INTAKE_WAIT_TIME)
+                 //robot.outtake.reverseTimeAction(INTAKE_WAIT_TIME)
          );
 
      }
