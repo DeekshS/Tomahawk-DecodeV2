@@ -39,31 +39,40 @@ public class BlueCloseAuto extends LinearOpMode implements FieldConstants {
             .build();
 
         Action artifact1 = drive.actionBuilder(new Pose2d(FieldConstants.BLUE_CLOSE_SHOOT.x, FieldConstants.BLUE_CLOSE_SHOOT.y, FieldConstants.BLUE_CLOSE_ANGLE))
-            .strafeToLinearHeading(new Vector2d(FieldConstants.PPG_BLUE_ARTIFACT.x, FieldConstants.BLUE_CLOSE_SHOOT.y), FieldConstants.BLUE_ARTIFACT_ANGLE)
+            .turn(Math.toRadians(47))
             .strafeTo(FieldConstants.PPG_BLUE_ARTIFACT)
+
             .build();
 
         Action artifact1_return = drive.actionBuilder(new Pose2d(FieldConstants.PPG_BLUE_ARTIFACT.x, FieldConstants.PPG_BLUE_ARTIFACT.y, FieldConstants.BLUE_ARTIFACT_ANGLE))
 
             .strafeToLinearHeading(FieldConstants.BLUE_CLOSE_SHOOT, FieldConstants.BLUE_CLOSE_ANGLE)
             .waitSeconds(0.85)
+
             .build();
 
 
         Action artifact2 = drive.actionBuilder(new Pose2d(FieldConstants.BLUE_CLOSE_SHOOT.x, FieldConstants.BLUE_CLOSE_SHOOT.y, FieldConstants.BLUE_CLOSE_ANGLE))
-            .strafeToLinearHeading(FieldConstants.PGP_BLUE_ARTIFACT, FieldConstants.BLUE_ARTIFACT_ANGLE)
-
-            .setTangent(FieldConstants.BLUE_ARTIFACT_ANGLE)
-            //
-            .lineToY(FieldConstants.PGP_BLUE_ARTIFACT.y+FieldConstants.ARTIFACT_DIST+10)
+//            .strafeToLinearHeading(FieldConstants.PGP_BLUE_ARTIFACT, FieldConstants.BLUE_ARTIFACT_ANGLE)
+//
+//            .setTangent(FieldConstants.BLUE_ARTIFACT_ANGLE)
+//            //
+//            .lineToY(FieldConstants.PGP_BLUE_ARTIFACT.y+FieldConstants.ARTIFACT_DIST+10)
+            .setReversed(true)
+            .splineToLinearHeading(new Pose2d(FieldConstants.PGP_BLUE_ARTIFACT.x, FieldConstants.PGP_BLUE_ARTIFACT.y+FieldConstants.ARTIFACT_DIST, FieldConstants.BLUE_ARTIFACT_ANGLE), +Math.PI/2.2)
 
             .build();
 
-        Action artifact2_return = drive.actionBuilder(new Pose2d(FieldConstants.PGP_BLUE_ARTIFACT.x, FieldConstants.PGP_BLUE_ARTIFACT.y-FieldConstants.ARTIFACT_DIST-10, FieldConstants.BLUE_ARTIFACT_ANGLE))
+        Action artifact2_return = drive.actionBuilder(new Pose2d(FieldConstants.PGP_BLUE_ARTIFACT.x, FieldConstants.PGP_BLUE_ARTIFACT.y+FieldConstants.ARTIFACT_DIST, FieldConstants.BLUE_ARTIFACT_ANGLE))
 
-//             .setReversed(true)
-            .lineToY(FieldConstants.PGP_BLUE_ARTIFACT.y)
-            .strafeToLinearHeading(FieldConstants.BLUE_CLOSE_SHOOT, FieldConstants.BLUE_CLOSE_ANGLE)
+//            .strafeTo(FieldConstants.PGP_BLUE_ARTIFACT)
+//            .strafeToLinearHeading(FieldConstants.BLUE_CLOSE_SHOOT, FieldConstants.BLUE_CLOSE_ANGLE+Math.toRadians(5+2))
+            .setReversed(true)
+            .splineToLinearHeading(new Pose2d(FieldConstants.BLUE_CLOSE_SHOOT.x, FieldConstants.BLUE_CLOSE_SHOOT.y, FieldConstants.BLUE_CLOSE_ANGLE), Math.PI/8)
+
+//                            .splineToLinearHeading(new Pose2d(FieldConstants.BLUE_CLOSE_SHOOT, FieldConstants.BLUE_CLOSE_ANGLE))
+//            .setReversed(true)
+//            .strafeTo(FieldConstants.BLUE_CLOSE_SHOOT)
 
             .build();
 
@@ -73,16 +82,15 @@ public class BlueCloseAuto extends LinearOpMode implements FieldConstants {
             .strafeToLinearHeading(FieldConstants.GPP_BLUE_ARTIFACT, FieldConstants.BLUE_ARTIFACT_ANGLE)
 
 //            .setTangent(0)
-//            .splineToConstantHeading(FieldConstants.GPP_BLUE_ARTIFACT, -0.75*Math.PI)
+//            .splineToConstantHeading(FieldConstants.GPP_BLUE_ARTIFACT, +0.75*Math.PI)
             .waitSeconds(.2)
-            .lineToY(FieldConstants.GPP_BLUE_ARTIFACT.y-26)
+            .lineToY(FieldConstants.GPP_BLUE_ARTIFACT.y+FieldConstants.ARTIFACT_DIST)
 
             .build();
 
-        Action artifact3_return = drive.actionBuilder(new Pose2d(FieldConstants.GPP_BLUE_ARTIFACT.x, FieldConstants.GPP_BLUE_ARTIFACT.y-26, FieldConstants.BLUE_ARTIFACT_ANGLE))
+        Action artifact3_return = drive.actionBuilder(new Pose2d(FieldConstants.GPP_BLUE_ARTIFACT.x, FieldConstants.GPP_BLUE_ARTIFACT.y+FieldConstants.ARTIFACT_DIST, FieldConstants.BLUE_ARTIFACT_ANGLE))
 
             //                .setReversed(true)
-            .lineToY(FieldConstants.GPP_BLUE_ARTIFACT.y)
             .strafeToLinearHeading(FieldConstants.BLUE_CLOSE_SHOOT, FieldConstants.BLUE_CLOSE_ANGLE)
 
             .build();

@@ -30,8 +30,8 @@ public class RED_CLOSE {
             .build();
 
         Action artifact1 = myBot.getDrive().actionBuilder(new Pose2d(FieldConstants.RED_CLOSE_SHOOT.x, FieldConstants.RED_CLOSE_SHOOT.y, FieldConstants.RED_CLOSE_ANGLE))
-            .setTangent(Math.PI)
-            .strafeToLinearHeading(FieldConstants.PPG_RED_ARTIFACT, FieldConstants.RED_ARTIFACT_ANGLE)
+            .turn(Math.toRadians(-43))
+            .strafeTo(FieldConstants.PPG_RED_ARTIFACT)
 
             .build();
 
@@ -44,22 +44,27 @@ public class RED_CLOSE {
 
 
         Action artifact2 = myBot.getDrive().actionBuilder(new Pose2d(FieldConstants.RED_CLOSE_SHOOT.x, FieldConstants.RED_CLOSE_SHOOT.y, FieldConstants.RED_CLOSE_ANGLE))
-            .strafeToLinearHeading(FieldConstants.PGP_RED_ARTIFACT, FieldConstants.RED_ARTIFACT_ANGLE)
-
-            .setTangent(FieldConstants.RED_ARTIFACT_ANGLE)
-            //
-            .lineToY(FieldConstants.PGP_RED_ARTIFACT.y-FieldConstants.ARTIFACT_DIST+10)
+//            .strafeToLinearHeading(FieldConstants.PGP_RED_ARTIFACT, FieldConstants.RED_ARTIFACT_ANGLE)
+//
+//            .setTangent(FieldConstants.RED_ARTIFACT_ANGLE)
+//            //
+//            .lineToY(FieldConstants.PGP_RED_ARTIFACT.y-FieldConstants.ARTIFACT_DIST+10)
+            .setReversed(true)
+            .splineToLinearHeading(new Pose2d(FieldConstants.PGP_RED_ARTIFACT.x, FieldConstants.PGP_RED_ARTIFACT.y-FieldConstants.ARTIFACT_DIST+10, FieldConstants.RED_ARTIFACT_ANGLE), -Math.PI/2.2)
 
             .build();
 
         Action artifact2_return = myBot.getDrive().actionBuilder(new Pose2d(FieldConstants.PGP_RED_ARTIFACT.x, FieldConstants.PGP_RED_ARTIFACT.y-FieldConstants.ARTIFACT_DIST+10, FieldConstants.RED_ARTIFACT_ANGLE))
 
-            .strafeTo(FieldConstants.PGP_RED_ARTIFACT)
-            .strafeToLinearHeading(FieldConstants.RED_CLOSE_SHOOT, FieldConstants.RED_CLOSE_ANGLE-Math.toRadians(5-2))
+//            .strafeTo(FieldConstants.PGP_RED_ARTIFACT)
+//            .strafeToLinearHeading(FieldConstants.RED_CLOSE_SHOOT, FieldConstants.RED_CLOSE_ANGLE-Math.toRadians(5-2))
+            .lineToY(FieldConstants.PGP_RED_ARTIFACT.y-FieldConstants.ARTIFACT_DIST+30)
+            .setReversed(true)
+            .splineToLinearHeading(new Pose2d(FieldConstants.RED_CLOSE_SHOOT.x, FieldConstants.RED_CLOSE_SHOOT.y, FieldConstants.RED_CLOSE_ANGLE), Math.PI/8)
 
 //                            .splineToLinearHeading(new Pose2d(FieldConstants.RED_CLOSE_SHOOT, FieldConstants.RED_CLOSE_ANGLE))
-            .setReversed(true)
-            .splineToConstantHeading(FieldConstants.RED_CLOSE_SHOOT, 0)
+//            .setReversed(true)
+//            .strafeTo(FieldConstants.RED_CLOSE_SHOOT)
 
             .build();
 
@@ -71,11 +76,11 @@ public class RED_CLOSE {
 //            .setTangent(0)
 //            .splineToConstantHeading(FieldConstants.GPP_RED_ARTIFACT, -0.75*Math.PI)
             .waitSeconds(.2)
-            .lineToY(FieldConstants.GPP_RED_ARTIFACT.y-26)
+            .lineToY(FieldConstants.GPP_RED_ARTIFACT.y-FieldConstants.ARTIFACT_DIST)
 
             .build();
 
-        Action artifact3_return = myBot.getDrive().actionBuilder(new Pose2d(FieldConstants.GPP_RED_ARTIFACT.x, FieldConstants.GPP_RED_ARTIFACT.y-26, FieldConstants.RED_ARTIFACT_ANGLE))
+        Action artifact3_return = myBot.getDrive().actionBuilder(new Pose2d(FieldConstants.GPP_RED_ARTIFACT.x, FieldConstants.GPP_RED_ARTIFACT.y-FieldConstants.ARTIFACT_DIST, FieldConstants.RED_ARTIFACT_ANGLE))
 
             //                .setReversed(true)
             .strafeToLinearHeading(FieldConstants.RED_CLOSE_SHOOT, FieldConstants.RED_CLOSE_ANGLE)
