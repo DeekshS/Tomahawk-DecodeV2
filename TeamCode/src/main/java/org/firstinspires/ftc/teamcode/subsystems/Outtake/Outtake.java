@@ -23,15 +23,12 @@ import com.qualcomm.robotcore.util.ElapsedTime;
 
 
 import org.firstinspires.ftc.teamcode.drive.PoseTransfer.PoseStorage;
-import org.firstinspires.ftc.teamcode.pid.MiniPID;
 
 
 public class Outtake {
     public DcMotorEx motor1;
     public DcMotorEx motor2;
     Servo hood;
-    MiniPID velocityController;
-    public double pidOutput;
     double error;
     public double SETPOINT;
     MultipleTelemetry telemetry;
@@ -65,7 +62,6 @@ public class Outtake {
         motor2.setPIDFCoefficients(DcMotor.RunMode.RUN_USING_ENCODER, new PIDFCoefficients(P, I, D, F));
 
 
-        velocityController = new MiniPID(P, I, D, F);
         telemetry = new MultipleTelemetry(FtcDashboard.getInstance().getTelemetry());
     }
     public double getVelocity() {
@@ -95,12 +91,9 @@ public class Outtake {
 
 
         // apply PID to reach velocity
-        velocityController.setSetpoint(velocity);
-        pidOutput = velocityController.getOutput(Math.abs(getVelocity()));
 //        telemetry.addData("PID Output", pidOutput);
 //        telemetry.addData("Setpoint", velocity);
 //        telemetry.addData("Error", velocity - (motor1.getVelocity()+ motor2.getVelocity())/2);
-        setPower(pidOutput);
     }
 
 
@@ -129,7 +122,7 @@ public class Outtake {
         motor2.setPower(0);
     }
     public int veloCalc(double Rx, double Ry, double hoodPos) {
-        int velocity = 5500; /* formula that depends on hoodPos, Rx, Ry */
+        int velocity = 1100; /* formula that depends on hoodPos, Rx, Ry */
         return velocity;
     }
 //    public double hoodCalc(double Rx, double Ry) {
@@ -181,17 +174,10 @@ public class Outtake {
                     init = true;
                 }
 
-
-
-
                 SETPOINT = vel;
-                velocityController.setSetpoint(SETPOINT);
-                error = SETPOINT - Math.abs(getVelocity());
 
-
-                pidOutput = velocityController.getOutput(Math.abs(getVelocity()));
                 if (timer.seconds() < time) {
-                    setPower(pidOutput);
+                    setVelocity(SETPOINT);
                     timer.reset();
                 }
                 else {
@@ -232,27 +218,13 @@ public class Outtake {
                     init = true;
                 }
 
-
-
-
                 SETPOINT = vel;
-                velocityController.setSetpoint(SETPOINT);
-                error = SETPOINT - Math.abs(getVelocity());
 
-
-                pidOutput = velocityController.getOutput(Math.abs(getVelocity()));
-                setPower(pidOutput);
-
-
-
-
-
+                setVelocity(SETPOINT);
 
                 telemetryPacket.put("VELOCITY", Math.abs(getVelocity()));
                 telemetryPacket.put("ERROR", error);
                 telemetryPacket.put("SETPOINT", SETPOINT);
-
-
 
 
                 return error >= 50;

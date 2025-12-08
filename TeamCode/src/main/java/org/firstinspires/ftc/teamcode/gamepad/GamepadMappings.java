@@ -70,9 +70,9 @@ public class GamepadMappings {
         intakeReverse.update(gamepad1.left_trigger > 0.5);
     }
     public void outtakeUpdate() {
-        flywheelClose.update(gamepad1.a);
-        flywheelFar.update(gamepad1.y);
-        flywheelOff.update(gamepad1.b);
+        flywheelClose.update(gamepad2.a);
+        flywheelFar.update(gamepad2.y);
+        flywheelOff.update(gamepad2.b);
 //        autoAim.update(gamepad1.dpad_up);
     }
 
