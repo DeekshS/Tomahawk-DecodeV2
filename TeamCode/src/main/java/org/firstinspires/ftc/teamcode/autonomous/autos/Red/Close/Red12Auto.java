@@ -20,7 +20,7 @@ import org.firstinspires.ftc.teamcode.subsystems.Robot;
 @Config
 public class Red12Auto extends LinearOpMode implements FCV2 {
 
-    public static double INTAKE_WAIT_TIME = 3.5;
+    public static double INTAKE_WAIT_TIME = 4.5;
     public static double SHOOTER_TIME = 2.5;
 
     public static int ARTIFACT_SHOOT_VEL = 1050;
@@ -39,13 +39,12 @@ public class Red12Auto extends LinearOpMode implements FCV2 {
 
         Action artifact1 = drive.actionBuilder(new Pose2d(FCV2.RED_CLOSE_SHOOT.x, FCV2.RED_CLOSE_SHOOT.y, FCV2.RED_CLOSE_ANGLE))
             .strafeToLinearHeading(new Vector2d(FCV2.PPG_RED_ARTIFACT.x, FCV2.RED_CLOSE_SHOOT.y), FCV2.RED_ARTIFACT_ANGLE)
-            .lineToY(FCV2.PPG_RED_ARTIFACT.y + 16)
+            .strafeTo(new Vector2d(FCV2.PPG_RED_ARTIFACT.x, FCV2.PPG_RED_ARTIFACT.y + 16))
             .strafeToLinearHeading(FCV2.RED_GATE, 0)
             .build();
 
         Action artifact1_return = drive.actionBuilder(new Pose2d(FCV2.RED_GATE.x, FCV2.RED_GATE.y, 0))
             .strafeToLinearHeading(FCV2.RED_CLOSE_SHOOT, FCV2.RED_CLOSE_ANGLE)
-            .waitSeconds(0.85)
 
             .build();
 
