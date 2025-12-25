@@ -69,7 +69,7 @@ public class GazelleFSM {
                 //intake on, blocker closed
                 break;
             case SPINUP:
-                outtake.setVelocity(1770);
+                outtake.shootVelocity(1770);
                 if (controls.transfer.value()) {
                     gazelleState= GazelleState.TRANSFERRING;
                 } else if (controls.intake.locked()){
