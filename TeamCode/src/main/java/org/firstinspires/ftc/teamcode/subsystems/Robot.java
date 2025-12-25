@@ -14,6 +14,7 @@ import org.firstinspires.ftc.teamcode.subsystems.Outtake.Outtake;
 //import org.firstinspires.ftc.teamcode.subsystems.Outtake.Turret;
 import org.firstinspires.ftc.teamcode.drive.localizers.PinpointLocalizer;
 import org.firstinspires.ftc.teamcode.drive.PoseTransfer.PoseStorage;
+import org.firstinspires.ftc.teamcode.subsystems.Outtake.Turret;
 
 public class Robot {
 
@@ -21,13 +22,14 @@ public class Robot {
     public Intake intake;
     public Outtake outtake;
     public Intake transfer;
-//    public Turret turret;
+
+    public Turret turret;
     public PinpointLocalizer pinpoint;
     public MecanumDrive drive;
     public Robot(HardwareMap hwMap, GamepadMappings controls) {
         driveTrain = new DriveTrain(hwMap, controls);
         intake = new Intake(hwMap);
-//        turret = new Turret(hwMap);
+       turret = new Turret(hwMap);
         outtake = new Outtake(hwMap);
         transfer = new Intake(hwMap);
         pinpoint = new PinpointLocalizer(hwMap, 0.0025, PoseStorage.currentPose);

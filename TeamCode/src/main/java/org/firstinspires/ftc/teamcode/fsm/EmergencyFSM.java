@@ -31,11 +31,10 @@ public class EmergencyFSM {
     // Current target color: true = red, false = blue
     private boolean targetIsRed = true;
 
-    public EmergencyFSM(Telemetry telemetry, GamepadMappings controls, Robot robot, RTPAxon turret) {
+    public EmergencyFSM(Telemetry telemetry, GamepadMappings controls, Robot robot) {
         this.robot = robot;
         this.intake = robot.intake;
         this.outtake = robot.outtake;
-        this.turret = turret;
         this.pinpoint = robot.pinpoint;
         this.controls = controls;
         this.telemetry = telemetry;
@@ -109,7 +108,7 @@ public class EmergencyFSM {
                 turret.setTargetRotation(targetAngle);
                 turret.setRtp(true);
             } else {
-                // Manual control fallback
+                // Manual control
                 double manualPower = 0;
                 if (controls.turretLeft.locked()) manualPower = -0.2;
                 else if (controls.turretRight.locked()) manualPower = 0.2;

@@ -1,70 +1,80 @@
 package org.firstinspires.ftc.teamcode.subsystems.Outtake;
 
 import com.qualcomm.robotcore.hardware.AnalogInput;
+import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.CRServo;
-import org.firstinspires.ftc.teamcode.subsystems.Outtake.RTPAxon;
 
 public class Turret {
 
-    private final RTPAxon turretServo;
+    private final RTPAxon leftServo;
+    private final RTPAxon rightServo;
     private boolean enabled = true; // allow manual override
 
     // Constructor
-    public Turret(CRServo servo, AnalogInput encoder) {
-        turretServo = new RTPAxon(servo, encoder);
+    public Turret(HardwareMap hwMap) {
+        CRServo left = hwMap.get(CRServo.class, "turretLeft");
+        CRServo right = hwMap.get(CRServo.class, "turretRight");
+        AnalogInput encoder = hwMap.get(AnalogInput.class, "turretEncoder");
+
+        leftServo = new RTPAxon(left, encoder);
+        rightServo = new RTPAxon(right, encoder);
+
         // Optional PID tuning
-        turretServo.setPidCoeffs(0.015, 0.0005, 0.0025);
-        turretServo.setMaxPower(0.25);
+        leftServo.setPidCoeffs(0.015, 0.0005, 0.0025);
+        rightServo.setPidCoeffs(0.015, 0.0005, 0.0025);
+
+        leftServo.setMaxPower(0.8);
+        rightServo.setMaxPower(0.8);
     }
 
-    // Enable or disable automatic turret control
+    // ---------------- Control ----------------
     public void setEnabled(boolean enabled) {
         this.enabled = enabled;
     }
 
-    // Set target angle (absolute)
     public void setTargetAngle(double degrees) {
         if (enabled) {
-            turretServo.setTargetRotation(degrees);
+            leftServo.setTargetRotation(degrees);
+            rightServo.setTargetRotation(-degrees); // opposite direction
         }
     }
 
-    // Increment target angle (relative)
     public void changeTargetAngle(double deltaDegrees) {
         if (enabled) {
-            turretServo.changeTargetRotation(deltaDegrees);
+            leftServo.changeTargetRotation(deltaDegrees);
+            rightServo.changeTargetRotation(-deltaDegrees); // opposite
         }
     }
 
-    // Manual power control (bypass PID)
     public void manualPower(double power) {
-        turretServo.setRtp(false);
-        turretServo.setPower(power);
+        leftServo.setRtp(false);
+        rightServo.setRtp(false);
+
+        leftServo.setPower(power);
+        rightServo.setPower(-power); // opposite
     }
 
-    // Update loop: must call in OpMode loop
     public void update() {
-        turretServo.update();
+        leftServo.update();
+        rightServo.update();
     }
 
-    // Read current angle (degrees)
     public double getAngle() {
-        return turretServo.getTotalRotation();
+        return leftServo.getTotalRotation(); // both share the same encoder
     }
 
-    // Check if turret is at target
     public boolean isAtTarget() {
-        return turretServo.isAtTarget();
+        return leftServo.isAtTarget() && rightServo.isAtTarget();
     }
 
-    // Reset turret encoder and PID
     public void reset() {
-        turretServo.forceResetTotalRotation();
-        turretServo.setRtp(true);
+        leftServo.forceResetTotalRotation();
+        rightServo.forceResetTotalRotation();
+        leftServo.setRtp(true);
+        rightServo.setRtp(true);
     }
 
-    // Optional: telemetry string
     public String telemetryString() {
-        return turretServo.log();
+        return "L: " + leftServo.log() + " | R: " + rightServo.log();
     }
 }

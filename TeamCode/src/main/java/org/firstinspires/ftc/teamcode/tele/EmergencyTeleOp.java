@@ -6,7 +6,9 @@ import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.teamcode.fsm.EmergencyFSM;
 import org.firstinspires.ftc.teamcode.gamepad.GamepadMappings;
+import org.firstinspires.ftc.teamcode.subsystems.Outtake.RTPAxon;
 import org.firstinspires.ftc.teamcode.subsystems.Robot;
+import org.firstinspires.ftc.teamcode.subsystems.Outtake.RTPAxon;
 
 @TeleOp
 public class EmergencyTeleOp extends LinearOpMode {
@@ -24,7 +26,7 @@ public class EmergencyTeleOp extends LinearOpMode {
         robot = new Robot(hardwareMap, controls);
 
         // Initialize FSM with fully constructed Robot
-        fsm = new EmergencyFSM(telemetry, controls, robot);
+            fsm = new EmergencyFSM(telemetry, controls, robot);
 
         telemetry.addLine("Initialization complete");
         telemetry.update();
