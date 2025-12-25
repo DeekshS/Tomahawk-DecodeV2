@@ -48,11 +48,21 @@ public class Outtake {
         telemetry = new MultipleTelemetry(FtcDashboard.getInstance().getTelemetry());
     }
 
-    public void shootVelocity(double velocity) {
+    public void setVelocity(double velocity) {
         motor1.setVelocity(velocity);
         motor2.setVelocity(velocity);
     }
+    public void shootVelocity(int velocity) {
 
+        motor1.setPIDFCoefficients(DcMotor.RunMode.RUN_USING_ENCODER, new PIDFCoefficients(P, I, D, F));
+        motor2.setPIDFCoefficients(DcMotor.RunMode.RUN_USING_ENCODER, new PIDFCoefficients(P, I, D, F));
+
+
+        motor1.setVelocity(velocity);
+        motor2.setVelocity(velocity);
+
+
+    }
     public void shootStop() {
         motor1.setPower(0);
         motor2.setPower(0);
