@@ -111,10 +111,10 @@ public class AutoLock extends LinearOpMode {
             intake.transferIn(1);
             drive.localizer.update();
             double distance = Math.sqrt(Math.pow(36 - drive.localizer.getPose().position.x, 2) + Math.pow(36 - drive.localizer.getPose().position.y, 2));
-            int velocity = outtake.autoVelocityTest(distance);
-            outtake.shootVelocity(velocity);
+            //int velocity = outtake.autoVelocity(distance);
+            //outtake.shootVelocity(velocity);
             telemetry.addData("Dist", distance);
-            telemetry.addData("Velocity", velocity);
+           // telemetry.addData("Velocity", velocity);
             telemetry.update();
         }
     }
