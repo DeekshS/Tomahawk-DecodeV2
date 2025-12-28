@@ -23,78 +23,77 @@ public class Blue12 {
     public static void main(String[] args) {
         MeepMeep meepMeep = new MeepMeep(700);
 
-        RoadRunnerBotEntity myBot = new DefaultBotBuilder(meepMeep)
+        RoadRunnerBotEntity drive = new DefaultBotBuilder(meepMeep)
             .setConstraints(80, 80, 2.5, 3, 18)
             .setDimensions(16.53, 18)
             .build();
 
-        Action preload = myBot.getDrive().actionBuilder(FieldConstants.BLUE_CLOSE_START)
-            .strafeToLinearHeading(FieldConstants.BLUE_CLOSE_SHOOT, FieldConstants.BLUE_CLOSE_ANGLE)
-            .build();
+        Action preload = drive.getDrive().actionBuilder(FCV2.BLUE_CLOSE_START)
+                .strafeToLinearHeading(FCV2.BLUE_CLOSE_SHOOT, FCV2.BLUE_CLOSE_ANGLE)
+                .build();
 
-        Action artifact1 = myBot.getDrive().actionBuilder(new Pose2d(FieldConstants.BLUE_CLOSE_SHOOT.x, FieldConstants.BLUE_CLOSE_SHOOT.y, FieldConstants.BLUE_CLOSE_ANGLE))
-            .strafeToLinearHeading(new Vector2d(FieldConstants.PPG_BLUE_ARTIFACT.x, FieldConstants.BLUE_CLOSE_SHOOT.y), FieldConstants.BLUE_ARTIFACT_ANGLE)
-            .strafeTo(FieldConstants.PPG_BLUE_ARTIFACT)
-            .lineToY(FieldConstants.PPG_BLUE_ARTIFACT.y - 16)
-            .strafeToLinearHeading(FieldConstants.BLUE_GATE, 0)
-            .build();
+        Action artifact1 = drive.getDrive().actionBuilder(new Pose2d(FCV2.BLUE_CLOSE_SHOOT.x, FCV2.BLUE_CLOSE_SHOOT.y, FCV2.BLUE_CLOSE_ANGLE))
+                .strafeToLinearHeading(new Vector2d(FCV2.PPG_BLUE_ARTIFACT.x, FCV2.BLUE_CLOSE_SHOOT.y), FCV2.BLUE_ARTIFACT_ANGLE)
+                .strafeTo(FCV2.PPG_BLUE_ARTIFACT)
+                .strafeToLinearHeading(FCV2.BLUE_GATE, 0)
+                .build();
 
-        Action artifact1_return = myBot.getDrive().actionBuilder(new Pose2d(FieldConstants.BLUE_GATE.x, FieldConstants.BLUE_GATE.y, 0))
+        Action artifact1_return = drive.getDrive().actionBuilder(new Pose2d(FCV2.BLUE_GATE.x, FCV2.BLUE_GATE.y, 0))
 
-            .strafeToLinearHeading(FieldConstants.BLUE_CLOSE_SHOOT, FieldConstants.BLUE_CLOSE_ANGLE)
-            .waitSeconds(0.85)
+                .strafeToLinearHeading(FCV2.BLUE_CLOSE_SHOOT, FCV2.BLUE_CLOSE_ANGLE)
+                .waitSeconds(0.85)
 
-            .build();
+                .build();
 
 
-        Action artifact2 = myBot.getDrive().actionBuilder(new Pose2d(FieldConstants.BLUE_CLOSE_SHOOT.x, FieldConstants.BLUE_CLOSE_SHOOT.y, FieldConstants.BLUE_CLOSE_ANGLE))
-            .strafeToLinearHeading(FieldConstants.PGP_BLUE_ARTIFACT, FieldConstants.BLUE_ARTIFACT_ANGLE)
+        Action artifact2 = drive.getDrive().actionBuilder(new Pose2d(FCV2.BLUE_CLOSE_SHOOT.x, FCV2.BLUE_CLOSE_SHOOT.y, FCV2.BLUE_CLOSE_ANGLE))
+                .strafeToLinearHeading(FCV2.PGP_BLUE_ARTIFACT, FCV2.BLUE_ARTIFACT_ANGLE)
 
-            .setTangent(FieldConstants.BLUE_ARTIFACT_ANGLE)
-            //
-            .lineToY(FieldConstants.PGP_BLUE_ARTIFACT.y+FieldConstants.ARTIFACT_DIST)
+                .setTangent(FCV2.BLUE_ARTIFACT_ANGLE)
+                //
+                .lineToY(FCV2.PGP_BLUE_ARTIFACT.y+FCV2.ARTIFACT_DIST)
 //            .setReversed(true)
-//            .splineToLinearHeading(new Pose2d(FieldConstants.PGP_BLUE_ARTIFACT.x, FieldConstants.PGP_BLUE_ARTIFACT.y+FieldConstants.ARTIFACT_DIST, FieldConstants.BLUE_ARTIFACT_ANGLE), +Math.PI/2.2)
+//            .splineToLinearHeading(new Pose2d(FCV2.PGP_BLUE_ARTIFACT.x, FCV2.PGP_BLUE_ARTIFACT.y+FCV2.ARTIFACT_DIST, FCV2.BLUE_ARTIFACT_ANGLE), +Math.PI/2.2)
 
-            .build();
+                .build();
 
-        Action artifact2_return = myBot.getDrive().actionBuilder(new Pose2d(FieldConstants.PGP_BLUE_ARTIFACT.x, FieldConstants.PGP_BLUE_ARTIFACT.y+FieldConstants.ARTIFACT_DIST, FieldConstants.BLUE_ARTIFACT_ANGLE))
+        Action artifact2_return = drive.getDrive().actionBuilder(new Pose2d(FCV2.PGP_BLUE_ARTIFACT.x, FCV2.PGP_BLUE_ARTIFACT.y+FCV2.ARTIFACT_DIST, FCV2.BLUE_ARTIFACT_ANGLE))
 
-//            .strafeTo(FieldConstants.PGP_BLUE_ARTIFACT)
-//            .strafeToLinearHeading(FieldConstants.BLUE_CLOSE_SHOOT, FieldConstants.BLUE_CLOSE_ANGLE+Math.toRadians(5+2))
-            .setReversed(true)
-            .splineToLinearHeading(new Pose2d(FieldConstants.BLUE_CLOSE_SHOOT.x, FieldConstants.BLUE_CLOSE_SHOOT.y, FieldConstants.BLUE_CLOSE_ANGLE), Math.PI/8)
+//            .strafeTo(FCV2.PGP_BLUE_ARTIFACT)
+//            .strafeToLinearHeading(FCV2.BLUE_CLOSE_SHOOT, FCV2.BLUE_CLOSE_ANGLE+Math.toRadians(5+2))
+                .setReversed(true)
+                .splineToLinearHeading(new Pose2d(FCV2.BLUE_CLOSE_SHOOT.x, FCV2.BLUE_CLOSE_SHOOT.y, FCV2.BLUE_CLOSE_ANGLE), Math.PI/8)
 
-//                            .splineToLinearHeading(new Pose2d(FieldConstants.BLUE_CLOSE_SHOOT, FieldConstants.BLUE_CLOSE_ANGLE))
+//                            .splineToLinearHeading(new Pose2d(FCV2.BLUE_CLOSE_SHOOT, FCV2.BLUE_CLOSE_ANGLE))
 //            .setReversed(true)
-//            .strafeTo(FieldConstants.BLUE_CLOSE_SHOOT)
+//            .strafeTo(FCV2.BLUE_CLOSE_SHOOT)
 
-            .build();
+                .build();
 
 
 
-        Action artifact3 = myBot.getDrive().actionBuilder(new Pose2d(FieldConstants.BLUE_CLOSE_SHOOT.x, FieldConstants.BLUE_CLOSE_SHOOT.y, FieldConstants.BLUE_CLOSE_ANGLE))
-            .strafeToLinearHeading(FieldConstants.GPP_BLUE_ARTIFACT, FieldConstants.BLUE_ARTIFACT_ANGLE)
+        Action artifact3 = drive.getDrive().actionBuilder(new Pose2d(FCV2.BLUE_CLOSE_SHOOT.x, FCV2.BLUE_CLOSE_SHOOT.y, FCV2.BLUE_CLOSE_ANGLE))
+                .strafeToLinearHeading(FCV2.GPP_BLUE_ARTIFACT, FCV2.BLUE_ARTIFACT_ANGLE)
 
 //            .setTangent(0)
-//            .splineToConstantHeading(FieldConstants.GPP_BLUE_ARTIFACT, +0.75*Math.PI)
-            .waitSeconds(.2)
-            .lineToY(FieldConstants.GPP_BLUE_ARTIFACT.y+FieldConstants.ARTIFACT_DIST)
+//            .splineToConstantHeading(FCV2.GPP_BLUE_ARTIFACT, +0.75*Math.PI)
+                .waitSeconds(.2)
+                .lineToY(FCV2.GPP_BLUE_ARTIFACT.y+FCV2.ARTIFACT_DIST)
 
-            .build();
+                .build();
 
-        Action artifact3_return = myBot.getDrive().actionBuilder(new Pose2d(FieldConstants.GPP_BLUE_ARTIFACT.x, FieldConstants.GPP_BLUE_ARTIFACT.y+FieldConstants.ARTIFACT_DIST, FieldConstants.BLUE_ARTIFACT_ANGLE))
+        Action artifact3_return = drive.getDrive().actionBuilder(new Pose2d(FCV2.GPP_BLUE_ARTIFACT.x, FCV2.GPP_BLUE_ARTIFACT.y+FCV2.ARTIFACT_DIST, FCV2.BLUE_ARTIFACT_ANGLE))
 
-            //                .setReversed(true)
-            .strafeToLinearHeading(FieldConstants.BLUE_CLOSE_SHOOT, FieldConstants.BLUE_CLOSE_ANGLE)
+                //                .setReversed(true)
+                .strafeToLinearHeading(FCV2.BLUE_CLOSE_SHOOT, FCV2.BLUE_CLOSE_ANGLE)
 
-            .build();
+                .build();
 
-        Action park = myBot.getDrive().actionBuilder(new Pose2d(FieldConstants.BLUE_CLOSE_SHOOT.x, FieldConstants.BLUE_CLOSE_SHOOT.y, FieldConstants.BLUE_CLOSE_ANGLE))
-            .strafeTo(new Vector2d(FieldConstants.PGP_BLUE_ARTIFACT.x, FieldConstants.PGP_BLUE_ARTIFACT.y+5))
-            .build();
+        Action park = drive.getDrive().actionBuilder(new Pose2d(FCV2.GPP_BLUE_ARTIFACT.x, FCV2.GPP_BLUE_ARTIFACT.y+FCV2.ARTIFACT_DIST, FCV2.BLUE_CLOSE_ANGLE))
+                .strafeTo(new Vector2d(FCV2.PGP_BLUE_ARTIFACT.x, FCV2.PGP_BLUE_ARTIFACT.y-5))
+                .build();
 
-        myBot.runAction(
+        drive.runAction(
             new SequentialAction(
                 preload,
                 artifact1,
@@ -215,7 +214,7 @@ public class Blue12 {
         meepMeep.setBackground(bg)
             .setDarkMode(true)
             .setBackgroundAlpha(0.95f)
-            .addEntity(myBot)
+            .addEntity(drive)
             .start();
 
 

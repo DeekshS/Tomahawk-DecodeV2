@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode.autonomous.autos;
+package com.example.meepmeep;
 
 import com.acmerobotics.roadrunner.Pose2d;
 import com.acmerobotics.roadrunner.Vector2d;
@@ -35,9 +35,9 @@ public interface FCV2 {
 //    Vector2d PGP_RED_ARTIFACT = new Vector2d(-12, -25);
 //    Vector2d PPG_RED_ARTIFACT = new Vector2d(12, -54);
 
-    Vector2d GPP_RED_ARTIFACT = new Vector2d(-36, -26);
-    Vector2d PGP_RED_ARTIFACT = new Vector2d(-13, -23);
-    Vector2d PPG_RED_ARTIFACT = new Vector2d(10, -56);
+    Vector2d GPP_RED_ARTIFACT = new Vector2d(-36, -56);
+    Vector2d PGP_RED_ARTIFACT = new Vector2d(-12, -56);
+    Vector2d PPG_RED_ARTIFACT = new Vector2d(12, -56);
     Vector2d HP_RED_ARTIFACT = new Vector2d(-60,-58);
 
 
@@ -63,12 +63,12 @@ public interface FCV2 {
     double BLUE_GATE_INTAKE_ANGLE = Math.toRadians(55);
     Vector2d RED_GATE = new Vector2d(4, -68);
     Vector2d RED_GATE_INTAKE = new Vector2d(-11, -58);
-    double RED_GATE_INTAKE_ANGLE = Math.toRadians(235);
+    double RED_GATE_INTAKE_ANGLE = Math.toRadians(-35);
 
     // ======STARTING POSITIONS======
     Pose2d RED_FAR_START = new Pose2d(-61.25, -5, Math.toRadians(0));
 
-    Pose2d RED_CLOSE_START = new Pose2d(57, -45, Math.toRadians(-37));
+    Pose2d RED_CLOSE_START = new Pose2d(57, -45, Math.toRadians(306));
 
     Pose2d BLUE_FAR_START = new Pose2d(-61.25, 5, Math.toRadians(0));
 

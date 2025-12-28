@@ -114,6 +114,8 @@ public class Outtake {
         telemetry.addData("Velocity", velocity);
         return velocity;
     }
+
+    //============== ACTIONS =============
     public Action autoVelocityAction(double robotX, double robotY, double goalX, double goalY) {
         return new Action() {
             private boolean init = false;
@@ -181,6 +183,38 @@ public class Outtake {
                 }
 
                 return timer.seconds() >= timeLimit;
+            }
+        };
+    }
+    public Action shootVelocityAction(int velocity) {
+        return new Action() {
+
+            @Override
+            public boolean run(@NonNull TelemetryPacket telemetryPacket) {
+
+                motor1.setPIDFCoefficients(DcMotor.RunMode.RUN_USING_ENCODER, new PIDFCoefficients(P, I, D, F));
+                motor2.setPIDFCoefficients(DcMotor.RunMode.RUN_USING_ENCODER, new PIDFCoefficients(P, I, D, F));
+
+
+                motor1.setVelocity(velocity);
+                motor2.setVelocity(velocity);
+
+                double error = Math.abs(getVelocity() - velocity);
+                telemetryPacket.put("Error", error);
+                return error < 50;
+            }
+        };
+    }
+
+    public Action stopAction() {
+        return  new Action() {
+
+            @Override
+            public boolean run(@NonNull TelemetryPacket telemetryPacket) {
+                motor1.setPower(0);
+                motor2.setPower(0);
+
+                return true;
             }
         };
     }
