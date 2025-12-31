@@ -1,5 +1,7 @@
 package org.firstinspires.ftc.teamcode.fsm;
 
+import com.acmerobotics.dashboard.config.Config;
+
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.teamcode.drive.localizers.PinpointLocalizer;
 import org.firstinspires.ftc.teamcode.gamepad.GamepadMappings;
@@ -8,7 +10,7 @@ import org.firstinspires.ftc.teamcode.subsystems.Outtake.Outtake;
 import org.firstinspires.ftc.teamcode.subsystems.Outtake.OuttakeConstants;
 import org.firstinspires.ftc.teamcode.subsystems.Outtake.Turret;
 import org.firstinspires.ftc.teamcode.subsystems.Robot;
-
+@Config
 public class EmergencyFSM {
 
     private Intake intake;
@@ -21,6 +23,7 @@ public class EmergencyFSM {
     private GazelleState gazelleState;
     private Intake transfer;
 
+    public static int velocity = 1600;
     public EmergencyFSM(Telemetry telemetry, GamepadMappings controls, Robot robot) {
         this.robot = robot;
         this.intake = robot.intake;
@@ -44,7 +47,8 @@ public class EmergencyFSM {
         } else if (controls.flywheelFar.value()) {
             outtake.shootVelocity(OuttakeConstants.FAR_VELOCITY);
         } else if (controls.autoVelo.value()) {
-            outtake.shootVelocity(outtake.autoVelocity(robot.drive.localizer.getPose()));
+//            outtake.shootVelocity(outtake.autoVelocity(robot.drive.localizer.getPose()));
+            outtake.shootVelocity(velocity);
         } else {
             outtake.shootVelocity(OuttakeConstants.OFF_VELOCITY);
         }
@@ -68,16 +72,16 @@ public class EmergencyFSM {
         if (turret != null) {
             boolean autoAim = true; // always auto-aim at the current target color
 
-            if (autoAim && (robot.drive.localizer.getPose().position.x > -5 || (robot.drive.localizer.getPose().position.x < -43 && robot.drive.localizer.getPose().position.y > -30 && robot.drive.localizer.getPose().position.y < 30))) {
-                turret.autoAlign(robot.drive.localizer.getPose());
-            } else {
+//            if (autoAim && (robot.drive.localizer.getPose().position.x > -5 || (robot.drive.localizer.getPose().position.x < -43 && robot.drive.localizer.getPose().position.y > -30 && robot.drive.localizer.getPose().position.y < 30))) {
+//                turret.autoAlign(robot.drive.localizer.getPose());
+//            } else {
                 // Manual control
                 double power = 0;
                 if (controls.turretLeft.locked()) power = -0.2;
                 else if (controls.turretRight.locked()) power = 0.2;
 
                 turret.manualPower(power);
-            }
+//            }
 
             turret.update(); // always update PID / rotation
         }

@@ -43,7 +43,7 @@ public class Turret {
 
     // --------------- Auto-Align --------------
 
-    public void autoAlign(Pose2d pose) {
+    public double autoAlign(Pose2d pose) {
         update();
         leftServo.setRtp(true);
         rightServo.setRtp(true);
@@ -56,8 +56,9 @@ public class Turret {
         double targetAngle = Math.toDegrees(Math.atan2(deltaX, deltaY) - pose.heading.toDouble());
         if (targetAngle < -360) targetAngle += 360;
         if (targetAngle > 360) targetAngle -= 360;
-        leftServo.setTargetRotation(targetAngle);
-        rightServo.setTargetRotation(-targetAngle);
+//        leftServo.setTargetRotation(targetAngle);
+//        rightServo.setTargetRotation(-targetAngle);
+        return targetAngle;
 
     }
 
