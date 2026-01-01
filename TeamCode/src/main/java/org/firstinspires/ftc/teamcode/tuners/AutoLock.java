@@ -48,7 +48,8 @@ public class AutoLock extends LinearOpMode {
             drive.localizer.update();
             error = (angle > 180 && targetAngle > 180) ? (angle - (initialAngle + targetAngle)) % 360 : ((angle > 180 && targetAngle < 180) ? (360 - ((angle - (initialAngle + targetAngle))) % 360) : ((angle < 180 && targetAngle < 180) ? -((angle - (initialAngle + targetAngle)) % 360) : 360 + ((angle - (initialAngle + targetAngle)) % 360)));
 //            targetAngle = turret.autoAlign(drive.localizer.getPose());
-            power = error/200;
+//            power = Math.min(Math.max(Math.log(error) / Math.log(360), 0), 1);
+            power = 0.25 * Math.log1p(error);
             angle = (servoEncoder.getVoltage() / 3.3 * 360) % 360;
 
             boundsHittingLeft = angle > 180 && angle < 360 && targetAngle < 180;
