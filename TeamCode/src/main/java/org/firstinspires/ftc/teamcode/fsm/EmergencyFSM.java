@@ -72,16 +72,16 @@ public class EmergencyFSM {
         if (turret != null) {
             boolean autoAim = true; // always auto-aim at the current target color
 
-//            if (autoAim && (robot.drive.localizer.getPose().position.x > -5 || (robot.drive.localizer.getPose().position.x < -43 && robot.drive.localizer.getPose().position.y > -30 && robot.drive.localizer.getPose().position.y < 30))) {
-//                turret.autoAlign(robot.drive.localizer.getPose());
-//            } else {
+            if (autoAim) {
+                turret.autoAlign(robot.drive.localizer.getPose());
+            } else {
                 // Manual control
                 double power = 0;
-                if (controls.turretLeft.locked()) power = -0.2;
-                else if (controls.turretRight.locked()) power = 0.2;
+                if (controls.turretLeft.locked()) turret.changeTargetAngle(-20);
+                else if (controls.turretRight.locked()) turret.changeTargetAngle(20);
 
-                turret.manualPower(power);
-//            }
+
+            }
 
             turret.update(); // always update PID / rotation
         }

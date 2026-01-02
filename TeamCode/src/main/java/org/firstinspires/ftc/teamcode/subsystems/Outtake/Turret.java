@@ -10,56 +10,36 @@ import org.firstinspires.ftc.teamcode.PoseStorage;
 
 public class Turret {
 
-    public final RTPAxon leftServo;
-    public final RTPAxon rightServo;
-
     private boolean enabled = true; // allow manual override
 
-    double leftStart = 0;
-    double rightStart = 0;
+    double power = 0;
+    double error = 0;
+    double angle = 0;
+    double targetAngle = 0;
+    double initialAngle;
 
-    MultipleTelemetry telemetry;
+    CRServo left;
+    CRServo right;
+    AnalogInput encoder;
+
     // Constructor
     public Turret(HardwareMap hwMap) {
-        CRServo left = hwMap.get(CRServo.class, "turretLeft");
-        CRServo right = hwMap.get(CRServo.class, "turretRight");
-        AnalogInput encoder = hwMap.get(AnalogInput.class, "turretEncoder");
-
-        leftServo = new RTPAxon(left, encoder);
-        rightServo = new RTPAxon(right, encoder);
-        leftServo.setDirection(RTPAxon.Direction.REVERSE);
-        rightServo.setDirection(RTPAxon.Direction.FORWARD);
-
-        // Optional PID tuning
-        leftServo.setPidCoeffs(0.015, 0.0005, 0.0025);
-        rightServo.setPidCoeffs(0.015, 0.0005, 0.0025);
-
-        leftServo.setMaxPower(0.8);
-        rightServo.setMaxPower(0.8);
-
-        leftStart = leftServo.getCurrentAngle();
-        rightStart = rightServo.getCurrentAngle();
+        left = hwMap.get(CRServo.class, "turretLeft");
+        right = hwMap.get(CRServo.class, "turretRight");
+        encoder = hwMap.get(AnalogInput.class, "turretEncoder");
+        initialAngle = encoder.getVoltage() / 3.3 * 360;
     }
 
     // --------------- Auto-Align --------------
 
-    public double autoAlign(Pose2d pose) {
-        update();
-        leftServo.setRtp(true);
-        rightServo.setRtp(true);
-
+    public void autoAlign(Pose2d pose) {
         double robotX = pose.position.x;
         double robotY = pose.position.y;
 
         double deltaX = PoseStorage.goalX - robotX;
         double deltaY = PoseStorage.goalY - robotY;
-        double targetAngle = Math.toDegrees(Math.atan2(deltaX, deltaY) - pose.heading.toDouble());
-        if (targetAngle < -360) targetAngle += 360;
-        if (targetAngle > 360) targetAngle -= 360;
-//        leftServo.setTargetRotation(targetAngle);
-//        rightServo.setTargetRotation(-targetAngle);
-        return targetAngle;
 
+        setTargetAngle(Math.toDegrees(Math.atan2(deltaX, deltaY) - pose.heading.toDouble()));
     }
 
     // ---------------- Control ----------------
@@ -67,48 +47,53 @@ public class Turret {
         this.enabled = enabled;
     }
 
-    public void setTargetAngle(double degrees) {
-        if (enabled) {
-            leftServo.setTargetRotation(degrees);
-            rightServo.setTargetRotation(degrees);
-        }
+    public void setTargetAngle(double a) {
+        targetAngle = a;
     }
 
-    public void changeTargetAngle(double deltaDegrees) {
-        if (enabled) {
-            leftServo.changeTargetRotation(deltaDegrees);
-            rightServo.changeTargetRotation(deltaDegrees);
-        }
-    }
-
-    public void manualPower(double power) {
-        leftServo.setPower(power);
-        rightServo.setPower(-power);
-        leftServo.setRtp(false);
-        rightServo.setRtp(false);
-    }
-
-    public void update() {
-        leftServo.update();
-        rightServo.update();
+    public void changeTargetAngle(double a) {
+        targetAngle += a;
     }
 
     public double getAngle() {
-        return leftServo.getTotalRotation();
+        return angle;
+    }
+
+    public double getError() {
+        return error;
+    }
+
+    public double getPower() {
+        return power;
+    }
+
+    public double getTargetAngle() {
+        return targetAngle;
     }
 
     public boolean isAtTarget() {
-        return leftServo.isAtTarget() && rightServo.isAtTarget();
+        return error < 5;
     }
 
-    public void reset() {
-        leftServo.forceResetTotalRotation();
-        rightServo.forceResetTotalRotation();
-        leftServo.setRtp(true);
-        rightServo.setRtp(true);
-    }
+    public void update() {
+        error = (angle > 180 && targetAngle > 180) ? (angle - (initialAngle + targetAngle)) % 360 : ((angle > 180 && targetAngle < 180) ? (360 - ((angle - (initialAngle + targetAngle))) % 360) : ((angle < 180 && targetAngle < 180) ? -((angle - (initialAngle + targetAngle)) % 360) : 360 + ((angle - (initialAngle + targetAngle)) % 360)));
+        power = 0.25 * Math.log1p(error);
+        angle = (encoder.getVoltage() / 3.3 * 360) % 360;
 
-    public String telemetryString() {
-        return "\nLeft Error: " + (leftServo.getCurrentAngle() - leftServo.getTargetRotation()) + " | Right Error: " + (rightServo.getCurrentAngle() - rightServo.getTargetRotation());
+        boolean boundsHittingLeft = angle > 180 && angle < 360 && targetAngle < 180;
+        boolean boundsHittingRight = angle < 180 && angle > 0  && targetAngle > 180;
+
+        if (Math.abs(error) < 5 || Math.abs(Math.abs(error) - 360) < 5) {
+            left.setPower(0);
+            right.setPower(0);
+        } else {
+            if ((error > 180 || (error < 0 && error > -180) || (boundsHittingLeft)) && (!boundsHittingRight)) {
+                left.setPower(power);
+                right.setPower(power);
+            } else {
+                left.setPower(-power);
+                right.setPower(-power);
+            }
+        }
     }
 }

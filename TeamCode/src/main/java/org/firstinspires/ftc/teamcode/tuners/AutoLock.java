@@ -31,9 +31,6 @@ public class AutoLock extends LinearOpMode {
         AnalogInput servoEncoder = hardwareMap.get(AnalogInput.class, "turretEncoder");
         MecanumDrive drive = new MecanumDrive(this.hardwareMap, new Pose2d(24, 24, 0));
 
-        MiniPID pid = new MiniPID(p, i, d);
-        pid.setOutputLimits(0.7);
-
         double initialAngle = 0;
         double angle = 0;
         double error;
@@ -70,14 +67,9 @@ public class AutoLock extends LinearOpMode {
 
             telemetry.addData("Angle", angle);
             telemetry.addData("Target Angle", targetAngle);
-//            error = (error > 180 || ((error < 0 && error > -180) || (boundsHittingLeft)) && (!boundsHittingRight)) ? error : -error;
-//            error = (error > 180 && error < 360) ? 360 - error - targetAngle: error;
             telemetry.addData("Error", error);
-//            telemetry.addData("PID Output", pid.getOutput(Math.abs(error / 360), 0));
             telemetry.addData("pwr", power);
             telemetry.update();
         }
-//        turret.leftServo.forceResetTotalRotation();
-//        turret.rightServo.forceResetTotalRotation();
     }
 }
