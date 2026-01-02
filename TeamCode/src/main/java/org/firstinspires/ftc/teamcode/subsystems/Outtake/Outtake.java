@@ -11,7 +11,6 @@ import com.acmerobotics.roadrunner.Action;
 import com.acmerobotics.roadrunner.Pose2d;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
-import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.PIDFCoefficients;
 import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.util.ElapsedTime;
@@ -57,7 +56,6 @@ public class Outtake {
         motor2.setVelocity(velocity);
     }
     public void shootVelocity(int velocity) {
-
         motor1.setPIDFCoefficients(DcMotor.RunMode.RUN_USING_ENCODER, new PIDFCoefficients(P, I, D, F));
         motor2.setPIDFCoefficients(DcMotor.RunMode.RUN_USING_ENCODER, new PIDFCoefficients(P, I, D, F));
 
@@ -96,10 +94,8 @@ public class Outtake {
 
     /**
      * Automatic velocity + hood control
-     *
-     * @return
      */
-    public int autoVelocity(Pose2d pose) {
+    public void autoVelocity(Pose2d pose) {
         double robotX = pose.position.x;
         double robotY = pose.position.y;
         double dx = goalX - robotX;
@@ -112,12 +108,11 @@ public class Outtake {
 
         // Velocity control
         int velocity = veloCalc(distance, hoodPos);
-//        shootVelocity(velocity);
+        shootVelocity(velocity);
 
         telemetry.addData("Distance", distance);
         telemetry.addData("Hood", hoodPos);
         telemetry.addData("Velocity", velocity);
-        return velocity;
     }
 
     //============== ACTIONS =============
