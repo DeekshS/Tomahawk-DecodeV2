@@ -12,6 +12,7 @@ import com.qualcomm.robotcore.hardware.CRServo;
 import org.firstinspires.ftc.teamcode.drive.MecanumDrive;
 import org.firstinspires.ftc.teamcode.pid.MiniPID;
 import org.firstinspires.ftc.teamcode.subsystems.Outtake.Turret;
+import org.firstinspires.ftc.teamcode.tele.SET_AS_BLUE;
 
 @TeleOp
 @Config
@@ -19,7 +20,8 @@ public class AutoLock extends LinearOpMode {
     public static double pwr = 0.2;
     public static double targetAngle = 270;
 
-    public void runOpMode() {
+    public void runOpMode() throws InterruptedException {
+        SET_AS_BLUE.set();
         telemetry = new MultipleTelemetry(telemetry, FtcDashboard.getInstance().getTelemetry());
 
         Turret turret = new Turret(hardwareMap);
