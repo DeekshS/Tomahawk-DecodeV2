@@ -34,6 +34,7 @@ import com.qualcomm.hardware.lynx.LynxModule;
 import com.qualcomm.hardware.rev.RevHubOrientationOnRobot;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
+import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.IMU;
 import com.qualcomm.robotcore.hardware.VoltageSensor;
@@ -66,12 +67,12 @@ public final class MecanumDrive {
 
         // drive model parameters
         public double lateralInPerTick = 0.0015195423659615968;
-        public double inPerTick = 0.00199038;
+        public double inPerTick = 0.001923231028127254;
         public double trackWidthTicks = 6168.550184839865;
 
         // feedforward parameters (in tick units)
-        public double kS = 2.005549710435344;
-        public double kV = 0.00022;
+        public double kS = 1.6208636414882118;
+        public double kV = 0.00023706842154230475;
         public double kA = 0.0000575;
 
 
@@ -87,7 +88,7 @@ public final class MecanumDrive {
 
         // path controller gains
         public double axialGain = 8;
-        public double lateralGain = 3.5;
+        public double lateralGain = 0;
         public double headingGain = 3;
 
         public double axialVelGain = 0.3;
@@ -241,7 +242,9 @@ public final class MecanumDrive {
 
         // TODO: `reverse` motor directions if needed
         ;
-        //rightBack.setDirection(DcMotorEx.Direction.REVERSE);
+        leftBack.setDirection(DcMotorEx.Direction.REVERSE);
+//        rightBack.setDirection(DcMotorEx.Direction.FORWARD);
+        leftFront.setDirection(DcMotorSimple.Direction.REVERSE);
 
         // TODO: make sure your config has an IMU with this name (can be BNO or BHI)
         //   see https://ftc-docs.firstinspires.org/en/latest/hardware_and_software_configuration/configuring/index.html

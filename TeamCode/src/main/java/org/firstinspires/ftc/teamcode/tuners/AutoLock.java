@@ -18,21 +18,37 @@ public class AutoLock extends LinearOpMode {
     public static double minPower = 0.15;
     public static double maxPower = 0.6;
     public static double p = 0.008;
-    public static double i = 0.0;      // Integral gain
+    public static double i = 0.0;
     public static double d = 0.0003;
-    public static double f = 0.0;      // Feedforward gain
-    public static double targetAngle = 0;
+    public static double f = 0.0;
+    public static double targetAngle = 180;
     public static double tolerance = 5;
-    public static double maxIntegral = 0.3;  // Prevent integral windup
+    public static double maxIntegral = 0.3;
     public static int servo = 0;
     public static boolean tuning = false;
 
-    public static double encoderAtForward = 22;
 
-    // These will be set based on initial position
-    private double minBound;
-    private double maxBound;
-    private double initialAngle;
+    private static final double minBound = 0;
+    private static final double maxBound = 360;
+
+    private double normalizeAngle(double angle) {
+        angle = angle % 360;
+        if (angle < 0) angle += 360;
+        return angle;
+    }
+
+    private double calculateError(double target, double current) {
+        double error = target - current;
+
+        // Find shortest path
+        if (error > 180) {
+            error -= 360;
+        } else if (error < -180) {
+            error += 360;
+        }
+
+        return error;
+    }
 
     public void runOpMode() {
         telemetry = new MultipleTelemetry(telemetry, FtcDashboard.getInstance().getTelemetry());
@@ -45,28 +61,24 @@ public class AutoLock extends LinearOpMode {
         ElapsedTime timer = new ElapsedTime();
         double lastError = 0;
         double lastTime = 0;
-        double integralSum = 0;  // Accumulated integral
+        double integralSum = 0;
 
         waitForStart();
         if (isStopRequested()) return;
 
-        // Read initial position and set bounds
+        // Read initial position
         double rawEncoder = (servoEncoder.getVoltage() / 3.3 * 360);
-        initialAngle = rawEncoder - encoderAtForward;
-        while (initialAngle > 180) initialAngle -= 360;
-        while (initialAngle < -180) initialAngle += 360;
-
-        // Set bounds: 180° in each direction from initial position
-        minBound = initialAngle - 180;
-        maxBound = initialAngle + 180;
+        double initialAngle = normalizeAngle(rawEncoder);
 
         telemetry.addData("Initial Angle", initialAngle);
-        telemetry.addData("Min Bound", minBound);
-        telemetry.addData("Max Bound", maxBound);
-        telemetry.addData("Press START to confirm", "");
+        telemetry.addData("0° = Back", "");
+        telemetry.addData("90° = Right", "");
+        telemetry.addData("180° = Front", "");
+        telemetry.addData("270° = Left", "");
+        telemetry.addData("Valid Range", "0° to 360°");
         telemetry.update();
 
-        sleep(2000); // Show bounds for 2 seconds
+        sleep(2000);
 
         timer.reset();
 
@@ -78,31 +90,19 @@ public class AutoLock extends LinearOpMode {
 
             // Read raw encoder (0-360)
             rawEncoder = (servoEncoder.getVoltage() / 3.3 * 360);
+            double currentAngle = normalizeAngle(rawEncoder);
 
-            // Convert to turret coordinates (-180 to 180, where 0 = forward)
-            double currentAngle = rawEncoder - encoderAtForward;
+            // Normalize target to 0-360
+            double normalizedTarget = normalizeAngle(targetAngle);
 
-            // Normalize to -180 to 180 range
-            while (currentAngle > 180) currentAngle -= 360;
-            while (currentAngle < -180) currentAngle += 360;
+            // Calculate error using shortest path
+            double error = calculateError(normalizedTarget, currentAngle);
 
-            // Clamp target to valid range based on initial position
-            double clampedTarget = Math.max(minBound, Math.min(maxBound, targetAngle));
-
-            // Calculate error
-            double error = clampedTarget - currentAngle;
-
-            // Normalize error to shortest path
-            while (error > 180) error -= 360;
-            while (error < -180) error += 360;
-
-            // Calculate integral (accumulated error over time)
+            // Calculate integral
             if (dt > 0 && Math.abs(error) > tolerance) {
                 integralSum += error * dt;
-                // Anti-windup: clamp integral to prevent it from growing too large
                 integralSum = Math.max(-maxIntegral, Math.min(maxIntegral, integralSum));
             } else if (Math.abs(error) <= tolerance) {
-                // Reset integral when at target
                 integralSum = 0;
             }
 
@@ -116,11 +116,10 @@ public class AutoLock extends LinearOpMode {
             double power = 0;
 
             if (Math.abs(error) > tolerance) {
-                // PIDF control
                 double proportional = error * p;
                 double integral = integralSum * i;
                 double derivativeTerm = derivative * d;
-                double feedforward = Math.signum(error) * f;  // F provides constant push in error direction
+                double feedforward = Math.signum(error) * f;
 
                 power = proportional + integral + derivativeTerm + feedforward;
 
@@ -131,21 +130,23 @@ public class AutoLock extends LinearOpMode {
                     power = Math.max(-maxPower, Math.min(-minPower, power));
                 }
 
-                // Hard stop at bounds
-                if ((currentAngle <= minBound + 10 && power < 0) ||
-                        (currentAngle >= maxBound - 10 && power > 0)) {
+                // Hard stop at bounds (0° and 360° are the same, so check both)
+                // Stop if within 10° of 0°/360° AND moving toward the boundary
+                if (((currentAngle < 10 || currentAngle > 350) &&
+                        ((currentAngle < 10 && power < 0) || (currentAngle > 350 && power > 0)))) {
                     power = 0;
                 }
             } else {
-                // At target, reset integral
                 integralSum = 0;
             }
 
             if (tuning) {
                 if (servo == 1) {
                     left.setPower(power);
+                    right.setPower(0);
                 }
                 else {
+                    left.setPower(0);
                     right.setPower(power);
                 }
             }
@@ -154,15 +155,12 @@ public class AutoLock extends LinearOpMode {
                 right.setPower(power);
             }
 
-            // Update for next loop
             lastError = error;
             lastTime = currentTime;
 
             telemetry.addData("Raw Encoder", rawEncoder);
             telemetry.addData("Current Angle", currentAngle);
-            telemetry.addData("Target Angle", clampedTarget);
-            telemetry.addData("Min Bound", minBound);
-            telemetry.addData("Max Bound", maxBound);
+            telemetry.addData("Target Angle", normalizedTarget);
             telemetry.addData("Error", error);
             telemetry.addData("P Term", error * p);
             telemetry.addData("I Term", integralSum * i);
