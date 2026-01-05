@@ -41,21 +41,8 @@ public class AutoLockV2 extends LinearOpMode {
 
         while (opModeIsActive()) {
             drive.localizer.update();
-//            error = Math.abs((currentAngle - (initialAngle + targetAngle)) % 360);
-//            error = ((currentAngle < 180 && targetAngle > 180) || (currentAngle > 180 && targetAngle < 180)) ? 360 - error : error;
-//            power = 0.25 * Math.log(1+error) / Math.log(10);
             currentAngle = (servoEncoder.getVoltage() / 3.3 * 360) % 360;
             targetAngle = (targetAngle > 180) ? targetAngle - 360 : targetAngle;
-//
-//
-//            if (Math.abs(error) < 5 || Math.abs(Math.abs(error) - 360) < 5) {
-//                power = 0;
-//            } else {
-//                if ((currentAngle < 180 && targetAngle > 180) || (targetAngle < currentAngle && currentAngle < 180) || (targetAngle < currentAngle && targetAngle > 180)) {
-//                    //go right
-//                    power = -power;
-//                }
-//            }
 
             realError = (currentAngle - (initialAngle + targetAngle)) % 360;
             error = ((targetAngle <= 0 && currentAngle >= 0) || (targetAngle >= 0 && currentAngle <= 0)) ? 360 - Math.abs(realError) : realError;
