@@ -17,7 +17,7 @@ import org.firstinspires.ftc.teamcode.tele.SET_AS_BLUE;
 @TeleOp
 @Config
 public class AutoLock extends LinearOpMode {
-    public static double pwr = 0.2;
+    public static boolean enabled = false;
     public static double targetAngle = 270;
 
     public void runOpMode() throws InterruptedException {
@@ -40,31 +40,30 @@ public class AutoLock extends LinearOpMode {
 
         while (opModeIsActive()) {
             drive.localizer.update();
+            currentAngle = (servoEncoder.getVoltage() / 3.3 * 360) % 360;
             error = Math.abs((currentAngle - (initialAngle + targetAngle)) % 360);
             error = ((currentAngle < 180 && targetAngle > 180) || (currentAngle > 180 && targetAngle < 180)) ? 360 - error : error;
-            power = 0.25 * Math.log1p(error);
-            currentAngle = (servoEncoder.getVoltage() / 3.3 * 360) % 360;
-
+            power = 0.25 * Math.log(1+error) / Math.log(10);
 
             if (Math.abs(error) < 5 || Math.abs(Math.abs(error) - 360) < 5) {
-                left.setPower(0);
-                right.setPower(0);
+                power = 0;
             } else {
                 if ((currentAngle < 180 && targetAngle > 180) || (targetAngle < currentAngle && currentAngle < 180) || (targetAngle < currentAngle && targetAngle > 180)) {
-                    //go left
-                    left.setPower(pwr);
-                    right.setPower(pwr);
-                } else {
                     //go right
-                    left.setPower(-pwr);
-                    right.setPower(-pwr);
+                    power = -power;
                 }
             }
 
+            if (enabled) {
+                left.setPower(power);
+                right.setPower(power);
+            }
+
+            telemetry.addData("Enabled", enabled);
             telemetry.addData("Current Angle", currentAngle);
             telemetry.addData("Target Angle", targetAngle);
             telemetry.addData("Error", error);
-            telemetry.addData("pwr", power);
+            telemetry.addData("Power", power);
             telemetry.addData("Calculated Angle", turret.autoAlign(drive.localizer.getPose()));
             telemetry.update();
         }
