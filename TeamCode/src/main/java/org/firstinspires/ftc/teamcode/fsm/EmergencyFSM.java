@@ -54,7 +54,7 @@ public class EmergencyFSM {
         }
 
         // ---------------- Intake / Transfer ----------------
-        if (controls.intake.locked()) {
+        if (controls.intake.locked() || controls.intake2.locked()) {
             intake.intake();
             transfer.setPower(0);
         } else if (controls.intakeReverse.locked()) {

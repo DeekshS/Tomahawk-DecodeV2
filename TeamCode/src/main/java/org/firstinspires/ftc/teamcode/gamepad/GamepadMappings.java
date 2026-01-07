@@ -26,6 +26,8 @@ public class GamepadMappings {
 
     //=============== INTAKE ===============
     public Toggle intake;
+    public Toggle intake2;
+
     public Toggle intakeReverse;
 //    public Toggle servoBlocker;
     public Toggle transfer;
@@ -48,6 +50,8 @@ public class GamepadMappings {
 
         //=============== INTAKE ===============
         intake = new Toggle(false);
+        intake2 = new Toggle(false);
+
         intakeReverse = new Toggle(false);
 //        servoBlocker = new Toggle(false);
         transfer = new Toggle(false);
@@ -74,6 +78,7 @@ public class GamepadMappings {
 
     public void intakeUpdate() {
         intake.update(gamepad1.right_trigger > 0.5);
+        intake2.update(gamepad2.right_trigger>0.5);
     }
     public void intakeReverseUpdate() {
         intakeReverse.update(gamepad1.left_trigger > 0.5);
