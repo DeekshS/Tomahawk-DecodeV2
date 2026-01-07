@@ -1,6 +1,7 @@
 package org.firstinspires.ftc.teamcode.fsm;
 
 import com.acmerobotics.dashboard.config.Config;
+import com.acmerobotics.roadrunner.Pose2d;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.teamcode.drive.localizers.PinpointLocalizer;
@@ -10,6 +11,7 @@ import org.firstinspires.ftc.teamcode.subsystems.Outtake.Outtake;
 import org.firstinspires.ftc.teamcode.subsystems.Outtake.OuttakeConstants;
 import org.firstinspires.ftc.teamcode.subsystems.Outtake.Turret;
 import org.firstinspires.ftc.teamcode.subsystems.Robot;
+import org.firstinspires.ftc.teamcode.PoseStorage;
 @Config
 public class EmergencyFSM {
 
@@ -47,10 +49,26 @@ public class EmergencyFSM {
         } else if (controls.flywheelFar.value()) {
             outtake.shootVelocity(OuttakeConstants.FAR_VELOCITY);
         } else if (controls.autoVelo.value()) {
-//            outtake.shootVelocity(outtake.autoVelocity(robot.drive.localizer.getPose()));
-            outtake.shootVelocity(velocity);
+            if (controls.toggleBlue.value()) {
+                PoseStorage.goalX = 72;
+                PoseStorage.goalY = 72;
+            }
+            if (controls.toggleRed.value()) {
+                PoseStorage.goalX = 72;
+                PoseStorage.goalY = -72;
+            }
+            robot.outtake.autoVelocity(robot.drive.localizer.getPose());
         } else {
             outtake.shootVelocity(OuttakeConstants.OFF_VELOCITY);
+        }
+        //Reset Position
+        if (controls.resetPos.changed()) {
+            if (controls.toggleBlue.value()) {
+                robot.drive.localizer.setPose(PoseStorage.blueHP);
+            }
+            if (controls.toggleRed.value()) {
+                robot.drive.localizer.setPose(PoseStorage.redHP);
+            }
         }
 
         // ---------------- Intake / Transfer ----------------

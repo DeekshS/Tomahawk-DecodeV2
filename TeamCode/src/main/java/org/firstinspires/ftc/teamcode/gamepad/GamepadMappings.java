@@ -1,5 +1,7 @@
 package org.firstinspires.ftc.teamcode.gamepad;
 
+import android.widget.Button;
+
 import com.qualcomm.robotcore.hardware.Gamepad;
 
 public class GamepadMappings {
@@ -42,6 +44,9 @@ public class GamepadMappings {
     public Toggle turretRight;
     public Toggle turretRed;
     public Toggle turretBlue;
+    public Toggle resetPos;
+    public Toggle toggleBlue;
+    public Toggle toggleRed;
     public GamepadMappings(Gamepad gamepad1, Gamepad gamepad2) {
         this.gamepad1 = gamepad1;
         this.gamepad2 = gamepad2;
@@ -49,7 +54,6 @@ public class GamepadMappings {
         //=============== INTAKE ===============
         intake = new Toggle(false);
         intakeReverse = new Toggle(false);
-//        servoBlocker = new Toggle(false);
         transfer = new Toggle(false);
         transferReverse = new Toggle(false);
 
@@ -63,6 +67,9 @@ public class GamepadMappings {
         turretRight = new Toggle(false);
         turretRed = new Toggle(false);
         turretBlue = new Toggle(false);
+        resetPos = new Toggle(false);
+        toggleBlue = new Toggle(false);
+        toggleRed = new Toggle(false);
 
     }
 
@@ -72,12 +79,19 @@ public class GamepadMappings {
         turn = gamepad1.right_stick_x;
     }
 
-    public void intakeUpdate() {
+    public void intakeUpdate()
+    {
         intake.update(gamepad1.right_trigger > 0.5);
-    }
-    public void intakeReverseUpdate() {
+        transferReverse.update(gamepad1.left_bumper);
+        transfer.update(gamepad1.right_bumper || gamepad2.right_bumper);
         intakeReverse.update(gamepad1.left_trigger > 0.5);
     }
+
+    public void colorUpdate() { //change these to whatev (a and b are taken)
+        toggleBlue.update(gamepad2.a);
+        toggleRed.update(gamepad2.b);
+    }
+
     public void outtakeUpdate() {
         flywheelClose.update(gamepad1.a);
         flywheelFar.update(gamepad2.y);
@@ -89,6 +103,8 @@ public class GamepadMappings {
         turretBlue.update(gamepad2.x);
 
         autoAim.update(gamepad1.dpad_up);
+
+        resetPos.update(gamepad2.left_stick_button);
     }
 
     // v1 robot
@@ -97,12 +113,8 @@ public class GamepadMappings {
 
         intakeUpdate();
 
-//        servoBlocker.update(gamepad1.left_bumper);
-        transferReverse.update(gamepad1.left_bumper);
-        transfer.update(gamepad1.right_bumper || gamepad2.right_bumper);
-
-        intakeReverseUpdate();
         outtakeUpdate();
+        colorUpdate();
     }
 
     public void resetControls(Toggle... toggles) {
