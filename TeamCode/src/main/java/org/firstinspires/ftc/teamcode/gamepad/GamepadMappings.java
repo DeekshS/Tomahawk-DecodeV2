@@ -44,6 +44,8 @@ public class GamepadMappings {
     public Toggle turretRight;
     public Toggle turretRed;
     public Toggle turretBlue;
+    public Toggle colorToggle;
+    public Toggle resetPose;
     public GamepadMappings(Gamepad gamepad1, Gamepad gamepad2) {
         this.gamepad1 = gamepad1;
         this.gamepad2 = gamepad2;
@@ -65,8 +67,8 @@ public class GamepadMappings {
         autoVelo = new Toggle(false);
         turretLeft = new Toggle(false);
         turretRight = new Toggle(false);
-        turretRed = new Toggle(false);
-        turretBlue = new Toggle(false);
+        colorToggle = new Toggle(false);
+        resetPose = new Toggle(false);
 
     }
 
@@ -84,14 +86,13 @@ public class GamepadMappings {
         intakeReverse.update(gamepad1.left_trigger > 0.5);
     }
     public void outtakeUpdate() {
-        flywheelClose.update(gamepad1.a);
+        flywheelClose.update(gamepad2.a);
         flywheelFar.update(gamepad2.y);
         //flywheelOff.update(gamepad2.b);
         autoVelo.update(gamepad1.left_bumper);
         turretLeft.update(gamepad2.dpad_left);
         turretRight.update(gamepad2.dpad_right);
-        turretRed.update(gamepad2.b);
-        turretBlue.update(gamepad2.x);
+
 
         autoAim.update(gamepad1.dpad_up);
     }
@@ -105,7 +106,8 @@ public class GamepadMappings {
 //        servoBlocker.update(gamepad1.left_bumper);
         transferReverse.update(gamepad1.left_bumper);
         transfer.update(gamepad1.right_bumper || gamepad2.right_bumper);
-
+        resetPose.update(gamepad2.b);
+        colorToggle.update(gamepad2.x);
         intakeReverseUpdate();
         outtakeUpdate();
     }

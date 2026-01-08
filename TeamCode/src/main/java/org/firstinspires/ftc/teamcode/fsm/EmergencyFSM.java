@@ -49,11 +49,12 @@ public class EmergencyFSM {
         } else if (controls.flywheelFar.value()) {
             outtake.shootVelocity(OuttakeConstants.FAR_VELOCITY);
         } else if (controls.autoVelo.value()) {
-            if (controls.toggleBlue.value()) {
+            if (controls.colorToggle.value()) {
+                //blue
                 PoseStorage.goalX = 72;
                 PoseStorage.goalY = 72;
             }
-            if (controls.toggleRed.value()) {
+            else {
                 PoseStorage.goalX = 72;
                 PoseStorage.goalY = -72;
             }
@@ -62,11 +63,11 @@ public class EmergencyFSM {
             outtake.shootVelocity(OuttakeConstants.OFF_VELOCITY);
         }
         //Reset Position
-        if (controls.resetPos.changed()) {
-            if (controls.toggleBlue.value()) {
+        if (controls.resetPose.changed()) {
+            if (controls.colorToggle.value()) {
                 robot.drive.localizer.setPose(PoseStorage.blueHP);
             }
-            if (controls.toggleRed.value()) {
+            else {
                 robot.drive.localizer.setPose(PoseStorage.redHP);
             }
         }
