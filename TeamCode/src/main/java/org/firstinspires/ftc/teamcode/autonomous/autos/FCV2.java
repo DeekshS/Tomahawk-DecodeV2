@@ -58,8 +58,10 @@ public interface FCV2 {
 
     // ======Gates======
     Vector2d BLUE_GATE = new Vector2d(4, 56);
-    Vector2d BLUE_GATE_INTAKE = new Vector2d(-11, 58);
-    double BLUE_GATE_INTAKE_ANGLE = Math.toRadians(55);
+    Vector2d BLUE_GATE_INTAKE = new Vector2d(-15, 62);
+    Vector2d BLUE_GATE_INTAKE_TWO = new Vector2d(-25, 62);
+    double BLUE_GATE_INTAKE_TWO_ANGLE = Math.toRadians(0);
+    double BLUE_GATE_INTAKE_ANGLE = Math.toRadians(64);
     Vector2d RED_GATE = new Vector2d(4, -68);
     Vector2d RED_GATE_INTAKE = new Vector2d(-11, -58);
     double RED_GATE_INTAKE_ANGLE = Math.toRadians(235);

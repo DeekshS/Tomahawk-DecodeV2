@@ -48,8 +48,7 @@ public class EmergencyFSM {
         } else if (controls.flywheelFar.value()) {
             outtake.shootVelocity(OuttakeConstants.FAR_VELOCITY);
         } else if (controls.autoVelo.value()) {
-//            outtake.shootVelocity(outtake.autoVelocity(robot.drive.localizer.getPose()));
-            outtake.shootVelocity(velocity);
+            outtake.autoVelocity(robot.drive.localizer.getPose());
         } else {
             outtake.shootVelocity(OuttakeConstants.OFF_VELOCITY);
         }

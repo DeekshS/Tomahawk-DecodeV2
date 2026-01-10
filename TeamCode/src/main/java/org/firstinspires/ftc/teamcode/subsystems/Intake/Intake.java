@@ -12,6 +12,7 @@ import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.HardwareMap;
+import com.qualcomm.robotcore.hardware.PIDFCoefficients;
 import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
@@ -120,26 +121,15 @@ public class Intake {
         };
     }
 
-    public Action intakeTransferTimeAction(double time) {
+    public Action intakeTransferTimeAction(double seconds) {
         return new Action() {
-            final ElapsedTime timer = new ElapsedTime();
-            boolean init = false;
+            ElapsedTime t = new ElapsedTime();
 
             @Override
             public boolean run(@NonNull TelemetryPacket telemetryPacket) {
-                if (!init) {
-                    intake();
-                    transferIn(1);
-                    timer.reset();
-                    init = true;
-                }
-                if (timer.seconds() < time) {
-                    return true;
-                } else {
-                    intakeStop();
-                    transferStop();
-                    return false;
-                }
+                transferIn(1);
+                intake();
+                return (t.seconds() < seconds);
             }
         };
     }

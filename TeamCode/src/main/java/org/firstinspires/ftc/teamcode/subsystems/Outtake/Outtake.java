@@ -221,20 +221,50 @@ public class Outtake {
 
                 double error = Math.abs(getVelocity() - velocity);
                 telemetryPacket.put("Error", error);
-                return error < 50;
+                return error >= 50;
+            }
+        };
+    }
+
+    public Action shootVelocityTimeAction(int velocity, double seconds) {
+        return new Action() {
+            ElapsedTime t = new ElapsedTime();
+
+            @Override
+            public boolean run(@NonNull TelemetryPacket telemetryPacket) {
+                double v = velocity;
+
+                motor1.setPIDFCoefficients(DcMotor.RunMode.RUN_USING_ENCODER, new PIDFCoefficients(P, I, D, F));
+                motor2.setPIDFCoefficients(DcMotor.RunMode.RUN_USING_ENCODER, new PIDFCoefficients(P, I, D, F));
+
+
+                motor1.setVelocity(v);
+                motor2.setVelocity(v);
+
+
+                double error = Math.abs(getVelocity() - velocity);
+                telemetryPacket.put("Error", error);
+                telemetryPacket.put("time", t.seconds());
+
+                return (error >= 50 || t.seconds() < seconds);
             }
         };
     }
 
     public Action stopAction() {
-        return  new Action() {
+        return new Action() {
 
             @Override
             public boolean run(@NonNull TelemetryPacket telemetryPacket) {
-                motor1.setPower(0);
-                motor2.setPower(0);
 
-                return true;
+                motor1.setPIDFCoefficients(DcMotor.RunMode.RUN_USING_ENCODER, new PIDFCoefficients(P, I, D, F));
+                motor2.setPIDFCoefficients(DcMotor.RunMode.RUN_USING_ENCODER, new PIDFCoefficients(P, I, D, F));
+
+
+                motor1.setVelocity(0);
+                motor2.setVelocity(0);
+
+                return false;
             }
         };
     }
