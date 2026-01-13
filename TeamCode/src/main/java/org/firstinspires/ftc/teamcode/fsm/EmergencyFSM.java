@@ -21,17 +21,14 @@ public class EmergencyFSM {
     private final GamepadMappings controls;
     private final Telemetry telemetry;
     private GazelleState gazelleState;
-    private final Intake transfer;
     public static int velocity = 1580;
     public EmergencyFSM(Telemetry telemetry, GamepadMappings controls, Robot robot) {
         this.robot = robot;
         this.intake = robot.intake;
         this.turret = robot.turret;
         this.outtake = robot.outtake;
-        this.transfer = robot.transfer;
         this.controls = controls;
         this.telemetry = telemetry;
-        this.gazelleState = GazelleState.BASE_STATE;
     }
 
     // ---------------- Main update loop ----------------
@@ -44,10 +41,13 @@ public class EmergencyFSM {
         if (controls.flywheelClose.value()) {
             outtake.shootVelocity(OuttakeConstants.CLOSE_VELOCITY);
             outtake.hood.setPosition(OuttakeConstants.CLOSE_HOOD);
+            intake.transferIn(1);
         } else if (controls.flywheelFar.value()) {
             outtake.shootVelocity(OuttakeConstants.FAR_VELOCITY);
+            intake.transferIn(1);
         } else if (controls.autoVelo.value()) {
             outtake.autoVelocity(robot.drive.localizer.getPose());
+            intake.transferIn(1);
         } else {
             outtake.shootVelocity(OuttakeConstants.OFF_VELOCITY);
         }
@@ -63,32 +63,22 @@ public class EmergencyFSM {
         // ---------------- Intake / Transfer ----------------
         if (controls.intake.locked() || controls.intake2.locked()) {
             intake.intake();
-            transfer.setPower(0);
+            intake.transferStop();
         } else if (controls.intakeReverse.locked()) {
             intake.intakeReverse();
-            transfer.setPower(-1);
+            intake.transferOut(1);
         } else if (controls.transfer.locked()) {
-            transfer.setPower(1);
-            intake.intake();
+            intake.transferIn(1);
+            telemetry.addLine("Transfer Locked");
         } else {
             intake.intakeStop();
-            transfer.setPower(0);
-        }
-
-        // ---------------- FSM State Updates ----------------
-        switch (gazelleState) {
-            case BASE_STATE: break;
-            case INTAKING: break;
-            case TRANSFERRING: break;
+            intake.transferStop();
         }
 
         telemetry.update();
     }
 
     // ---------------- Getters / Setters ----------------
-    public GazelleState getState() { return gazelleState; }
-    public void setState(GazelleState newState) { gazelleState = newState; }
-
     public enum GazelleState {
         BASE_STATE, INTAKING, TRANSFERRING
     }

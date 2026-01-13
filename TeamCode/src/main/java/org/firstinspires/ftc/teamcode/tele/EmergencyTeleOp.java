@@ -34,7 +34,6 @@ public class EmergencyTeleOp extends LinearOpMode {
             robot.turret.autoAlign(robot.drive.localizer.getPose());
 
             // Optional telemetry
-            telemetry.addData("FSM State", fsm.getState());
             telemetry.update();
         }
     }

@@ -24,6 +24,7 @@ public class Intake {
     public final DcMotorEx intakeMotor;
     public final DcMotorEx transfer;
     private final Telemetry telemetry;
+    private boolean active = false;
 
     // Optional: pass telemetry if you want dashboard/logs
     public Intake(LinearOpMode mode, Telemetry telemetry) {
@@ -62,18 +63,18 @@ public class Intake {
 
     // Blocker controls
     public void transferIn(double power) {
-        if (transfer != null) transfer.setPower(power);
-        if (telemetry != null) telemetry.addData("Transfer", "Forward");
+        transfer.setPower(power);
+        telemetry.addData("Transfer", "Forward");
     }
 
     public void transferOut(double power) {
-        if (transfer != null) transfer.setPower(-power);
-        if (telemetry != null) telemetry.addData("Transfer", "Reverse");
+        transfer.setPower(-power);
+        telemetry.addData("Transfer", "Reverse");
     }
 
     public void transferStop() {
-        if (transfer != null) transfer.setPower(0);
-        if (telemetry != null) telemetry.addData("Transfer", "Stopped");
+        transfer.setPower(0);
+        telemetry.addData("Transfer", "Stopped");
     }
 
     // Actions for timing sequences
@@ -141,8 +142,10 @@ public class Intake {
 
             @Override
             public boolean run(@NonNull TelemetryPacket telemetryPacket) {
+
                 transferIn(1);
-                return (t.seconds() < seconds);
+                active = (t.seconds() < seconds);
+                return active;
             }
         };
     }
@@ -153,8 +156,7 @@ public class Intake {
 
             @Override
             public boolean run(@NonNull TelemetryPacket telemetryPacket) {
-                transferOut(1);
-//                return (t.seconds() < seconds);
+                if (!active) transferOut(1);
                 return false;
             }
         };

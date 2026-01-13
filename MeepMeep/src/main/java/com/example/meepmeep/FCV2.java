@@ -17,7 +17,7 @@ public interface FCV2 {
     double RED_ARTIFACT_ANGLE = Math.toRadians(270);
 
     //BLUE
-    double BLUE_CLOSE_ANGLE = Math.toRadians(47);
+    double BLUE_CLOSE_ANGLE = Math.toRadians(90);
     double BLUE_FAR_ANGLE = Math.toRadians(0);
     double BLUE_ARTIFACT_ANGLE = Math.toRadians(90);
 

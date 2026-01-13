@@ -333,6 +333,17 @@ public class Outtake {
             }
         };
     }
+
+    public Action hoodAction(double pos, double time) {
+        ElapsedTime t = new ElapsedTime();
+        return new Action() {
+            @Override
+            public boolean run(@NonNull TelemetryPacket telemetryPacket) {
+                hood.setPosition(pos);
+                return t.seconds() < time;
+            }
+        };
+    }
 }
 
 

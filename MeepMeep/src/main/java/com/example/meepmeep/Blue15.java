@@ -57,14 +57,14 @@ public class Blue15 {
             .build();
 
         Action gate_score = drive.getDrive().actionBuilder(new Pose2d(FCV2.BLUE_CLOSE_SHOOT.x, FCV2.BLUE_CLOSE_SHOOT.y, FCV2.BLUE_CLOSE_ANGLE))
-            .setTangent(Math.toRadians(180))
-            .splineToLinearHeading(new Pose2d(FCV2.BLUE_GATE.x - 10, FCV2.BLUE_GATE.y, Math.toRadians(90)), Math.toRadians(90))
-            .setTangent(Math.toRadians(180))
-            .splineToLinearHeading(new Pose2d(FCV2.BLUE_GATE_INTAKE.x - 10, 60, 0), Math.toRadians(90))
+//            .setTangent(Math.toRadians(15))
+            .splineToLinearHeading(new Pose2d(FCV2.BLUE_GATE.x - 12, FCV2.BLUE_GATE.y, Math.toRadians(0)), Math.toRadians(90))
+//            .setTangent(Math.toRadians(180))
+//            .splineToLinearHeading(new Pose2d(FCV2.BLUE_GATE_INTAKE.x - 2, 62, 0), Math.toRadians(0))
             .strafeToConstantHeading(new Vector2d(FCV2.BLUE_GATE_INTAKE.x - 6, 60))
             .build();
 
-        Action gate_return = drive.getDrive().actionBuilder(new Pose2d(FCV2.BLUE_GATE_INTAKE.x - 6, 60, Math.toRadians(90)))
+        Action gate_return = drive.getDrive().actionBuilder(new Pose2d(FCV2.BLUE_GATE_INTAKE.x - 6, 60, Math.toRadians(0)))
             .setTangent(Math.toRadians(270))
             .splineToLinearHeading(new Pose2d(FCV2.BLUE_CLOSE_SHOOT.x, FCV2.BLUE_CLOSE_SHOOT.y, FCV2.BLUE_CLOSE_ANGLE), Math.toRadians(45))
 
@@ -78,7 +78,7 @@ public class Blue15 {
             .strafeToConstantHeading(new Vector2d(FCV2.BLUE_GATE_INTAKE.x - 6, 60))
             .build();
 
-        Action gate_return2 = drive.getDrive().actionBuilder(new Pose2d(FCV2.BLUE_GATE_INTAKE.x - 6, 60, Math.toRadians(90)))
+        Action gate_return2 = drive.getDrive().actionBuilder(new Pose2d(FCV2.BLUE_GATE_INTAKE.x - 6, 60, Math.toRadians(0)))
             .setTangent(Math.toRadians(270))
             .splineToLinearHeading(new Pose2d(FCV2.BLUE_CLOSE_SHOOT.x, FCV2.BLUE_CLOSE_SHOOT.y, FCV2.BLUE_CLOSE_ANGLE), Math.toRadians(45))
 
@@ -114,42 +114,43 @@ public class Blue15 {
             .build();
 
         drive.runAction(
-                new SequentialAction(
-                        preload,
-                        artifact1,
-
-                        new ParallelAction(
-                                artifact1_return
-                        ),
-
-                        gate_score,
-                        gate_return,
-
-                        gate_score,
-                        gate_return,
-
-                        gate_score,
-                        gate_return,
-
-                        // ARTIFACT 2
-
-                        new ParallelAction(
-                                artifact2
-                        ),
-
-                        new ParallelAction(
-                                artifact2_return
-                        ),
-                        // ARTIFACT 3
-
-                        new ParallelAction(
-                                artifact3
-                        ),
-
-                        new ParallelAction(
-                                artifact3_return
-                        )
-                )
+            gate_score
+//                new SequentialAction(
+//                        preload,
+//                        artifact1,
+//
+//                        new ParallelAction(
+//                                artifact1_return
+//                        ),
+//
+//                        gate_score,
+//                        gate_return,
+//
+//                        gate_score,
+//                        gate_return,
+//
+//                        gate_score,
+//                        gate_return,
+//
+//                        // ARTIFACT 2
+//
+//                        new ParallelAction(
+//                                artifact2
+//                        ),
+//
+//                        new ParallelAction(
+//                                artifact2_return
+//                        ),
+//                        // ARTIFACT 3
+//
+//                        new ParallelAction(
+//                                artifact3
+//                        ),
+//
+//                        new ParallelAction(
+//                                artifact3_return
+//                        )
+//                )
 
         );
 

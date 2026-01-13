@@ -1,12 +1,19 @@
 package org.firstinspires.ftc.teamcode.subsystems.Outtake;
 
+import static org.firstinspires.ftc.teamcode.Functions.isInShootingZone;
+
+import androidx.annotation.NonNull;
+
 import com.acmerobotics.dashboard.config.Config;
 import com.acmerobotics.dashboard.telemetry.MultipleTelemetry;
+import com.acmerobotics.dashboard.telemetry.TelemetryPacket;
+import com.acmerobotics.roadrunner.Action;
 import com.acmerobotics.roadrunner.Pose2d;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.AnalogInput;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.CRServo;
+import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.teamcode.PoseStorage;
 
@@ -96,7 +103,23 @@ public class Turret {
                 power = -power;
             }
         }
-        if (enabled) left.setPower(power); else left.setPower(0.05);
-        if (enabled) right.setPower(power); else right.setPower(0.05);
+        if (enabled) left.setPower(power); else left.setPower(0);
+        if (enabled) right.setPower(power); else right.setPower(0);
     }
+
+    public Action alignAction(double angle, double time) {
+        return  new Action() {
+
+            ElapsedTime t = new ElapsedTime();
+            @Override
+            public boolean run(@NonNull TelemetryPacket telemetryPacket) {
+                setTargetAngle(angle);
+                update();
+
+                return t.seconds() < time;
+            }
+        };
+    }
+
+
 }
