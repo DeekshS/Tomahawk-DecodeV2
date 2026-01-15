@@ -143,7 +143,7 @@ public class Intake {
             @Override
             public boolean run(@NonNull TelemetryPacket telemetryPacket) {
 
-                transferIn(1);
+                setPower(1);
                 active = (t.seconds() < seconds);
                 return active;
             }
@@ -156,7 +156,7 @@ public class Intake {
 
             @Override
             public boolean run(@NonNull TelemetryPacket telemetryPacket) {
-                if (!active) transferOut(1);
+                if (!active) setPower(-1);
                 return false;
             }
         };
@@ -168,7 +168,7 @@ public class Intake {
 
             @Override
             public boolean run(@NonNull TelemetryPacket telemetryPacket) {
-                transferIn(0);
+                setPower(0);
                 return false;
             }
         };
@@ -179,7 +179,17 @@ public class Intake {
             @Override
             public boolean run(@NonNull TelemetryPacket telemetryPacket) {
                 intakeStop();
-                transferStop();
+                setPower(0);
+                return false;
+            }
+        };
+    }
+
+    public Action powerAction(double power) {
+        return new Action() {
+            @Override
+            public boolean run(@NonNull TelemetryPacket telemetryPacket) {
+                setPower(power);
                 return false;
             }
         };

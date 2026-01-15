@@ -17,13 +17,14 @@ public class Robot {
 
     public DriveTrain driveTrain;
     public Intake intake;
-    public Outtake outtake;
     public Intake transfer;
+    public Outtake outtake;
     public Turret turret;
     public MecanumDrive drive;
     public Robot(LinearOpMode mode) {
         driveTrain = new DriveTrain(mode);
         intake = new Intake(mode);
+        transfer = new Intake(mode);
         turret = new Turret(mode);
         outtake = new Outtake(mode);
         transfer = new Intake(mode);

@@ -1,28 +1,26 @@
 package org.firstinspires.ftc.teamcode.subsystems.Outtake;
 
-import static org.firstinspires.ftc.teamcode.Functions.isInShootingZone;
-
 import androidx.annotation.NonNull;
 
 import com.acmerobotics.dashboard.config.Config;
-import com.acmerobotics.dashboard.telemetry.MultipleTelemetry;
 import com.acmerobotics.dashboard.telemetry.TelemetryPacket;
 import com.acmerobotics.roadrunner.Action;
 import com.acmerobotics.roadrunner.Pose2d;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.AnalogInput;
-import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.CRServo;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.teamcode.PoseStorage;
+import org.firstinspires.ftc.teamcode.Constants;
 
 @Config
 public class Turret {
 
-    public boolean enabled = true; // allow manual override
-    public double MULTIPLIER = 1;
-    public double TOLERANCE = 1;
+    public static boolean enabled = true; // allow manual override
+    public static double TOLERANCE = 2;
+
+    public static boolean gearOut = false;
 
     double power = 0;
     double error = 0;
@@ -40,7 +38,7 @@ public class Turret {
         left = mode.hardwareMap.get(CRServo.class, "turretLeft");
         right = mode.hardwareMap.get(CRServo.class, "turretRight");
         encoder = mode.hardwareMap.get(AnalogInput.class, "turretEncoderRight");
-        initialAngle = 0;
+        initialAngle = Constants.turretOffset;
     }
 
     // --------------- Auto-Align --------------
@@ -51,14 +49,14 @@ public class Turret {
 
         double deltaX = PoseStorage.goalX - robotX;
         double deltaY = PoseStorage.goalY - robotY;
-        calculatedAngle = Math.toDegrees(Math.atan2(deltaY * MULTIPLIER, deltaX * MULTIPLIER)) - Math.toDegrees(pose.heading.toDouble());
+        calculatedAngle = Math.toDegrees(Math.atan2(deltaY, deltaX)) - Math.toDegrees(pose.heading.toDouble());
         setTargetAngle(calculatedAngle);
         return calculatedAngle;
     }
 
     // ---------------- Control ----------------
     public void setEnabled(boolean enabled) {
-        this.enabled = enabled;
+        Turret.enabled = enabled;
     }
 
     public void setTargetAngle(double a) {
@@ -70,6 +68,7 @@ public class Turret {
     }
 
     public double getCurrentAngle() {
+        currentAngle = (((encoder.getVoltage() / 3.3 * 360) % 360) - 180) - initialAngle;
         return currentAngle;
     }
 
@@ -103,6 +102,9 @@ public class Turret {
                 power = -power;
             }
         }
+
+        if (gearOut) power = Math.min(Math.abs(power * 2), 1) * (power < 0 ? -1 : 1);
+
         if (enabled) left.setPower(power); else left.setPower(0);
         if (enabled) right.setPower(power); else right.setPower(0);
     }

@@ -7,6 +7,7 @@ import com.acmerobotics.roadrunner.SequentialAction;
 import com.acmerobotics.roadrunner.Vector2d;
 import com.noahbres.meepmeep.MeepMeep;
 import com.noahbres.meepmeep.roadrunner.DefaultBotBuilder;
+import com.noahbres.meepmeep.roadrunner.DriveShim;
 import com.noahbres.meepmeep.roadrunner.entity.RoadRunnerBotEntity;
 
 //import org.firstinspires.ftc.teamcode.autonomous.autos.FieldConstants;
@@ -22,98 +23,103 @@ public class Red15 {
 
     public static void main(String[] args) {
         MeepMeep meepMeep = new MeepMeep(700);
+        RoadRunnerBotEntity bot = new DefaultBotBuilder(meepMeep)
+            .setConstraints(90, 90, 2.5, 3, 18)
+            .setDimensions(16.53, 18)
+            .build();
+        DriveShim drive = bot.getDrive();
 
-        RoadRunnerBotEntity drive = new DefaultBotBuilder(meepMeep)
-                .setConstraints(80, 80, 2.5, 3, 18)
-                .setDimensions(16.53, 18)
-                .build();
+        Action preload = drive.actionBuilder(FCV2.RED_CLOSE_START)
+            .strafeToLinearHeading(FCV2.RED_CLOSE_SHOOT, FCV2.RED_CLOSE_ANGLE)
+            .build();
 
-        Action preload = drive.getDrive().actionBuilder(FCV2.RED_CLOSE_START)
-                .strafeToLinearHeading(FCV2.RED_CLOSE_SHOOT, FCV2.RED_CLOSE_ANGLE)
-                .build();
+        Action artifact1 = drive.actionBuilder(new Pose2d(FCV2.RED_CLOSE_SHOOT.x, FCV2.RED_CLOSE_SHOOT.y, FCV2.RED_CLOSE_ANGLE))
+            .setTangent(Math.toRadians(-180))
+            .splineToSplineHeading(new Pose2d(FCV2.PGP_RED_ARTIFACT.x, FCV2.PGP_RED_ARTIFACT.y, FCV2.RED_ARTIFACT_ANGLE), Math.toRadians(-90))
+            .build();
 
-        Action artifact1 = drive.getDrive().actionBuilder(new Pose2d(FCV2.RED_CLOSE_SHOOT.x, FCV2.RED_CLOSE_SHOOT.y, FCV2.RED_CLOSE_ANGLE))
-                .strafeToLinearHeading(new Vector2d(FCV2.PGP_RED_ARTIFACT.x, FCV2.PGP_RED_ARTIFACT.y+27), FCV2.RED_ARTIFACT_ANGLE)
-                .strafeTo(FCV2.PGP_RED_ARTIFACT)
-                .build();
+        Action artifact1_return = drive.actionBuilder(new Pose2d(FCV2.PGP_RED_ARTIFACT, FCV2.RED_ARTIFACT_ANGLE))
 
-        Action artifact1_return = drive.getDrive().actionBuilder(new Pose2d(FCV2.PGP_RED_ARTIFACT, FCV2.RED_ARTIFACT_ANGLE))
-
-                .strafeToLinearHeading(FCV2.RED_CLOSE_SHOOT, FCV2.RED_CLOSE_ANGLE)
-                .waitSeconds(0.85)
-
-                .build();
-
-
-        Action artifact2 = drive.getDrive().actionBuilder(new Pose2d(FCV2.RED_CLOSE_SHOOT.x, FCV2.RED_CLOSE_SHOOT.y, FCV2.RED_CLOSE_ANGLE))
-                .strafeToLinearHeading(new Vector2d(FCV2.PPG_RED_ARTIFACT.x, FCV2.PPG_RED_ARTIFACT.y+27), FCV2.RED_ARTIFACT_ANGLE)
-                .strafeTo(FCV2.PPG_RED_ARTIFACT)
-                .build();
-
-        Action artifact2_return = drive.getDrive().actionBuilder(new Pose2d(FCV2.PPG_RED_ARTIFACT.x, FCV2.PPG_RED_ARTIFACT.y, FCV2.RED_ARTIFACT_ANGLE))
-
-                .strafeToLinearHeading(FCV2.RED_CLOSE_SHOOT, FCV2.RED_CLOSE_ANGLE)
-                .build();
-
-        Action gate_score = drive.getDrive().actionBuilder(new Pose2d(FCV2.RED_CLOSE_SHOOT.x, FCV2.RED_CLOSE_SHOOT.y, FCV2.RED_CLOSE_ANGLE))
-                .strafeToLinearHeading(FCV2.RED_GATE_INTAKE, FCV2.RED_GATE_INTAKE_ANGLE)
-                .build();
-
-        Action gate_return = drive.getDrive().actionBuilder(new Pose2d(FCV2.RED_GATE_INTAKE, FCV2.RED_GATE_INTAKE_ANGLE))
-                .setTangent(Math.toRadians(135))
-                .splineToLinearHeading(new Pose2d(FCV2.RED_CLOSE_SHOOT.x, FCV2.RED_CLOSE_SHOOT.y, FCV2.RED_CLOSE_ANGLE), Math.toRadians(45))
-
-                .build();
+            .setTangent(Math.toRadians(-285))
+            .splineToLinearHeading(new Pose2d(FCV2.RED_CLOSE_SHOOT.x, FCV2.RED_CLOSE_SHOOT.y, FCV2.RED_CLOSE_ANGLE), Math.toRadians(-45))
+            .build();
 
 
-        Action artifact3 = drive.getDrive().actionBuilder(new Pose2d(FCV2.RED_CLOSE_SHOOT.x, FCV2.RED_CLOSE_SHOOT.y, FCV2.RED_CLOSE_ANGLE))
-                .strafeToLinearHeading(new Vector2d(FCV2.GPP_RED_ARTIFACT.x, FCV2.GPP_RED_ARTIFACT.y+27), FCV2.RED_ARTIFACT_ANGLE)
-                .strafeTo(FCV2.GPP_RED_ARTIFACT)
+        Action artifact2 = drive.actionBuilder(new Pose2d(FCV2.RED_CLOSE_SHOOT.x, FCV2.RED_CLOSE_SHOOT.y, FCV2.RED_CLOSE_ANGLE))
+            .strafeToLinearHeading(FCV2.PPG_RED_ARTIFACT, FCV2.RED_ARTIFACT_ANGLE)
+            .build();
 
-                .build();
+        Action artifact2_return = drive.actionBuilder(new Pose2d(FCV2.PPG_RED_ARTIFACT.x, FCV2.PPG_RED_ARTIFACT.y, FCV2.RED_ARTIFACT_ANGLE))
 
-        Action artifact3_return = drive.getDrive().actionBuilder(new Pose2d(FCV2.GPP_RED_ARTIFACT.x, FCV2.GPP_RED_ARTIFACT.y, FCV2.RED_ARTIFACT_ANGLE))
+            .strafeToLinearHeading(FCV2.RED_CLOSE_SHOOT, FCV2.RED_CLOSE_ANGLE)
+            .build();
 
-                //                .setReversed(true)
-                .strafeToLinearHeading(FCV2.RED_CLOSE_SHOOT, FCV2.RED_CLOSE_ANGLE)
+        Action gate_score = drive.actionBuilder(new Pose2d(FCV2.RED_CLOSE_SHOOT.x, FCV2.RED_CLOSE_SHOOT.y, FCV2.RED_CLOSE_ANGLE))
+            .setTangent(Math.toRadians(-180))
+            .splineToLinearHeading(new Pose2d(FCV2.RED_GATE.x - 16, FCV2.RED_GATE.y-2, Math.toRadians(-65)), Math.toRadians(-90))            .build();
 
-                .build();
+        Action gate_return = drive.actionBuilder(new Pose2d(FCV2.RED_GATE.x - 16, FCV2.RED_GATE.y-2, Math.toRadians(-65)))
+            .setTangent(Math.toRadians(-180))
+            .splineToLinearHeading(new Pose2d(FCV2.RED_CLOSE_SHOOT.x, FCV2.RED_CLOSE_SHOOT.y, FCV2.RED_CLOSE_ANGLE), Math.toRadians(-90))
+            .build();
 
-        Action park = drive.getDrive().actionBuilder(new Pose2d(FCV2.GPP_RED_ARTIFACT.x, FCV2.GPP_RED_ARTIFACT.y+FCV2.ARTIFACT_DIST, FCV2.RED_CLOSE_ANGLE))
-                .strafeTo(new Vector2d(FCV2.PGP_RED_ARTIFACT.x, FCV2.PGP_RED_ARTIFACT.y+5))
-                .build();
+        Action gate_score2 = drive.actionBuilder(new Pose2d(FCV2.RED_CLOSE_SHOOT.x, FCV2.RED_CLOSE_SHOOT.y, FCV2.RED_CLOSE_ANGLE))
+            .setTangent(Math.toRadians(-180))
+            .splineToLinearHeading(new Pose2d(FCV2.RED_GATE.x - 16, FCV2.RED_GATE.y-2, Math.toRadians(-65)), Math.toRadians(-90))
+            .build();
 
-        drive.runAction(
-                new SequentialAction(
-                        preload,
-                        artifact1,
+        Action gate_return2 = drive.actionBuilder(new Pose2d(FCV2.RED_GATE.x - 16, FCV2.RED_GATE.y-2, Math.toRadians(65)))
+            .setTangent(Math.toRadians(-180))
+            .splineToLinearHeading(new Pose2d(FCV2.RED_CLOSE_SHOOT.x, FCV2.RED_CLOSE_SHOOT.y, FCV2.RED_CLOSE_ANGLE), Math.toRadians(90))
+            .build();
 
-                        new ParallelAction(
-                                artifact1_return
-                        ),
 
-                        gate_score,
-                        gate_return,
+        Action artifact3 = drive.actionBuilder(new Pose2d(FCV2.RED_CLOSE_SHOOT.x, FCV2.RED_CLOSE_SHOOT.y, FCV2.RED_CLOSE_ANGLE))
+            .setTangent(Math.toRadians(-190))
+            .splineToSplineHeading(new Pose2d(FCV2.GPP_RED_ARTIFACT.x, FCV2.GPP_RED_ARTIFACT.y, FCV2.RED_CLOSE_ANGLE), Math.toRadians(-90))
+            .build();
 
-                        // ARTIFACT 2
+        Action artifact3_return = drive.actionBuilder(new Pose2d(FCV2.GPP_RED_ARTIFACT.x, FCV2.GPP_RED_ARTIFACT.y, FCV2.RED_ARTIFACT_ANGLE))
+            .strafeToLinearHeading(FCV2.RED_CLOSE_SHOOT, FCV2.RED_CLOSE_ANGLE)
+            .build();
 
-                        new ParallelAction(
-                                artifact2
-                        ),
+        bot.runAction(
+            new SequentialAction(
+                preload,
+                artifact1,
 
-                        new ParallelAction(
-                                artifact2_return
-                        ),
-                        // ARTIFACT 3
+                new ParallelAction(
+                    artifact1_return
+                ),
 
-                        new ParallelAction(
-                                artifact3
-                        ),
+                gate_score,
+                gate_return,
 
-                        new ParallelAction(
-                                artifact3_return
-                        )
+                gate_score,
+                gate_return,
+
+                gate_score,
+                gate_return,
+
+                // ARTIFACT 2
+
+                new ParallelAction(
+                    artifact2
+                ),
+
+                new ParallelAction(
+                    artifact2_return
+                ),
+                // ARTIFACT 3
+
+                new ParallelAction(
+                    artifact3
+                ),
+
+                new ParallelAction(
+                    artifact3_return
                 )
+            )
 
         );
 
@@ -124,10 +130,10 @@ public class Red15 {
             e.printStackTrace();
         }
         meepMeep.setBackground(bg)
-                .setDarkMode(true)
-                .setBackgroundAlpha(0.95f)
-                .addEntity(drive)
-                .start();
+            .setDarkMode(true)
+            .setBackgroundAlpha(0.95f)
+            .addEntity(bot)
+            .start();
 
 
     }

@@ -1,115 +1,89 @@
-// /*
-// package org.firstinspires.ftc.teamcode.autonomous.autos.Red.Far;
 
-// import com.acmerobotics.dashboard.config.Config;
-// import com.acmerobotics.roadrunner.Action;
-// import com.acmerobotics.roadrunner.ParallelAction;
-// import com.acmerobotics.roadrunner.Pose2d;
-// import com.acmerobotics.roadrunner.SequentialAction;
-// import com.acmerobotics.roadrunner.TranslationalVelConstraint;
-// import com.acmerobotics.roadrunner.Vector2d;
-// import com.acmerobotics.roadrunner.ftc.Actions;
-// import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
-// import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
-
-// import org.firstinspires.ftc.teamcode.drive.MecanumDrive;
-// import org.firstinspires.ftc.teamcode.subsystems.Robot;
-// import org.firstinspires.ftc.teamcode.PoseStorage;
-
-// @Autonomous
-// @Config
-// public class RedFarAuto extends LinearOpMode implements FIELD {
-
-//     public static double INTAKE_WAIT_TIME = 3;
-//     public static double SHOOTER_TIME = 2.5;
+package org.firstinspires.ftc.teamcode.autonomous.autos.Blue.Far;
 
 
-//     public void runOpMode() throws InterruptedException {
+import com.acmerobotics.dashboard.config.Config;
+import com.acmerobotics.roadrunner.Action;
+import com.acmerobotics.roadrunner.ParallelAction;
+import com.acmerobotics.roadrunner.Pose2d;
+import com.acmerobotics.roadrunner.SequentialAction;
+import com.acmerobotics.roadrunner.TranslationalVelConstraint;
+import com.acmerobotics.roadrunner.Vector2d;
+import com.acmerobotics.roadrunner.ftc.Actions;
+import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
+import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
-//         Robot robot = new Robot(this);
+import org.firstinspires.ftc.teamcode.autonomous.autos.FCV2;
+import org.firstinspires.ftc.teamcode.drive.MecanumDrive;
+import org.firstinspires.ftc.teamcode.subsystems.Robot;
+import org.firstinspires.ftc.teamcode.PoseStorage;
 
-//         MecanumDrive drive = new MecanumDrive(hardwareMap, RED_FAR_START);
+@Autonomous
+@Config
+public class RedFarAuto extends LinearOpMode implements FCV2 {
 
+    public static double INTAKE_WAIT_TIME = 1.4;
 
-//         Action artifact1 = drive.actionBuilder(new Pose2d(RED_FAR_START.position.x, RED_FAR_START.position.y, Math.toRadians(-90)))
-// //                .strafeToLinearHeading(PPG_RED_ARTIFACT, RED_ARTIFACT_ANGLE+Math.toRadians(10))
-//             .strafeToLinearHeading(GPP_RED_ARTIFACT, RED_ARTIFACT_ANGLE)
-//             .setTangent(Math.PI/2)
-//             .lineToY(GPP_RED_ARTIFACT.y-ARTIFACT_DIST+5, new TranslationalVelConstraint(90))
-
-//             .build();
-
-//         Action artifact1_return = drive.actionBuilder(new Pose2d(GPP_RED_ARTIFACT.x, GPP_RED_ARTIFACT.y-ARTIFACT_DIST+5, Math.toRadians(-90)))
-
-//             .strafeToLinearHeading(new Vector2d(RED_FAR_SHOOT.position.x, RED_FAR_SHOOT.position.y), Math.toRadians(-90))
-// //                .waitSeconds(0.85)
-
-//             .build();
-
-
-//         Action human = drive.actionBuilder(new Pose2d(RED_FAR_SHOOT.position.x, RED_FAR_SHOOT.position.y, Math.toRadians(-90)))
-//             .strafeToLinearHeading(new Vector2d(-24, HP_RED_ARTIFACT.y), Math.toRadians(180))
-//             .strafeTo(HP_RED_ARTIFACT)
-//             .build();
-
-//         Action human_return = drive.actionBuilder(new Pose2d(HP_RED_ARTIFACT.x, HP_RED_ARTIFACT.y, Math.toRadians(180)))
-//             .strafeToLinearHeading(new Vector2d(-48, HP_RED_ARTIFACT.y), Math.toRadians(180))
-//             .strafeToLinearHeading(new Vector2d(RED_FAR_SHOOT.position.x, RED_FAR_SHOOT.position.y), Math.toRadians(-90))
-//             .build();
+    public static int ARTIFACT_SHOOT_VEL = 2000;
+    public static double HOOD_POS = 0.2;
 
 
-//         Action artifact2 = drive.actionBuilder(new Pose2d(RED_FAR_SHOOT.position.x, RED_FAR_SHOOT.position.y, Math.toRadians(-90)))
-//             .strafeToLinearHeading(PGP_RED_ARTIFACT, RED_ARTIFACT_ANGLE)
-//             .setTangent(Math.PI/2)
-//             .lineToY(PGP_RED_ARTIFACT.y-ARTIFACT_DIST+5, new TranslationalVelConstraint(90))
+    public void runOpMode() throws InterruptedException {
 
-//             .build();
+        Robot robot = new Robot(this);
 
-//         Action artifact2_return = drive.actionBuilder(new Pose2d(PGP_RED_ARTIFACT.x, PGP_RED_ARTIFACT.y-ARTIFACT_DIST+5, RED_ARTIFACT_ANGLE))
+        MecanumDrive drive = new MecanumDrive(hardwareMap, FCV2.RED_FAR_START);
 
-// //            .strafeTo(new Vector2d(PGP_RED_ARTIFACT.x, PGP_RED_ARTIFACT.y-5))
-//             .setTangent(Math.toRadians(90))
-//             .splineTo(new Vector2d(RED_FAR_SHOOT.position.x, RED_FAR_SHOOT.position.y), Math.toRadians(-90))
+        Action ppg = drive.actionBuilder(FCV2.RED_FAR_START)
+            .setTangent(Math.toRadians(0))
+            .splineToSplineHeading(new Pose2d(FCV2.GPP_RED_ARTIFACT, FCV2.RED_ARTIFACT_ANGLE), Math.toRadians(-90))
+            .build();
 
-//             .build();
+        Action ppg_return = drive.actionBuilder(new Pose2d(FCV2.GPP_RED_ARTIFACT, FCV2.RED_ARTIFACT_ANGLE))
+            .strafeToLinearHeading(FCV2.RED_FAR_START.component1(), FCV2.RED_ARTIFACT_ANGLE)
+            .build();
+
+        Action human1 = drive.actionBuilder(new Pose2d(FCV2.RED_FAR_START.component1(), FCV2.RED_ARTIFACT_ANGLE))
+            .setTangent(0)
+            .splineToSplineHeading(new Pose2d(FCV2.HP_RED_ARTIFACT, -Math.PI), -Math.PI)
+            .build();
+
+        Action human1_return = drive.actionBuilder(new Pose2d(FCV2.HP_RED_ARTIFACT, -Math.PI))
+            .setTangent(Math.toRadians(0))
+            .splineToLinearHeading(FCV2.RED_FAR_START, Math.toRadians(-180))
+            .build();
+
+        Action human2 = drive.actionBuilder(new Pose2d(FCV2.RED_FAR_START.component1(), FCV2.RED_ARTIFACT_ANGLE))
+            .strafeToLinearHeading(FCV2.HP_RED_ARTIFACT, FCV2.RED_ARTIFACT_ANGLE)
+            .build();
+
+        Action human2_return = drive.actionBuilder(new Pose2d(FCV2.HP_RED_ARTIFACT, FCV2.RED_ARTIFACT_ANGLE))
+            .strafeToLinearHeading(FCV2.RED_FAR_START.component1(), FCV2.RED_ARTIFACT_ANGLE)
+            .build();
 
 
 
 
-//         waitForStart();
-//         if (isStopRequested()) return;
+        waitForStart();
+        if (isStopRequested()) return;
 
 
-//         Actions.runBlocking(
-//             new SequentialAction(
-//                 new SequentialAction(
-//                   robot.turret.turretRed(),
-//                   robot.outtake.shoot_far(),
-//                   robot.intake.intake(SHOOTER_TIME),
-//                   robot.outtake.shoot_stop(),
-//                     new ParallelAction(
-//                       artifact1,
-//                       robot.intake.intake(3)
-//                     ),
-//                     artifact1_return,
-//                     robot.outtake.shoot_far(),
-//                     robot.intake.intake(SHOOTER_TIME),
-//                     robot.outtake.shoot_stop(),
-//                     new ParallelAction(
-//                       human,
-//                       robot.intake.intake(5)
-//                     ),
-//                     human_return,
-//                     robot.outtake.shoot_far(),
-//                     robot.intake.intake(SHOOTER_TIME),
-//                     robot.outtake.shoot_stop()
-//                 )
-//             )
-//         );
-//         robot.pinpoint.update();
-//         PoseStorage.endPose = robot.pinpoint.getPose();
-//         PoseStorage.side = PoseStorage.SIDE.RED;
-//     }
+        Actions.runBlocking(
+            new ParallelAction(
+                robot.outtake.shootVelocityTimeAction(ARTIFACT_SHOOT_VEL, 29.9),
+                robot.intake.intakeTimeAction(29.9),
+                robot.turret.alignAction(-40, 29.9),
+                robot.outtake.hoodAction(HOOD_POS, 29.9),
+                new SequentialAction(
+//                     ppg,
+//                     ppg_return,
+                    human1,
+                    human1_return,
+                    human2,
+                    human2_return
+                )
+            )
+        );
+    }
 
-// }
-// */
+}

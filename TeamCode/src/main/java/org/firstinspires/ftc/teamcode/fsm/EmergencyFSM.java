@@ -14,6 +14,7 @@ import org.firstinspires.ftc.teamcode.subsystems.Robot;
 public class EmergencyFSM {
 
     private Intake intake;
+    private Intake transfer;
     private Outtake outtake;
 //    private RTPAxon turret;           // turret controlled by RTPAxon
     private final Turret turret;
@@ -25,6 +26,7 @@ public class EmergencyFSM {
     public EmergencyFSM(Telemetry telemetry, GamepadMappings controls, Robot robot) {
         this.robot = robot;
         this.intake = robot.intake;
+        this.transfer = robot.transfer;
         this.turret = robot.turret;
         this.outtake = robot.outtake;
         this.controls = controls;
@@ -63,16 +65,16 @@ public class EmergencyFSM {
         // ---------------- Intake / Transfer ----------------
         if (controls.intake.locked() || controls.intake2.locked()) {
             intake.intake();
-            intake.transferStop();
+            transfer.setPower(0);
         } else if (controls.intakeReverse.locked()) {
             intake.intakeReverse();
-            intake.transferOut(1);
+            transfer.setPower(-1);
         } else if (controls.transfer.locked()) {
-            intake.transferIn(1);
-            telemetry.addLine("Transfer Locked");
-        } else {
+            intake.intake();
+            transfer.setPower(1);
+        } else if (!controls.transfer.locked() && !controls.intakeReverse.locked()) {
             intake.intakeStop();
-            intake.transferStop();
+            transfer.setPower(0);
         }
 
         telemetry.update();

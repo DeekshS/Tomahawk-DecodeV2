@@ -12,8 +12,8 @@ public interface FCV2 {
     //-------------------------------Angles------------------------------------------
 
     //RED
-    double RED_CLOSE_ANGLE = Math.toRadians(-43);
-    double RED_FAR_ANGLE = Math.toRadians(90);
+    double RED_CLOSE_ANGLE = Math.toRadians(270);
+    double RED_FAR_ANGLE = Math.toRadians(0);
     double RED_ARTIFACT_ANGLE = Math.toRadians(270);
 
     //BLUE
@@ -31,14 +31,10 @@ public interface FCV2 {
     double ARTIFACT_DIST = 36+5;
     double HP_ARTIFACT_DIST = 62;
     // ======RED ARTIFACTS======
-//    Vector2d GPP_RED_ARTIFACT = new Vector2d(-36, -25);
-//    Vector2d PGP_RED_ARTIFACT = new Vector2d(-12, -25);
-//    Vector2d PPG_RED_ARTIFACT = new Vector2d(12, -54);
-
-    Vector2d GPP_RED_ARTIFACT = new Vector2d(-36, -26);
-    Vector2d PGP_RED_ARTIFACT = new Vector2d(-13, -23);
-    Vector2d PPG_RED_ARTIFACT = new Vector2d(10, -56);
-    Vector2d HP_RED_ARTIFACT = new Vector2d(-60,-58);
+    Vector2d GPP_RED_ARTIFACT = new Vector2d(-36, -56);
+    Vector2d PGP_RED_ARTIFACT = new Vector2d(-12, -56);
+    Vector2d PPG_RED_ARTIFACT = new Vector2d(12, -56);
+    Vector2d HP_RED_ARTIFACT = new Vector2d(-60,-60);
 
 
     // ======RED Shooting Locations======
@@ -49,7 +45,7 @@ public interface FCV2 {
     Vector2d GPP_BLUE_ARTIFACT = new Vector2d(-36, 56);
     Vector2d PGP_BLUE_ARTIFACT = new Vector2d(-12, 56);
     Vector2d PPG_BLUE_ARTIFACT = new Vector2d(12, 56);
-    Vector2d HP_BLUE_ARTIFACT = new Vector2d(-60,58);
+    Vector2d HP_BLUE_ARTIFACT = new Vector2d(-60,60);
 
     // ====== BLUE Shooting Locations======
     Vector2d BLUE_CLOSE_SHOOT = new Vector2d(18, 18);
@@ -58,22 +54,22 @@ public interface FCV2 {
 
     // ======Gates======
     Vector2d BLUE_GATE = new Vector2d(4, 56);
-    Vector2d BLUE_GATE_INTAKE = new Vector2d(-15, 62);
+    Vector2d BLUE_GATE_INTAKE = new Vector2d(-11, 58);
     Vector2d BLUE_GATE_INTAKE_TWO = new Vector2d(-25, 62);
     double BLUE_GATE_INTAKE_TWO_ANGLE = Math.toRadians(0);
     double BLUE_GATE_INTAKE_ANGLE = Math.toRadians(64);
-    Vector2d RED_GATE = new Vector2d(4, -68);
+    Vector2d RED_GATE = new Vector2d(4, -56);
     Vector2d RED_GATE_INTAKE = new Vector2d(-11, -58);
     double RED_GATE_INTAKE_ANGLE = Math.toRadians(235);
 
     // ======STARTING POSITIONS======
     Pose2d RED_FAR_START = new Pose2d(-61.25, -5, Math.toRadians(0));
 
-    Pose2d RED_CLOSE_START = new Pose2d(57, -45, Math.toRadians(-37));
+    Pose2d RED_CLOSE_START = new Pose2d(55.5, -43.5, Math.toRadians(-37));
 
     Pose2d BLUE_FAR_START = new Pose2d(-61.25, 5, Math.toRadians(0));
 
-    Pose2d BLUE_CLOSE_START = new Pose2d(57, 45, Math.toRadians(53));
+    Pose2d BLUE_CLOSE_START = new Pose2d(55.5, 43.5, Math.toRadians(53));
 
     Pose2d BLUE_GOAL_START = new Pose2d(-47.5, 51.5,  Math.toRadians(323));
 }
