@@ -27,6 +27,7 @@ public class FlywheelTuner extends LinearOpMode {
     public static double POS = 0.86;
     public static double POWER = 0.77;
     public static boolean autoVelo = false;
+    public static boolean pid = true;
     public static boolean intaking = true;
     public static boolean transfering = true;
     public static boolean setPower = false;
@@ -46,18 +47,18 @@ public class FlywheelTuner extends LinearOpMode {
         intake = new Intake(this);
         drive = new MecanumDrive(hardwareMap, new Pose2d(0, 0, 0));
         telemetry = new MultipleTelemetry(telemetry, FtcDashboard.getInstance().getTelemetry());
-//        flywheel.hood.setDirection(Servo.Direction.REVERSE);
-
 
         waitForStart();
         if (isStopRequested()) return;
 
-
         while (opModeIsActive()) {
+            if (pid) {
+                flywheel.motor1.setPIDFCoefficients(DcMotor.RunMode.RUN_USING_ENCODER, new PIDFCoefficients(P, I, D, F));
+                flywheel.motor2.setPIDFCoefficients(DcMotor.RunMode.RUN_USING_ENCODER, new PIDFCoefficients(P, I, D, F));
+            }
             double currentVelocity = Math.abs(flywheel.getVelocity());
             double error = VELOCITY - currentVelocity;
             drive.localizer.update();
-
 
             if (intaking) {
                 intake.intake();
@@ -72,11 +73,6 @@ public class FlywheelTuner extends LinearOpMode {
                 intake.transferStop();
             }
 
-
-            flywheel.motor1.setPIDFCoefficients(DcMotor.RunMode.RUN_USING_ENCODER, new PIDFCoefficients(P, I, D, F));
-            flywheel.motor2.setPIDFCoefficients(DcMotor.RunMode.RUN_USING_ENCODER, new PIDFCoefficients(P, I, D, F));
-
-
             if (autoVelo) {
                 flywheel.autoVelocity(drive.localizer.getPose());
             }
@@ -88,13 +84,9 @@ public class FlywheelTuner extends LinearOpMode {
 //                flywheel.motor2.setPower(POWER);
 //            }
 //            else {
-//                flywheel.setVelocity(VELOCITY);
+//                if (error > 100) {flywheel.motor1.setPower(1); flywheel.motor2.setPower(1);}
+//                else flywheel.setVelocity(VELOCITY);
 //            }
-
-
-
-
-
 
             telemetry.addData("Transfer State", intake.transfer.getDirection());
             telemetry.addData("Intake State", intake.intakeMotor.getDirection());
@@ -103,7 +95,7 @@ public class FlywheelTuner extends LinearOpMode {
             telemetry.addData("Set point", VELOCITY);
             telemetry.addData("BotX", drive.localizer.getPose().position.x);
             telemetry.addData("BotY", drive.localizer.getPose().position.y);
-            telemetry.addData("AutoVelo", flywheel.autoVelo);
+            telemetry.addData("Auto Velo", flywheel.autoVelo);
             telemetry.addData("AutoHoodPos", flywheel.autoHoodPos);
             telemetry.addData("currentHoodPos", flywheel.currentHoodPos);
             telemetry.addData("Distance", flywheel.distCalc(drive.localizer.getPose()));

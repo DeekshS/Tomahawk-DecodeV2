@@ -25,10 +25,12 @@ public class Blue18Auto extends LinearOpMode implements FCV2 {
 
     public static double INTAKE_TIME = 1.5;
     public static double SHOOT_TIME = 0.7;
-    public static double GATE_X = 16;
+    public static double GATE_X = 17.5;
+    public static double GATE_Y = 2;
     public static int ARTIFACT_SHOOT_VEL = 1700;
     public static double HOOD_POS = 0.65;
     public static double ANGLE = -35;
+    public static double REV_TRANSFER_POWER = 0;
 
 
     public void runOpMode() throws InterruptedException {
@@ -63,19 +65,19 @@ public class Blue18Auto extends LinearOpMode implements FCV2 {
 
         Action gate_score = drive.actionBuilder(new Pose2d(FCV2.BLUE_CLOSE_SHOOT.x, FCV2.BLUE_CLOSE_SHOOT.y, FCV2.BLUE_CLOSE_ANGLE))
             .setTangent(Math.toRadians(180))
-            .splineToLinearHeading(new Pose2d(FCV2.BLUE_GATE.x - GATE_X, FCV2.BLUE_GATE.y+2, Math.toRadians(65)), Math.toRadians(90))            .build();
+            .splineToLinearHeading(new Pose2d(FCV2.BLUE_GATE.x - GATE_X, FCV2.BLUE_GATE.y+GATE_Y, Math.toRadians(65)), Math.toRadians(90))            .build();
 
-        Action gate_return = drive.actionBuilder(new Pose2d(FCV2.BLUE_GATE.x - GATE_X, FCV2.BLUE_GATE.y+2, Math.toRadians(65)))
+        Action gate_return = drive.actionBuilder(new Pose2d(FCV2.BLUE_GATE.x - GATE_X, FCV2.BLUE_GATE.y+GATE_Y, Math.toRadians(65)))
             .setTangent(Math.toRadians(180))
             .splineToLinearHeading(new Pose2d(FCV2.BLUE_CLOSE_SHOOT.x, FCV2.BLUE_CLOSE_SHOOT.y, FCV2.BLUE_CLOSE_ANGLE), Math.toRadians(90))
             .build();
 
         Action gate_score2 = drive.actionBuilder(new Pose2d(FCV2.BLUE_CLOSE_SHOOT.x, FCV2.BLUE_CLOSE_SHOOT.y, FCV2.BLUE_CLOSE_ANGLE))
             .setTangent(Math.toRadians(180))
-            .splineToLinearHeading(new Pose2d(FCV2.BLUE_GATE.x - GATE_X, FCV2.BLUE_GATE.y+2, Math.toRadians(65)), Math.toRadians(90))
+            .splineToLinearHeading(new Pose2d(FCV2.BLUE_GATE.x - GATE_X, FCV2.BLUE_GATE.y+GATE_Y, Math.toRadians(65)), Math.toRadians(90))
             .build();
 
-        Action gate_return2 = drive.actionBuilder(new Pose2d(FCV2.BLUE_GATE.x - GATE_X, FCV2.BLUE_GATE.y + 2, Math.toRadians(65)))
+        Action gate_return2 = drive.actionBuilder(new Pose2d(FCV2.BLUE_GATE.x - GATE_X, FCV2.BLUE_GATE.y+GATE_Y, Math.toRadians(65)))
             .setTangent(Math.toRadians(180))
             .splineToLinearHeading(new Pose2d(FCV2.BLUE_CLOSE_SHOOT.x, FCV2.BLUE_CLOSE_SHOOT.y, FCV2.BLUE_CLOSE_ANGLE), Math.toRadians(90))
             .build();
@@ -91,14 +93,14 @@ public class Blue18Auto extends LinearOpMode implements FCV2 {
             .build();
 
         Action p = new SequentialAction(
-            robot.transfer.powerAction(-1),
+            robot.transfer.powerAction(-REV_TRANSFER_POWER),
             preload,
             robot.transfer.powerAction(1),
             new SleepAction(SHOOT_TIME)
         );
 
         Action a1 = new SequentialAction(
-            robot.transfer.powerAction(-1),
+            robot.transfer.powerAction(-REV_TRANSFER_POWER),
             artifact1,
             artifact1_return,
             robot.transfer.powerAction(1),
@@ -106,7 +108,7 @@ public class Blue18Auto extends LinearOpMode implements FCV2 {
         );
 
         Action a2 = new SequentialAction(
-            robot.transfer.powerAction(-1),
+            robot.transfer.powerAction(-REV_TRANSFER_POWER),
             artifact2,
             artifact2_return,
             robot.transfer.powerAction(1),
@@ -114,13 +116,13 @@ public class Blue18Auto extends LinearOpMode implements FCV2 {
         );
 
         Action gate = new SequentialAction(
-            robot.transfer.powerAction(-1),
+            robot.transfer.powerAction(-REV_TRANSFER_POWER),
             gate_score,
             new SleepAction(INTAKE_TIME),
             gate_return,
             robot.transfer.powerAction(1),
             new SleepAction(SHOOT_TIME),
-            robot.transfer.powerAction(-1),
+            robot.transfer.powerAction(-REV_TRANSFER_POWER),
             gate_score2,
             new SleepAction(INTAKE_TIME),
             gate_return2,
@@ -129,7 +131,7 @@ public class Blue18Auto extends LinearOpMode implements FCV2 {
         );
 
         Action a3 = new SequentialAction(
-            robot.transfer.powerAction(-1),
+            robot.transfer.powerAction(-REV_TRANSFER_POWER),
             artifact3,
             artifact3_return,
             robot.transfer.powerAction(1),
