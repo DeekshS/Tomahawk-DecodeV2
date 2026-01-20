@@ -50,8 +50,12 @@ public class Intake {
     // Motor controls
     public void intake() {
         intakeMotor.setPower(1);
-        transfer.setPower(0);
     }
+
+    public void intakePower(double power) {
+        intakeMotor.setPower(power);
+    }
+
 
     public void intakeReverse() {
         intakeMotor.setPower(-1);

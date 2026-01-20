@@ -43,15 +43,19 @@ public class EmergencyFSM {
         if (controls.flywheelClose.value()) {
             outtake.shootVelocity(OuttakeConstants.CLOSE_VELOCITY);
             outtake.hood.setPosition(OuttakeConstants.CLOSE_HOOD);
-            intake.transferIn(1);
+            outtake.currentVelocity = OuttakeConstants.CLOSE_VELOCITY;
         } else if (controls.flywheelFar.value()) {
             outtake.shootVelocity(OuttakeConstants.FAR_VELOCITY);
-            intake.transferIn(1);
-        } else if (controls.autoVelo.value()) {
-            outtake.autoVelocity(robot.drive.localizer.getPose());
-            intake.transferIn(1);
-        } else {
+            outtake.hood.setPosition(OuttakeConstants.FAR_HOOD);
+            outtake.currentVelocity = OuttakeConstants.FAR_VELOCITY;
+        }
+//        else if (controls.autoVelo.value()) {
+//            outtake.autoVelocity(robot.drive.localizer.getPose());
+//            intake.transferIn(1);
+//        }
+        else {
             outtake.shootVelocity(OuttakeConstants.OFF_VELOCITY);
+            outtake.currentVelocity = 0;
         }
 
         // ---------------------- Turret ----------------------
@@ -71,6 +75,16 @@ public class EmergencyFSM {
             transfer.setPower(-1);
         } else if (controls.transfer.locked()) {
             intake.intake();
+            if (controls.flywheelClose.locked() || controls.flywheelFar.locked()) {
+                if (outtake.getVelocity() <= outtake.currentVelocity - 150) {
+                    intake.transferOut(Math.min(1 - 0.2, 0.4));
+                } else {
+                    intake.transferIn(1);
+                }
+            }
+            else {
+                intake.transferIn(1);
+            }
             transfer.setPower(1);
         } else if (!controls.transfer.locked() && !controls.intakeReverse.locked()) {
             intake.intakeStop();

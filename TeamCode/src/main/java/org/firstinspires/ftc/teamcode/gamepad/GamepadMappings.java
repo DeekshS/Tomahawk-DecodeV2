@@ -81,7 +81,7 @@ public class GamepadMappings {
     public void outtakeUpdate() {
         flywheelClose.update(gamepad2.a);
         flywheelFar.update(gamepad2.y);
-        //flywheelOff.update(gamepad2.b);
+        flywheelOff.update(gamepad2.b);
         autoVelo.update(gamepad2.left_bumper);
         turretAuto.update(gamepad1.ps);
     }

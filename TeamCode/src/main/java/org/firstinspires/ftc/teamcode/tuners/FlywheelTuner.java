@@ -23,7 +23,7 @@ import org.firstinspires.ftc.teamcode.subsystems.Outtake.Outtake;
 @TeleOp
 @Config
 public class FlywheelTuner extends LinearOpMode {
-    public static double VELOCITY = 1680;
+    public static double VELOCITY = 1330;
     public static double POS = 0.86;
     public static double POWER = 0.77;
     public static boolean autoVelo = false;
@@ -31,9 +31,12 @@ public class FlywheelTuner extends LinearOpMode {
     public static boolean transfering = true;
     public static boolean setPower = false;
     public static boolean flywheelActive = true;
+    public static boolean hoodthingy = false;
+    public static double transferPower = 1;
+    public static double intakePower = 1;
+    public static double velocityError = 150;
 
-
-    public static double P = 430, I = 0, D = 1, F = 14.8;
+    public static double P = 900, I = 0, D = 7, F = 14.8;
 
 
     Outtake flywheel;
@@ -59,37 +62,42 @@ public class FlywheelTuner extends LinearOpMode {
             drive.localizer.update();
 
 
-            if (intaking) {
-                intake.intake();
+
+
+
+//            flywheel.motor1.setVelocityPIDFCoefficients(P, I, D, F);
+//            flywheel.motor2.setVelocityPIDFCoefficients(P, I, D, F);
+//            flywheel.motor1.setPIDFCoefficients(DcMotor.RunMode.RUN_USING_ENCODER, new PIDFCoefficients(P, I, D, F));
+//            flywheel.motor2.setPIDFCoefficients(DcMotor.RunMode.RUN_USING_ENCODER, new PIDFCoefficients(P, I, D, F));
+
+            if (error > 50) {
+                flywheel.motor1.setPower(10);
+                flywheel.motor2.setPower(10);
             }
             else {
-                intake.intakeStop();
+                flywheel.motor1.setPower(0);
+                flywheel.motor2.setPower(0);
+            }
+
+
+
+//            flywheel.autoVelocity(drive.localizer.getPose());
+            if (intaking) {
+                intake.intakePower(intakePower);
             }
             if (transfering) {
-                intake.transferIn(1);
+                if (currentVelocity <= VELOCITY - velocityError) {
+                    intake.transferOut(Math.min(transferPower - 0.2, 0.4));
+                } else {
+                    intake.transferIn(transferPower);
+                }
             }
-            else {
-                intake.transferStop();
-            }
 
 
-            flywheel.motor1.setPIDFCoefficients(DcMotor.RunMode.RUN_USING_ENCODER, new PIDFCoefficients(P, I, D, F));
-            flywheel.motor2.setPIDFCoefficients(DcMotor.RunMode.RUN_USING_ENCODER, new PIDFCoefficients(P, I, D, F));
+            flywheel.hood.setPosition(POS);
+            flywheel.setVelocity(VELOCITY);
 
 
-            if (autoVelo) {
-                flywheel.autoVelocity(drive.localizer.getPose());
-            }
-//            else {
-//                flywheel.hood.setPosition(POS);
-//            }
-//            if (setPower) {
-//                flywheel.motor1.setPower(POWER);
-//                flywheel.motor2.setPower(POWER);
-//            }
-//            else {
-//                flywheel.setVelocity(VELOCITY);
-//            }
 
 
 
