@@ -41,8 +41,9 @@ public class Blue15New extends LinearOpMode implements FCV2 {
 
         Action artifact1 = drive.actionBuilder(new Pose2d(FCV2.BLUE_CLOSE_SHOOT.x, FCV2.BLUE_CLOSE_SHOOT.y, FCV2.BLUE_CLOSE_ANGLE))
                 .strafeToLinearHeading(new Vector2d(FCV2.PPG_BLUE_ARTIFACT.x, FCV2.PPG_BLUE_ARTIFACT.y), FCV2.BLUE_ARTIFACT_ANGLE)
-                .lineToY(FCV2.PPG_BLUE_ARTIFACT.y + 16)
+                .lineToY(FCV2.PPG_BLUE_ARTIFACT.y + ARTIFACT_DIST-1)
                 .strafeToLinearHeading(FCV2.BLUE_GATE, 0)
+                .waitSeconds(0.2)
                 .build();
 
 
@@ -55,14 +56,14 @@ public class Blue15New extends LinearOpMode implements FCV2 {
                 .strafeToLinearHeading(FCV2.PGP_BLUE_ARTIFACT, FCV2.BLUE_ARTIFACT_ANGLE)
 
                 .setTangent(FCV2.BLUE_ARTIFACT_ANGLE)
-                //
-                .lineToY(FCV2.PGP_BLUE_ARTIFACT.y+FCV2.ARTIFACT_DIST)
+
+                .lineToY(FCV2.PGP_BLUE_ARTIFACT.y+FCV2.ARTIFACT_DIST+2)
 //            .setReversed(true)
 //            .splineToLinearHeading(new Pose2d(FCV2.PGP_BLUE_ARTIFACT.x, FCV2.PGP_BLUE_ARTIFACT.y+FCV2.ARTIFACT_DIST, FCV2.BLUE_ARTIFACT_ANGLE), -Math.PI/2.2)
 
                 .build();
 
-        Action artifact2_return = drive.actionBuilder(new Pose2d(FCV2.PGP_BLUE_ARTIFACT.x, FCV2.PGP_BLUE_ARTIFACT.y+FCV2.ARTIFACT_DIST, FCV2.BLUE_ARTIFACT_ANGLE))
+        Action artifact2_return = drive.actionBuilder(new Pose2d(FCV2.PGP_BLUE_ARTIFACT.x, FCV2.PGP_BLUE_ARTIFACT.y+FCV2.ARTIFACT_DIST+2, FCV2.BLUE_ARTIFACT_ANGLE))
 
 //            .strafeTo(FCV2.PGP_BLUE_ARTIFACT)
 //            .strafeToLinearHeading(FCV2.BLUE_CLOSE_SHOOT, FCV2.BLUE_CLOSE_ANGLE-Math.toRadians(5-2))
@@ -79,11 +80,7 @@ public class Blue15New extends LinearOpMode implements FCV2 {
 
         Action artifact3 = drive.actionBuilder(new Pose2d(FCV2.BLUE_CLOSE_SHOOT.x, FCV2.BLUE_CLOSE_SHOOT.y, FCV2.BLUE_CLOSE_ANGLE))
                 .strafeToLinearHeading(FCV2.GPP_BLUE_ARTIFACT, FCV2.BLUE_ARTIFACT_ANGLE)
-
-//            .setTangent(0)
-//            .splineToConstantHeading(FCV2.GPP_BLUE_ARTIFACT, -0.75*Math.PI)
-                .setTangent(FCV2.BLUE_ARTIFACT_ANGLE)
-                .lineToY(FCV2.GPP_BLUE_ARTIFACT.y+FCV2.ARTIFACT_DIST)
+                .strafeToConstantHeading(new Vector2d(FCV2.GPP_BLUE_ARTIFACT.x, FCV2.GPP_BLUE_ARTIFACT.y+ARTIFACT_DIST+2))
 
                 .build();
 
@@ -91,16 +88,20 @@ public class Blue15New extends LinearOpMode implements FCV2 {
 
                 //                .setReversed(true)
                 .strafeToLinearHeading(FCV2.BLUE_CLOSE_SHOOT, FCV2.BLUE_CLOSE_ANGLE)
-
+                
                 .build();
 
         Action park = drive.actionBuilder(new Pose2d(FCV2.BLUE_CLOSE_SHOOT.x, FCV2.BLUE_CLOSE_SHOOT.y, FCV2.BLUE_CLOSE_ANGLE))
                 .strafeTo(new Vector2d(FCV2.PGP_BLUE_ARTIFACT.x, FCV2.PGP_BLUE_ARTIFACT.y-5))
                 .build();
 
-        Action hp_artifact = drive.actionBuilder(new Pose2d(FCV2.BLUE_CLOSE_SHOOT.x, FCV2.BLUE_CLOSE_SHOOT.y, FCV2.BLUE_CLOSE_ANGLE))
+        Action hp = drive.actionBuilder(new Pose2d(FCV2.BLUE_CLOSE_SHOOT.x, FCV2.BLUE_CLOSE_SHOOT.y, FCV2.BLUE_CLOSE_ANGLE))
                 .strafeToLinearHeading(FCV2.HP_BLUE_ARTIFACT, Math.toRadians(180))
                 .strafeTo(new Vector2d(FCV2.HP_BLUE_ARTIFACT.x-20, FCV2.HP_BLUE_ARTIFACT.y))
+                .build();
+
+        Action hp_return = drive.actionBuilder(new Pose2d(FCV2.HP_BLUE_ARTIFACT.x-20, FCV2.HP_BLUE_ARTIFACT.y, FCV2.BLUE_CLOSE_ANGLE))
+                .strafeToLinearHeading(FCV2.BLUE_CLOSE_SHOOT, FCV2.BLUE_CLOSE_ANGLE)
                 .build();
 
 
@@ -111,19 +112,19 @@ public class Blue15New extends LinearOpMode implements FCV2 {
                 new SequentialAction(
                         new ParallelAction(
                                 preload,
-                                robot.outtake.shootCloseAction()
-                        ),
+                                robot.outtake.shootCloseAction(robot)
+                                ),
 //
                         new ParallelAction(
-                                robot.outtake.shootCloseAction(),
-                                robot.intake.intakeTransferTimeAction(SHOOTER_TIME),
+                                robot.outtake.shootCloseAction(robot),
+                                robot.transfer.intakeTransferTimeAction(SHOOTER_TIME),
                                 new SleepAction(SHOOTER_TIME)
 
                         ),
-
+                        robot.transfer.transferStopAction(),
                         //FIRST SPIKE
                         new ParallelAction(
-                                artifact1,
+                                artifact2,
                                 robot.intake.intakeTimeAction(INTAKE_WAIT_TIME)
                         ),
 //
@@ -131,18 +132,22 @@ public class Blue15New extends LinearOpMode implements FCV2 {
 
 
                         new ParallelAction(
-                                artifact1_return,
-                                robot.outtake.shootCloseAction()
+                                artifact2_return
+//                                robot.outtake.shootCloseAction(robot)
                         ),
 
                         new ParallelAction(
-                                robot.outtake.shootVelocityTimeAction(1130, SHOOTER_TIME),
-                                robot.intake.intakeTransferTimeAction(SHOOTER_TIME)
+                                robot.outtake.shootCloseAction(robot),
+                                robot.transfer.intakeTransferTimeAction(SHOOTER_TIME),
+                                new SleepAction(SHOOTER_TIME)
+
                         ),
+
+                        robot.transfer.transferStopAction(),
 //
                         //SECOND SPIKE
                         new ParallelAction(
-                                artifact2,
+                                artifact1,
                                 robot.intake.intakeTimeAction(SHOOTER_TIME)
 
                         ),
@@ -150,41 +155,60 @@ public class Blue15New extends LinearOpMode implements FCV2 {
                         robot.intake.stop(),
 
                         new ParallelAction(
-                                artifact2_return,
-                                robot.outtake.shootCloseAction()
+                                artifact1_return
+//                                robot.outtake.shootCloseAction(robot)
                         ),
 //
                         new ParallelAction(
-                                robot.outtake.shootCloseAction(),
-                                robot.intake.intakeTransferTimeAction(SHOOTER_TIME)
+                                robot.outtake.shootCloseAction(robot),
+                                robot.transfer.intakeTransferTimeAction(SHOOTER_TIME),
+                                new SleepAction(SHOOTER_TIME)
                         ),
-//
+                      robot.transfer.transferStopAction(),
                         //THIRD SPIKE
-
+                        robot.transfer.transferStopAction(),
                         new ParallelAction(
-                                artifact3,
+                                artifact3
+//                                robot.intake.intakeTimeAction(INTAKE_WAIT_TIME)
+                        ),
+
+                        robot.intake.stop(),
+                        new ParallelAction(
+                                artifact3_return
+//                                robot.outtake.shootCloseAction(robot)
+                        ),
+                        new ParallelAction(
+                                robot.outtake.shootCloseAction(robot),
+                                robot.transfer.intakeTransferTimeAction(SHOOTER_TIME),
+                                new SleepAction(SHOOTER_TIME)
+
+                        ),
+                        robot.transfer.transferStopAction(),
+                        new ParallelAction(
+                                hp,
                                 robot.intake.intakeTimeAction(INTAKE_WAIT_TIME)
                         ),
 
                         robot.intake.stop(),
                         new ParallelAction(
-                                artifact3_return,
-                                robot.outtake.shootCloseAction()
+                                hp_return
+//                                robot.outtake.shootCloseAction(robot)
                         ),
                         new ParallelAction(
-                                robot.outtake.shootCloseAction(),
-                                robot.intake.intakeTransferTimeAction(SHOOTER_TIME),
+                                robot.outtake.shootCloseAction(robot),
+                                robot.transfer.intakeTransferTimeAction(SHOOTER_TIME),
                                 new SleepAction(SHOOTER_TIME)
+
                         ),
                         park
 //
-//
                 )
 
+
         );
-        robot.drive.localizer.update();
-        PoseStorage.endPose = robot.drive.localizer.getPose();
-        PoseStorage.side = PoseStorage.SIDE.BLUE;
+//        robot.drive.localizer.update();
+//        PoseStorage.endPose = robot.drive.localizer.getPose();
+//        PoseStorage.side = PoseStorage.SIDE.BLUE;
     }
 
 }

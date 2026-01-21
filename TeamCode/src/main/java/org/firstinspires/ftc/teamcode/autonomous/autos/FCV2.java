@@ -28,7 +28,7 @@ public interface FCV2 {
     //-------------------------------Coordinates------------------------------------------
 
     // ======Artifact Length======
-    double ARTIFACT_DIST = 28;
+    double ARTIFACT_DIST = 33;
     double HP_ARTIFACT_DIST = 62;
     // ======RED ARTIFACTS======
     Vector2d GPP_RED_ARTIFACT = new Vector2d(-36, -34);
@@ -42,10 +42,10 @@ public interface FCV2 {
     Pose2d RED_FAR_SHOOT = new Pose2d(-61.25, -5, Math.toRadians(-90));
 
     // ======BLUE ARTIFACTS======
-    Vector2d GPP_BLUE_ARTIFACT = new Vector2d(-36, 30);
-    Vector2d PGP_BLUE_ARTIFACT = new Vector2d(-12, 30);
-    Vector2d PPG_BLUE_ARTIFACT = new Vector2d(12, 30);
-    Vector2d HP_BLUE_ARTIFACT = new Vector2d(-48,60);
+    Vector2d GPP_BLUE_ARTIFACT = new Vector2d(-36, 20);
+    Vector2d PGP_BLUE_ARTIFACT = new Vector2d(-12, 25);
+    Vector2d PPG_BLUE_ARTIFACT = new Vector2d(12, 25);
+    Vector2d HP_BLUE_ARTIFACT = new Vector2d(-43,70.5);
 
     // ====== BLUE Shooting Locations======
     Vector2d BLUE_CLOSE_SHOOT = new Vector2d(12, 12);
@@ -53,7 +53,7 @@ public interface FCV2 {
 
 
     // ======Gates======
-    Vector2d BLUE_GATE = new Vector2d(4, 56);
+    Vector2d BLUE_GATE = new Vector2d(0, 56);
     Vector2d BLUE_GATE_INTAKE = new Vector2d(-24, 62);
     Vector2d BLUE_GATE_INTAKE_TWO = new Vector2d(-25, 62);
     double BLUE_GATE_INTAKE_TWO_ANGLE = Math.toRadians(0);

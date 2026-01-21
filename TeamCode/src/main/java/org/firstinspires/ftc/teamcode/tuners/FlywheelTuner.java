@@ -60,6 +60,8 @@ public class FlywheelTuner extends LinearOpMode {
             double currentVelocity = Math.abs(flywheel.getVelocity());
             double error = VELOCITY - currentVelocity;
             drive.localizer.update();
+            flywheel.hood.setPosition(POS);
+
 
 
 
@@ -94,7 +96,7 @@ public class FlywheelTuner extends LinearOpMode {
             }
 
 
-            flywheel.hood.setPosition(POS);
+
             flywheel.setVelocity(VELOCITY);
 
 

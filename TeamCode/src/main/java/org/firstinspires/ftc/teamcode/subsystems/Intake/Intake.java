@@ -154,13 +154,25 @@ public class Intake {
         };
     }
 
-    public Action transferReverseAction() {
+    public Action transferReverseAction(double power) {
         return new Action() {
             ElapsedTime t = new ElapsedTime();
 
             @Override
             public boolean run(@NonNull TelemetryPacket telemetryPacket) {
-                if (!active) setPower(-1);
+                if (!active) setPower(-power);
+                return false;
+            }
+        };
+    }
+
+    public Action transferInAction(double power) {
+        return new Action() {
+            ElapsedTime t = new ElapsedTime();
+
+            @Override
+            public boolean run(@NonNull TelemetryPacket telemetryPacket) {
+                if (!active) setPower(power);
                 return false;
             }
         };

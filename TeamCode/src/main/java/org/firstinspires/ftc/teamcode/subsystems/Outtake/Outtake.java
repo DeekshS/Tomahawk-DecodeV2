@@ -20,6 +20,8 @@ import com.qualcomm.robotcore.util.ElapsedTime;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 
 
+import org.firstinspires.ftc.teamcode.subsystems.Robot;
+
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 
@@ -65,6 +67,10 @@ public class Outtake {
 
         motor1.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         motor2.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+
+        motor1.setPIDFCoefficients(DcMotor.RunMode.RUN_USING_ENCODER, new PIDFCoefficients(P, I, D, F));
+        motor2.setPIDFCoefficients(DcMotor.RunMode.RUN_USING_ENCODER, new PIDFCoefficients(P, I, D, F));
+
 
 
 
@@ -224,7 +230,7 @@ public class Outtake {
                 // Return true if flywheel is at target (within 50 rpm)
                 double error = Math.abs(getVelocity() - velocity);
                 telemetryPacket.put("Error", error);
-                return error < 50;
+                return error > 50;
             }
         };
     }
@@ -265,18 +271,21 @@ public class Outtake {
             public boolean run(@NonNull TelemetryPacket telemetryPacket) {
 
 
-                setVelocity(velocity);
-                bangController(velocity);
+                motor1.setPIDFCoefficients(DcMotor.RunMode.RUN_USING_ENCODER, new PIDFCoefficients(P, I, D, F));
+                motor2.setPIDFCoefficients(DcMotor.RunMode.RUN_USING_ENCODER, new PIDFCoefficients(P, I, D, F));
+
+                motor1.setVelocity(velocity);
+                motor2.setVelocity(velocity);
 
 
                 double error = Math.abs(getVelocity() - velocity);
                 telemetryPacket.put("Error", error);
-                return error < 50;
+                return error > 50;
             }
         };
     }
 
-    public Action shootCloseAction() {
+    public Action shootCloseAction(Robot robot) {
         return new Action() {
 
 
@@ -285,16 +294,14 @@ public class Outtake {
 
 
                 setVelocity(OuttakeConstants.CLOSE_VELOCITY);
-                bangController(OuttakeConstants.CLOSE_VELOCITY);
-
-
-
+//                bangController(OuttakeConstants.CLOSE_VELOCITY);
                 hood.setPosition(OuttakeConstants.CLOSE_HOOD);
+                robot.outtake.transferHold(robot);
 
 
                 double error = Math.abs(getVelocity() - OuttakeConstants.CLOSE_VELOCITY);
                 telemetryPacket.put("Error", error);
-                return error < 50;
+                return error > 50;
             }
         };
     }
@@ -343,6 +350,20 @@ public class Outtake {
         };
     }
 
+    public Action transferHold(Robot robot) {
+        return new Action() {
+            @Override
+            public boolean run(@NonNull TelemetryPacket telemetryPacket) {
+                if (getVelocity() <= currentVelocity - 150) {
+                    robot.intake.transferReverseAction(Math.min(1 - 0.2, 0.4));
+                } else {
+                    robot.intake.transferInAction(1);
+                }
+                return false;
+            }
+        };
+    }
+
 
 
 
@@ -354,7 +375,6 @@ public class Outtake {
             public boolean run(@NonNull TelemetryPacket telemetryPacket) {
                 motor1.setPower(0);
                 motor2.setPower(0);
-
 
                 return true;
             }

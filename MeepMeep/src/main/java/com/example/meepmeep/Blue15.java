@@ -75,7 +75,8 @@ public class Blue15 {
 
 //            .setTangent(0)
 //            .splineToConstantHeading(FCV2.GPP_BLUE_ARTIFACT, -0.75*Math.PI)
-                .setTangent(FCV2.BLUE_ARTIFACT_ANGLE)
+//                .setTangent(FCV2.BLUE_ARTIFACT_ANGLE)
+                .setTangent(Math.toRadians(90))
                 .lineToY(FCV2.GPP_BLUE_ARTIFACT.y+FCV2.ARTIFACT_DIST)
 
                 .build();
