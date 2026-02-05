@@ -1,8 +1,10 @@
 package org.firstinspires.ftc.teamcode.fsm;
 
 import com.acmerobotics.dashboard.config.Config;
+import com.acmerobotics.roadrunner.Pose2d;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
+import org.firstinspires.ftc.teamcode.PoseStorage;
 import org.firstinspires.ftc.teamcode.drive.localizers.PinpointLocalizer;
 import org.firstinspires.ftc.teamcode.gamepad.GamepadMappings;
 import org.firstinspires.ftc.teamcode.subsystems.Intake.Intake;
@@ -16,12 +18,12 @@ public class EmergencyFSM {
     private Intake intake;
     private Intake transfer;
     private Outtake outtake;
-//    private RTPAxon turret;           // turret controlled by RTPAxon
     private final Turret turret;
     private final Robot robot;
     private final GamepadMappings controls;
     private final Telemetry telemetry;
     private GazelleState gazelleState;
+    public String telemetry1;
     public static int velocity = 1580;
     public EmergencyFSM(Telemetry telemetry, GamepadMappings controls, Robot robot) {
         this.robot = robot;
@@ -38,6 +40,11 @@ public class EmergencyFSM {
         controls.update();
         robot.driveTrain.update();
         robot.drive.localizer.update();
+
+        //Drivetrain stuff
+        if (controls.reset.value()) {
+            robot.drive.localizer.setPose(new Pose2d(PoseStorage.hpX, PoseStorage.hpY, PoseStorage.hpHeading));
+        }
 
         // ---------------- Outtake / Flywheel ----------------
         if (controls.flywheelClose.value()) {
@@ -75,11 +82,13 @@ public class EmergencyFSM {
             transfer.setPower(-1);
         } else if (controls.transfer.locked()) {
             intake.intake();
-            if (controls.flywheelClose.locked() || controls.flywheelFar.locked()) {
-                if (outtake.getVelocity() <= outtake.currentVelocity - 150) {
-                    intake.transferOut(Math.min(1 - 0.2, 0.4));
+            if (controls.flywheelClose.value() || controls.flywheelFar.value()) {
+                if (outtake.getVelocity() <= outtake.currentVelocity - OuttakeConstants.velocityError) {
+                    telemetry1 = "transferHold";
+                    transfer.setPower(-0.8);
                 } else {
                     intake.transferIn(1);
+                    telemetry1 = "transfer";
                 }
             }
             else {

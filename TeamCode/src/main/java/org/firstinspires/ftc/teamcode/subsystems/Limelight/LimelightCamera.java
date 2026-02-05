@@ -27,7 +27,7 @@ public class LimelightCamera {
         this.mode = mode;
         turret = new Turret(mode);
         telemetry = new MultipleTelemetry(mode.telemetry, FtcDashboard.getInstance().getTelemetry());
-        limelight = mode.hardwareMap.get(Limelight3A.class, "limelight");
+        limelight = mode.hardwareMap.get(Limelight3A.class, "ll");
         telemetry.setMsTransmissionInterval(1);
 
         limelight.pipelineSwitch(1);

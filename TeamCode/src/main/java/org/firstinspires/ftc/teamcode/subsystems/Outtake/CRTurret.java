@@ -10,35 +10,39 @@ import com.qualcomm.hardware.limelightvision.Limelight3A;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.AnalogInput;
 import com.qualcomm.robotcore.hardware.CRServo;
-import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
-import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import org.firstinspires.ftc.teamcode.PoseStorage;
 import org.firstinspires.ftc.teamcode.Constants;
 import org.firstinspires.ftc.teamcode.drive.MecanumDrive;
 
 @Config
-public class Turret {
+public class CRTurret {
 
     public static boolean enabled = true; // allow manual override
-    public static double multiplier = 0.00319444;
+    public static double TOLERANCE = 2;
+
+    public static boolean gearOut = false;
+
+    double power = 0;
+    double error = 0;
+    double currentAngle;
     double targetAngle = 0;
     double initialAngle;
     public double calculatedAngle;
 
-    Servo left;
-    Servo right;
+    CRServo left;
+    CRServo right;
     AnalogInput encoder;
-//    Limelight3A limelight;
+    Limelight3A limelight;
 
     // Constructor
-    public Turret(LinearOpMode mode) {
-        left = mode.hardwareMap.get(Servo.class, "turretLeft");
-        right = mode.hardwareMap.get(Servo.class, "turretRight");
+    public CRTurret(LinearOpMode mode) {
+        left = mode.hardwareMap.get(CRServo.class, "turretLeft");
+        right = mode.hardwareMap.get(CRServo.class, "turretRight");
         encoder = mode.hardwareMap.get(AnalogInput.class, "turretEncoderRight");
-//        limelight = mode.hardwareMap.get(Limelight3A.class, "ll");
-//        limelight.start();
+        limelight = mode.hardwareMap.get(Limelight3A.class, "ll");
+        limelight.start();
         initialAngle = Constants.turretOffset;
     }
 
@@ -59,13 +63,20 @@ public class Turret {
         targetAngle += a;
     }
 
+    public double getCurrentAngle() {
+        return currentAngle;
+    }
+
+    public double getError() {
+        return error;
+    }
+
+    public double getPower() {
+        return power;
+    }
 
     public double getTargetAngle() {
         return targetAngle;
-    }
-
-    public double getPosition() {
-        return targetAngle * multiplier;
     }
 
     public double getInitialAngle() {
@@ -73,7 +84,7 @@ public class Turret {
     }
 
     public boolean isAtTarget() {
-        return true;
+        return Math.abs(error) < TOLERANCE;
     }
 
     public double autoAlign(Pose2d pose) {
@@ -88,12 +99,23 @@ public class Turret {
     }
 
     public void update() {
-//        targetAngle += 180;
-//        targetAngle = (targetAngle > 360) ? targetAngle - 360 : targetAngle;
-//        targetAngle -= limelight.getLatestResult().getTx();
+        currentAngle = (((encoder.getVoltage() / 3.3 * 360) % 360) - 180) - initialAngle;
+        targetAngle = (targetAngle > 180) ? targetAngle - 360 : targetAngle;
+        targetAngle -= limelight.getLatestResult().getTx();
 
-        left.setPosition((targetAngle + 180) * multiplier);
-        right.setPosition((targetAngle + 180) * multiplier);
+        error = (targetAngle - currentAngle) % 360;
+        power = 0.1 * Math.log(1+Math.abs(error)) / Math.log(10);
+
+        if (isAtTarget()) {
+            power = 0;
+        } else {
+            if ((error < 0)) {
+                power = -power;
+            }
+        }
+
+        if (enabled) left.setPower(power); else left.setPower(0);
+        if (enabled) right.setPower(power); else right.setPower(0);
     }
 
     public Action alignAction(double angle, double time) {

@@ -21,5 +21,9 @@ public class SET_AS_BLUE extends LinearOpMode {
         PoseStorage.side = PoseStorage.SIDE.BLUE;
         PoseStorage.goalX = 72;
         PoseStorage.goalY = 72;
+        PoseStorage.hpX = -56.4375;
+        PoseStorage.hpY = 54.6875;
+        PoseStorage.hpHeading = Math.toRadians(90);
+
     }
 }

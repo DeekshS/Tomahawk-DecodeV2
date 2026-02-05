@@ -70,10 +70,10 @@
 
          Actions.runBlocking(
              new ParallelAction(
+                 robot.outtake.hoodAction(HOOD_POS, 29.9),
                  robot.outtake.shootVelocityTimeAction(ARTIFACT_SHOOT_VEL, 29.9),
                  robot.intake.intakeTimeAction(29.9),
                  robot.turret.alignAction(-40, 29.9),
-                 robot.outtake.hoodAction(HOOD_POS, 29.9),
                  new SequentialAction(
 //                     ppg,
 //                     ppg_return,

@@ -53,8 +53,8 @@ public class Outtake {
 
     public Outtake(LinearOpMode mode) {
         this.telemetry = new MultipleTelemetry(FtcDashboard.getInstance().getTelemetry(), mode.telemetry);
-        motor1 = mode.hardwareMap.get(DcMotorEx.class, "flywheel1");
-        motor2 = mode.hardwareMap.get(DcMotorEx.class, "flywheel2");
+        motor1 = mode.hardwareMap.get(DcMotorEx.class, "outtake1");
+        motor2 = mode.hardwareMap.get(DcMotorEx.class, "outtake2");
         hood = mode.hardwareMap.get(Servo.class, "hood");
 
 

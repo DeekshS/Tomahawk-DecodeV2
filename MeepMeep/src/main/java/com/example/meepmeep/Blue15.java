@@ -98,114 +98,118 @@ public class Blue15 {
                 .build();
 
         drive.runAction(
-            new SequentialAction(
-                preload,
-                artifact1,
-//                botActions.preload_parallel_blue(preload),
+            drive.getDrive().actionBuilder(new Pose2d(FCV2.HP_BLUE_ARTIFACT.x, FCV2.HP_BLUE_ARTIFACT.y, Math.toRadians(180)))
+                .setTangent(Math.toRadians(270))
+                .splineToLinearHeading(new Pose2d(FCV2.BLUE_CLOSE_SHOOT, FCV2.BLUE_CLOSE_ANGLE), Math.toRadians(0))
+                .build()
+//            new SequentialAction(
+//                preload,
+//                artifact1,
+////                botActions.preload_parallel_blue(preload),
+////
+////                botActions.shoot_parallel(),
+////
+////                robot.outtake.stopAction(),
+////
+////
+////
+////
+////
+////
+////
+////                botActions.intake_parallel(artifact1),
+////
+////                robot.intake.stop(),
 //
-//                botActions.shoot_parallel(),
+//                new ParallelAction(
+//                    artifact1_return
+//                    //                                subsystems.intake.intakeReverse(0.5),
 //
-//                robot.outtake.stopAction(),
-//
-//
-//
-//
-//
-//
-//
-//                botActions.intake_parallel(artifact1),
-//
-//                robot.intake.stop(),
-
-                new ParallelAction(
-                    artifact1_return
-                    //                                subsystems.intake.intakeReverse(0.5),
-
-//                    new SequentialAction(
-//
-////                        robot.outtake.reverseAction(.5),
-////                        robot.outtake.shootVelocityAction(CLOSE_VELOCITY)
-//
-//                    )
-                ),
-
-//                robot.outtake.stopAction(),
-
-
-//                new SequentialAction(
-//                    //                                subsystems.outtake.shoot_close(),
-//                    new ParallelAction(
-////                        robot.outtake.shootVelocityTimeAction(CLOSE_VELOCITY, SHOOTER_TIME),
-////                        robot.intake.intakeTimeAction(SHOOTER_TIME)
-//                    )
-//
+////                    new SequentialAction(
+////
+//////                        robot.outtake.reverseAction(.5),
+//////                        robot.outtake.shootVelocityAction(CLOSE_VELOCITY)
+////
+////                    )
 //                ),
-
-//                robot.outtake.stopAction(),
-
-
-
-
-
-                // ARTIFACT 2
-
-                new ParallelAction(
-                    artifact2
-//                    robot.intake.intakeTimeAction(INTAKE_WAIT_TIME),
-//                    robot.outtake.shootVelocityTimeAction(CLOSE_VELOCITY, INTAKE_WAIT_TIME)
-                ),
-//                robot.intake.stop(),
-
-                new ParallelAction(
-                    artifact2_return
-                    //                                subsystems.intake.intakeReverse(0.5),
-
-//                    new SequentialAction(
 //
-////                        robot.outtake.reverseTimeAction(.5),
-////                        robot.outtake.shootVelocityAction(CLOSE_VELOCITY)
+////                robot.outtake.stopAction(),
 //
-//                    )
-                ),
-
-//                new SequentialAction(
-//                    //                                subsystems.outtake.shoot_close(),
-//                    new ParallelAction(
-////                        robot.outtake.shootVelocityTimeAction(CLOSE_VELOCITY, SHOOTER_TIME),
-////                        robot.intake.intakeTimeAction(SHOOTER_TIME)
-//                    )
 //
+////                new SequentialAction(
+////                    //                                subsystems.outtake.shoot_close(),
+////                    new ParallelAction(
+//////                        robot.outtake.shootVelocityTimeAction(CLOSE_VELOCITY, SHOOTER_TIME),
+//////                        robot.intake.intakeTimeAction(SHOOTER_TIME)
+////                    )
+////
+////                ),
+//
+////                robot.outtake.stopAction(),
+//
+//
+//
+//
+//
+//                // ARTIFACT 2
+//
+//                new ParallelAction(
+//                    artifact2
+////                    robot.intake.intakeTimeAction(INTAKE_WAIT_TIME),
+////                    robot.outtake.shootVelocityTimeAction(CLOSE_VELOCITY, INTAKE_WAIT_TIME)
 //                ),
-//                robot.outtake.stopAction(),
-
-
-
-
-
-                // ARTIFACT 3
-
-                new ParallelAction(
-                    artifact3
-//                    robot.intake.intakeTimeAction(INTAKE_WAIT_TIME+.5),
-//                    robot.outtake.reverseTimeAction(INTAKE_WAIT_TIME+.5)
-                ),
-//                robot.intake.stop(),
-
-                new ParallelAction(
-                    artifact3_return
-                    //                                subsystems.intake.intakeReverse(0.5),
-
-//                    new SequentialAction(
-//                        robot.outtake.shootVelocityAction(CLOSE_VELOCITY)
+////                robot.intake.stop(),
 //
-//                    )
-                ),
-                hp_artifact
-
-//                new SequentialAction(
-//                    robot.intake.intakeTimeAction(SHOOTER_TIME)
-//                )
-            )
+//                new ParallelAction(
+//                    artifact2_return
+//                    //                                subsystems.intake.intakeReverse(0.5),
+//
+////                    new SequentialAction(
+////
+//////                        robot.outtake.reverseTimeAction(.5),
+//////                        robot.outtake.shootVelocityAction(CLOSE_VELOCITY)
+////
+////                    )
+//                ),
+//
+////                new SequentialAction(
+////                    //                                subsystems.outtake.shoot_close(),
+////                    new ParallelAction(
+//////                        robot.outtake.shootVelocityTimeAction(CLOSE_VELOCITY, SHOOTER_TIME),
+//////                        robot.intake.intakeTimeAction(SHOOTER_TIME)
+////                    )
+////
+////                ),
+////                robot.outtake.stopAction(),
+//
+//
+//
+//
+//
+//                // ARTIFACT 3
+//
+//                new ParallelAction(
+//                    artifact3
+////                    robot.intake.intakeTimeAction(INTAKE_WAIT_TIME+.5),
+////                    robot.outtake.reverseTimeAction(INTAKE_WAIT_TIME+.5)
+//                ),
+////                robot.intake.stop(),
+//
+//                new ParallelAction(
+//                    artifact3_return
+//                    //                                subsystems.intake.intakeReverse(0.5),
+//
+////                    new SequentialAction(
+////                        robot.outtake.shootVelocityAction(CLOSE_VELOCITY)
+////
+////                    )
+//                ),
+//                hp_artifact
+//
+////                new SequentialAction(
+////                    robot.intake.intakeTimeAction(SHOOTER_TIME)
+////                )
+//            )
 
         );
 

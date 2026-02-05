@@ -23,6 +23,7 @@ public class GamepadMappings {
     public static double drive = 0.0;
     public static double strafe = 0.0;
     public static double turn = 0.0;
+    public Toggle reset;
 
     //=============== INTAKE ===============
     public Toggle intake;
@@ -41,9 +42,12 @@ public class GamepadMappings {
     public Toggle autoAim;
     public Toggle autoVelo;
     public Toggle turretAuto;
+
     public GamepadMappings(Gamepad gamepad1, Gamepad gamepad2) {
         this.gamepad1 = gamepad1;
         this.gamepad2 = gamepad2;
+        //=========DRIVETRAIN======
+        reset = new Toggle(false);
 
         //=============== INTAKE ===============
         intake = new Toggle(false);
@@ -91,6 +95,7 @@ public class GamepadMappings {
         joystickUpdate();
 
         intakeUpdate();
+        reset.update(gamepad2.dpad_up);
 
 //        servoBlocker.update(gamepad1.left_bumper);
         transferReverse.update(gamepad1.left_bumper);

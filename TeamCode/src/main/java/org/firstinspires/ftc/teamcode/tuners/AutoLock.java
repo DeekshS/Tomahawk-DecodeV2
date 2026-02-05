@@ -41,33 +41,11 @@ public class AutoLock extends LinearOpMode {
             drive.localizer.update();
             turret.autoAlign(drive.localizer.getPose());
             turret.update();
-
-//            currentAngle = (((encoder.getVoltage() / 3.3 * 360) % 360) - 180) - initialAngle;
-//            targetAngle = turret.autoAlign(drive.localizer.getPose());
-//            targetAngle = (targetAngle > 180) ? targetAngle - 360 : targetAngle;
-//
-//            error = (targetAngle - currentAngle) % 360;
-//            power = 0.2 * Math.log(1+Math.abs(error)) / Math.log(10);
-//
-//            if (Math.abs(error) < 4 || Math.abs(Math.abs(error) - 360) < 4) {
-//                power = 0;
-//            } else {
-//                if ((error < 0)) {
-//                    //go clockwise
-//                    power = -power;
-//                }
-//            }
-//
-//            if (enabled) left.setPower(power); else left.setPower(0);
-//            if (enabled) right.setPower(power); else right.setPower(0);
-
-
-
-            telemetry.addData("Current Angle", turret.getCurrentAngle());
-            telemetry.addData("Initial Angle", 0);
+//            telemetry.addData("Current Angle", turret.getCurrentAngle());
+            telemetry.addData("Initial Angle", turret.getInitialAngle());
             telemetry.addData("Target Angle", turret.getTargetAngle());
-            telemetry.addData("Error", turret.getError());
-            telemetry.addData("Power", turret.getPower());
+//            telemetry.addData("Error", turret.getError());
+//            telemetry.addData("Power", turret.getPower());
             telemetry.addData("Rotation", Math.toDegrees(drive.localizer.getPose().heading.toDouble()));
             telemetry.addData("X", drive.localizer.getPose().position.x);
             telemetry.addData("Y", drive.localizer.getPose().position.y);
