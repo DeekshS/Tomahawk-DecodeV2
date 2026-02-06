@@ -34,4 +34,4 @@
             <AnalogInput name="leftwinchencoder" port="1" />
         </LynxModule>
     </LynxUsbDevice>
-    ?.</Robot>
+</Robot>
