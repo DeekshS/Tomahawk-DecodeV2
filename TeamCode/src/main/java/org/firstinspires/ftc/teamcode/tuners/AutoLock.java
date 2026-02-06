@@ -23,29 +23,17 @@ public class AutoLock extends LinearOpMode {
     public void runOpMode() {
         telemetry = new MultipleTelemetry(telemetry, FtcDashboard.getInstance().getTelemetry());
 
-        CRServo left = hardwareMap.get(CRServo.class, "turretLeft");
-        CRServo right = hardwareMap.get(CRServo.class, "turretRight");
         Turret turret = new Turret(this);
-        AnalogInput encoder = hardwareMap.get(AnalogInput.class, "turretEncoderRight");
         MecanumDrive drive = new MecanumDrive(this.hardwareMap, new Pose2d(0, 0, 0));
 
-        double error;
-        double power;
-        double currentAngle;
-
         waitForStart();
-        double initialAngle = (((encoder.getVoltage() / 3.3 * 360) % 360));
 
 
         while (opModeIsActive()) {
             drive.localizer.update();
             turret.autoAlign(drive.localizer.getPose());
             turret.update();
-//            telemetry.addData("Current Angle", turret.getCurrentAngle());
-            telemetry.addData("Initial Angle", turret.getInitialAngle());
             telemetry.addData("Target Angle", turret.getTargetAngle());
-//            telemetry.addData("Error", turret.getError());
-//            telemetry.addData("Power", turret.getPower());
             telemetry.addData("Rotation", Math.toDegrees(drive.localizer.getPose().heading.toDouble()));
             telemetry.addData("X", drive.localizer.getPose().position.x);
             telemetry.addData("Y", drive.localizer.getPose().position.y);

@@ -92,8 +92,8 @@ public class Turret {
 //        targetAngle = (targetAngle > 360) ? targetAngle - 360 : targetAngle;
 //        targetAngle -= limelight.getLatestResult().getTx();
 
-        left.setPosition((targetAngle + 180) * multiplier);
-        right.setPosition((targetAngle + 180) * multiplier);
+        left.setPosition((Math.round(targetAngle) + 184) * multiplier);
+        right.setPosition((Math.round(targetAngle) + 184) * multiplier);
     }
 
     public Action alignAction(double angle, double time) {
