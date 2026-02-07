@@ -23,7 +23,7 @@ import org.firstinspires.ftc.teamcode.subsystems.Robot;
 public class Red15New extends LinearOpMode implements FCV2 {
 
     public static double INTAKE_WAIT_TIME = 3;
-    public static double SHOOTER_TIME = 0.75;
+    public static double SHOOTER_TIME = 1.25;
 
 
 
@@ -119,7 +119,7 @@ public class Red15New extends LinearOpMode implements FCV2 {
                         preload,
                         robot.outtake.shootCloseAction(robot)
                     ),
-//
+
                     new ParallelAction(
                         robot.outtake.shootCloseAction(robot),
                         robot.transfer.intakeTransferTimeAction(SHOOTER_TIME),
@@ -211,17 +211,18 @@ public class Red15New extends LinearOpMode implements FCV2 {
                     ),
 
                     robot.intake.stop(),
-                    new ParallelAction(
-                        hp_return2
-                        //                                robot.outtake.shootCloseAction(robot)
-                    ),
-                    new ParallelAction(
-                        robot.outtake.shootCloseAction(robot),
-                        robot.transfer.intakeTransferTimeAction(SHOOTER_TIME),
-                        new SleepAction(SHOOTER_TIME)
-
-                    ),
-                    park
+//                        new ParallelAction(
+//                            hp_return2
+//    //                                robot.outtake.shootCloseAction(robot)
+//                        ),
+//                        new ParallelAction(
+//                            robot.outtake.shootCloseAction(robot),
+//                            robot.transfer.intakeTransferTimeAction(SHOOTER_TIME),
+//                            new SleepAction(SHOOTER_TIME)
+//
+//                        ),
+                    park,
+                    PoseStorage.setEndPose(new Pose2d(new Vector2d(FCV2.PGP_BLUE_ARTIFACT.x, FCV2.PGP_BLUE_ARTIFACT.y-5), BLUE_CLOSE_ANGLE))
 //
                 )
 

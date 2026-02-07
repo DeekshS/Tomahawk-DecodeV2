@@ -18,6 +18,7 @@ import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
+import org.firstinspires.ftc.teamcode.subsystems.Outtake.Outtake;
 
 public class Intake {
 
@@ -37,7 +38,7 @@ public class Intake {
 
         // Initialize motor
         transfer = mode.hardwareMap.get(DcMotorEx.class, "transfer");
-        transfer.setDirection(DcMotorEx.Direction.REVERSE);
+//        transfer.setDirection(DcMotorEx.Direction.REVERSE);
         transfer.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
 
     }
@@ -89,17 +90,9 @@ public class Intake {
 
             @Override
             public boolean run(@NonNull TelemetryPacket telemetryPacket) {
-                if (!init) {
-                    intake();
-                    timer.reset();
-                    init = true;
-                }
-                if (timer.seconds() < time) {
-                    return true;
-                } else {
-                    intakeStop();
-                    return false;
-                }
+
+                while (timer.seconds() < time) {intake(); return true;}
+                return false;
             }
         };
     }
@@ -133,8 +126,8 @@ public class Intake {
 
             @Override
             public boolean run(@NonNull TelemetryPacket telemetryPacket) {
-                transferIn(1);
                 intake();
+                transferIn(1);
                 return (t.seconds() < seconds);
             }
         };
@@ -146,8 +139,7 @@ public class Intake {
 
             @Override
             public boolean run(@NonNull TelemetryPacket telemetryPacket) {
-
-                setPower(1);
+                transfer.setPower(1);
                 active = (t.seconds() < seconds);
                 return active;
             }

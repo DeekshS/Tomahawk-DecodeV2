@@ -36,12 +36,18 @@ public class GamepadMappings {
 
 
     //=============== OUTTAKE ===============
-    public Toggle flywheelClose;
-    public Toggle flywheelFar;
+    public Toggle flywheelClose1;
+    public Toggle flywheelClose2;
+    public Toggle flywheelClose3;
+    public Toggle flywheelFar1;
+    public Toggle flywheelFar2;
+
     public Toggle flywheelOff;
     public Toggle autoAim;
     public Toggle autoVelo;
     public Toggle turretAuto;
+    public Toggle turretLeft;
+    public Toggle turretRight;
 
     public GamepadMappings(Gamepad gamepad1, Gamepad gamepad2) {
         this.gamepad1 = gamepad1;
@@ -59,13 +65,21 @@ public class GamepadMappings {
         transferReverse = new Toggle(false);
 
         //=============== OUTTAKE ===============
-        flywheelClose = new Toggle(false);
-        flywheelFar = new Toggle(false);
+        flywheelClose1 = new Toggle(false);
+        flywheelClose2 = new Toggle(false);
+        flywheelClose3 = new Toggle(false);
+
+        flywheelFar1 = new Toggle(false);
+        flywheelFar2 = new Toggle(false);
+
         flywheelOff = new Toggle(false);
         autoAim = new Toggle(false);
         autoVelo = new Toggle(false);
 
         turretAuto = new Toggle(false);
+
+        turretLeft = new Toggle(false);
+        turretRight = new Toggle(false);
     }
 
     public void joystickUpdate() {
@@ -83,11 +97,18 @@ public class GamepadMappings {
         intakeReverse.update(gamepad1.left_trigger > 0.5);
     }
     public void outtakeUpdate() {
-        flywheelClose.update(gamepad2.a);
-        flywheelFar.update(gamepad2.y);
+//        flywheelClose1.update(gamepad2.x);
+        flywheelClose2.update(gamepad2.y);
+//        flywheelClose3.update(gamepad2.b);
+
+        flywheelFar1.update(gamepad2.dpad_left);
+        flywheelFar2.update(gamepad2.dpad_right);
+
         flywheelOff.update(gamepad2.b);
-        autoVelo.update(gamepad2.left_bumper);
-        turretAuto.update(gamepad1.ps);
+        turretAuto.update(gamepad2.ps);
+        turretLeft.update(gamepad2.left_bumper);
+        turretLeft.update(gamepad2.right_bumper);
+
     }
 
     // v1 robot

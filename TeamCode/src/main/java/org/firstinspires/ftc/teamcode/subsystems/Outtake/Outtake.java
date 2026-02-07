@@ -14,6 +14,7 @@ import com.acmerobotics.roadrunner.Pose2d;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
+import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.PIDFCoefficients;
 import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.util.ElapsedTime;
@@ -54,7 +55,9 @@ public class Outtake {
     public Outtake(LinearOpMode mode) {
         this.telemetry = new MultipleTelemetry(FtcDashboard.getInstance().getTelemetry(), mode.telemetry);
         motor1 = mode.hardwareMap.get(DcMotorEx.class, "outtake1");
+//        motor1.setDirection(DcMotorEx.Direction.REVERSE);
         motor2 = mode.hardwareMap.get(DcMotorEx.class, "outtake2");
+//        motor2.setDirection(DcMotorEx.Direction.REVERSE);
         hood = mode.hardwareMap.get(Servo.class, "hood");
 
 
@@ -104,7 +107,8 @@ public class Outtake {
 //
 //
         setVelocity(velocity);
-        bangController(velocity);
+//        if (Math.abs(Math.abs(velocity) - getVelocity()) < 100) setVelocity(velocity);
+//        else bangController(velocity);
 
     }
     public void shootStop() {
@@ -114,7 +118,7 @@ public class Outtake {
 
 
     public double getVelocity() {
-        return (motor1.getVelocity() + motor2.getVelocity()) / 2.0;
+        return Math.abs(motor1.getVelocity() + motor2.getVelocity()) / 2.0;
     }
 
 
@@ -176,11 +180,11 @@ public class Outtake {
 
 
         if (distance > 100) {//far
-            shootVelocity(OuttakeConstants.FAR_VELOCITY);
+            shootVelocity(OuttakeConstants.FAR_VELOCITY1);
             hood.setPosition(hoodCalc(distance));
         }
         else {//close
-            shootVelocity(OuttakeConstants.CLOSE_VELOCITY);
+            shootVelocity(OuttakeConstants.CLOSE_VELOCITY2);
             hood.setPosition(hoodCalc(distance));
         }
 
@@ -293,13 +297,15 @@ public class Outtake {
             public boolean run(@NonNull TelemetryPacket telemetryPacket) {
 
 
-                setVelocity(OuttakeConstants.CLOSE_VELOCITY);
+                setVelocity(OuttakeConstants.CLOSE_VELOCITY2);
 //                bangController(OuttakeConstants.CLOSE_VELOCITY);
-                hood.setPosition(OuttakeConstants.CLOSE_HOOD);
+                hood.setPosition(OuttakeConstants.CLOSE_HOOD2);
                 robot.outtake.transferHold(robot);
 
 
-                double error = Math.abs(getVelocity() - OuttakeConstants.CLOSE_VELOCITY);
+                double error = Math.abs(getVelocity() - Math.abs(OuttakeConstants.CLOSE_VELOCITY2));
+
+
                 telemetryPacket.put("Error", error);
                 return error > 50;
             }
@@ -354,10 +360,29 @@ public class Outtake {
         return new Action() {
             @Override
             public boolean run(@NonNull TelemetryPacket telemetryPacket) {
-                if (getVelocity() <= currentVelocity - 150) {
+                if (Math.abs(Math.abs(getVelocity()) - Math.abs(currentVelocity)) <= OuttakeConstants.velocityError) {
                     robot.intake.transferReverseAction(Math.min(1 - 0.2, 0.4));
                 } else {
                     robot.intake.transferInAction(1);
+                }
+                robot.intake.transferInAction(0);
+                return false;
+            }
+        };
+    }
+
+    public Action transferHoldTime(Robot robot, double time) {
+        return new Action() {
+            ElapsedTime timer = new ElapsedTime();
+            @Override
+            public boolean run(@NonNull TelemetryPacket telemetryPacket) {
+                while (timer.seconds() < time) {
+                    if (getVelocity() <= currentVelocity - 150) {
+                        robot.intake.transferReverseAction(Math.min(1 - 0.2, 0.4));
+                    } else {
+                        robot.intake.transferInAction(1);
+                    }
+                    return true;
                 }
                 return false;
             }

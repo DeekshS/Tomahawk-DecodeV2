@@ -95,9 +95,9 @@ public class TurretTuner extends LinearOpMode {
     public static boolean negated = false;
 
     public void runOpMode() {
-        Servo s1 = hardwareMap.get(Servo.class, "turretLeft");
-        Servo s2 = hardwareMap.get(Servo.class, "turretRight");
-//        Turret turret = new Turret(this);
+//        Servo s1 = hardwareMap.get(Servo.class, "turretLeft");
+//        Servo s2 = hardwareMap.get(Servo.class, "turretRight");
+        Turret turret = new Turret(this);
         AnalogInput encoder = hardwareMap.get(AnalogInput.class, "turretEncoderRight");
         telemetry = new MultipleTelemetry(telemetry, FtcDashboard.getInstance().getTelemetry());
         Robot robot = new Robot(this);
@@ -106,11 +106,11 @@ public class TurretTuner extends LinearOpMode {
         if (isStopRequested()) return;
 
         while (opModeIsActive()) {
-//            turret.setTargetAngle(targetAngle);
-//            turret.update();
-
-            s1.setPosition((targetAngle + 181) * 0.00319444);
-            s2.setPosition((targetAngle + 181) * 0.00319444);
+            turret.setTargetAngle(targetAngle);
+            turret.update();
+//
+//            s1.setPosition((targetAngle + 181) * 0.00319444);
+//            s2.setPosition((targetAngle + 181) * 0.00319444);
 
             double robotX = robot.drive.localizer.getPose().position.x;
             double robotY = robot.drive.localizer.getPose().position.y;
@@ -119,7 +119,9 @@ public class TurretTuner extends LinearOpMode {
             double deltaY = PoseStorage.goalY - robotY;
             double calculatedAngle = Math.toDegrees(Math.atan2(deltaY, deltaX)) - Math.toDegrees(robot.drive.localizer.getPose().heading.toDouble());
 
-            telemetry.addData("Turret Pos", s1.getPosition());
+            telemetry.addData("Turret Pos", turret.getPosition());
+            telemetry.addData("Limelight Error", turret.limelight.getLatestResult().getTx());
+            telemetry.addData("Limelight Error", turret.getPosition() - turret.limelight.getLatestResult().getTx());
             telemetry.addData("Calculated Angle", calculatedAngle);
             telemetry.update();
         }

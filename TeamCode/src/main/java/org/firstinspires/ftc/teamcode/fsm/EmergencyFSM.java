@@ -5,7 +5,6 @@ import com.acmerobotics.roadrunner.Pose2d;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.teamcode.PoseStorage;
-import org.firstinspires.ftc.teamcode.drive.localizers.PinpointLocalizer;
 import org.firstinspires.ftc.teamcode.gamepad.GamepadMappings;
 import org.firstinspires.ftc.teamcode.subsystems.Intake.Intake;
 import org.firstinspires.ftc.teamcode.subsystems.Outtake.Outtake;
@@ -24,7 +23,7 @@ public class EmergencyFSM {
     private final Telemetry telemetry;
     private GazelleState gazelleState;
     public String telemetry1;
-    public static int velocity = 1580;
+    public static int transferPower = 1;
     public EmergencyFSM(Telemetry telemetry, GamepadMappings controls, Robot robot) {
         this.robot = robot;
         this.intake = robot.intake;
@@ -33,6 +32,7 @@ public class EmergencyFSM {
         this.outtake = robot.outtake;
         this.controls = controls;
         this.telemetry = telemetry;
+        turret.setTargetAngle(0);
     }
 
     // ---------------- Main update loop ----------------
@@ -44,34 +44,79 @@ public class EmergencyFSM {
         //Drivetrain stuff
         if (controls.reset.value()) {
             robot.drive.localizer.setPose(new Pose2d(PoseStorage.hpX, PoseStorage.hpY, PoseStorage.hpHeading));
+            turret.setTargetAngle(0);
         }
 
         // ---------------- Outtake / Flywheel ----------------
-        if (controls.flywheelClose.value()) {
-            outtake.shootVelocity(OuttakeConstants.CLOSE_VELOCITY);
-            outtake.hood.setPosition(OuttakeConstants.CLOSE_HOOD);
-            outtake.currentVelocity = OuttakeConstants.CLOSE_VELOCITY;
-        } else if (controls.flywheelFar.value()) {
-            outtake.shootVelocity(OuttakeConstants.FAR_VELOCITY);
-            outtake.hood.setPosition(OuttakeConstants.FAR_HOOD);
-            outtake.currentVelocity = OuttakeConstants.FAR_VELOCITY;
-        }
-//        else if (controls.autoVelo.value()) {
-//            outtake.autoVelocity(robot.drive.localizer.getPose());
-//            intake.transferIn(1);
+        //close velocities
+//        if (controls.flywheelClose1.value()) {
+//            outtake.shootVelocity(OuttakeConstants.CLOSE_VELOCITY1);
+//            outtake.hood.setPosition(OuttakeConstants.CLOSE_HOOD1);
+//            outtake.currentVelocity = OuttakeConstants.CLOSE_VELOCITY1;
+//            controls.flywheelClose2.set(false);
+//            controls.flywheelClose3.set(false);
+//            controls.flywheelFar1.set(false);
+//            controls.flywheelFar2.set(false);
+//            if (!controls.turretAuto.value()) turret.autoAlign(robot.drive.localizer.getPose()); else turret.setTargetAngle(0);
+        if (controls.flywheelClose2.value()) {
+            outtake.shootVelocity(OuttakeConstants.CLOSE_VELOCITY2);
+            outtake.hood.setPosition(OuttakeConstants.CLOSE_HOOD2);
+            outtake.currentVelocity = OuttakeConstants.CLOSE_VELOCITY2;
+            controls.flywheelClose1.set(false);
+            controls.flywheelClose3.set(false);
+            controls.flywheelFar1.set(false);
+            controls.flywheelFar2.set(false);
+            if (!controls.turretAuto.value()) turret.autoAlign(robot.drive.localizer.getPose());
+            else turret.setTargetAngle(0);
+
+//        } else if (controls.flywheelClose3.value()) {
+//            outtake.shootVelocity(OuttakeConstants.CLOSE_VELOCITY3);
+//            outtake.hood.setPosition(OuttakeConstants.CLOSE_HOOD3);
+//            outtake.currentVelocity = OuttakeConstants.CLOSE_VELOCITY3;
+//            controls.flywheelClose1.set(false);
+//            controls.flywheelClose2.set(false);
+//            controls.flywheelFar1.set(false);
+//            controls.flywheelFar2.set(false);
+//            if (!controls.turretAuto.value()) turret.autoAlign(robot.drive.localizer.getPose()); else turret.setTargetAngle(0);
+//        }
+
+            //far velocities
+            } else if (controls.flywheelFar1.value()) {
+                outtake.shootVelocity(OuttakeConstants.FAR_VELOCITY1);
+                outtake.hood.setPosition(OuttakeConstants.FAR_HOOD1);
+                outtake.currentVelocity = OuttakeConstants.FAR_VELOCITY1;
+    //            controls.flywheelClose1.set(false);
+                controls.flywheelClose2.set(false);
+    //            controls.flywheelClose3.set(false);
+                controls.flywheelFar2.set(false);
+                if (!controls.turretAuto.value()) turret.autoAlign(robot.drive.localizer.getPose());
+                else turret.setTargetAngle(0);
+            }
+//        } else if (controls.flywheelFar2.value()) {
+//            outtake.shootVelocity(OuttakeConstants.FAR_VELOCITY2);
+//            outtake.hood.setPosition(OuttakeConstants.FAR_HOOD2);
+//            outtake.currentVelocity = OuttakeConstants.FAR_VELOCITY2;
+//            controls.flywheelClose1.set(false);
+//            controls.flywheelClose2.set(false);
+//            controls.flywheelClose3.set(false);
+//            controls.flywheelFar1.set(false);
+//            if (!controls.turretAuto.value()) turret.autoAlign(robot.drive.localizer.getPose()); else turret.setTargetAngle(0);
 //        }
         else {
             outtake.shootVelocity(OuttakeConstants.OFF_VELOCITY);
             outtake.currentVelocity = 0;
+            turret.setTargetAngle(0);
         }
 
-        // ---------------------- Turret ----------------------
-        if (controls.turretAuto.value() || controls.flywheelClose.value() || controls.flywheelFar.value() || controls.autoVelo.value()) {
-            turret.update();
-        } else {
-            turret.setTargetAngle(0);
-            turret.update();
-        }
+//         ---------------------- Turret ----------------------
+
+        //Turret Manual
+//        if (controls.turretLeft.locked()) {
+//            turret.changeTargetAngle(5);
+//        }
+//        if (controls.turretRight.locked()) {
+//            turret.changeTargetAngle(-5);
+//        }
 
         // ---------------- Intake / Transfer ----------------
         if (controls.intake.locked() || controls.intake2.locked()) {
@@ -82,24 +127,21 @@ public class EmergencyFSM {
             transfer.setPower(-1);
         } else if (controls.transfer.locked()) {
             intake.intake();
-            if (controls.flywheelClose.value() || controls.flywheelFar.value()) {
-                if (outtake.getVelocity() <= outtake.currentVelocity - OuttakeConstants.velocityError) {
-                    telemetry1 = "transferHold";
-                    transfer.setPower(-0.8);
-                } else {
-                    intake.transferIn(1);
-                    telemetry1 = "transfer";
-                }
+            if (Math.abs(outtake.getVelocity()) <= Math.abs(outtake.currentVelocity) - Math.abs(OuttakeConstants.velocityError)) {
+                intake.transferOut(Math.min(transferPower - 0.2, 0.4));
+            } else {
+                intake.transferIn(transferPower);
             }
-            else {
-                intake.transferIn(1);
-            }
-            transfer.setPower(1);
         } else if (!controls.transfer.locked() && !controls.intakeReverse.locked()) {
             intake.intakeStop();
             transfer.setPower(0);
         }
-
+        
+        //--------------- reset position :)---------------
+        if (controls.reset.changed()) {
+            robot.drive.localizer.setPose(new Pose2d(PoseStorage.hpX, PoseStorage.hpY, PoseStorage.hpHeading));
+        }
+        turret.update();
         telemetry.update();
     }
 

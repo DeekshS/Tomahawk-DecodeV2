@@ -6,6 +6,7 @@ import com.acmerobotics.dashboard.config.Config;
 import com.acmerobotics.dashboard.telemetry.TelemetryPacket;
 import com.acmerobotics.roadrunner.Action;
 import com.acmerobotics.roadrunner.Pose2d;
+import com.qualcomm.hardware.limelightvision.LLResult;
 import com.qualcomm.hardware.limelightvision.Limelight3A;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.AnalogInput;
@@ -23,28 +24,34 @@ public class Turret {
 
     public static boolean enabled = true; // allow manual override
     public static double multiplier = 0.00319444;
+    public static double offset = 188;
     double targetAngle = 0;
     double initialAngle;
+
+
+    double result;
     public double calculatedAngle;
 
     Servo left;
     Servo right;
+
+    boolean justDetected;
+    boolean inZone;
     AnalogInput encoder;
-//    Limelight3A limelight;
+    public Limelight3A limelight;
+
 
     // Constructor
     public Turret(LinearOpMode mode) {
         left = mode.hardwareMap.get(Servo.class, "turretLeft");
         right = mode.hardwareMap.get(Servo.class, "turretRight");
         encoder = mode.hardwareMap.get(AnalogInput.class, "turretEncoderRight");
-//        limelight = mode.hardwareMap.get(Limelight3A.class, "ll");
+//        limelight = mode.hardwareMap.get(Limelight3A.class, "limelight");
+//        limelight.setPollRateHz(10);
+//        limelight.pipelineSwitch((PoseStorage.side.equals(PoseStorage.SIDE.BLUE) ? 1 : 0));
 //        limelight.start();
         initialAngle = Constants.turretOffset;
     }
-
-    // --------------- Auto-Align --------------
-
-
 
     // ---------------- Control ----------------
     public void setEnabled(boolean enabled) {
@@ -88,12 +95,18 @@ public class Turret {
     }
 
     public void update() {
-//        targetAngle += 180;
-//        targetAngle = (targetAngle > 360) ? targetAngle - 360 : targetAngle;
-//        targetAngle -= limelight.getLatestResult().getTx();
+//        result = (limelight.getLatestResult().isValid() && limelight.getLatestResult() != null) ? limelight.getLatestResult().getTx() : Double.NaN;
+//
+//        if (!Double.isNaN(result)) {
+//
+//
+//            if (Math.abs(result) < 1) inZone = true;
+//            if (!inZone && !justDetected && limelight.getLatestResult().isValid()) justDetected = true;
+//
+//            targetAngle -= (result);
 
-        left.setPosition((Math.round(targetAngle) + 184) * multiplier);
-        right.setPosition((Math.round(targetAngle) + 184) * multiplier);
+        left.setPosition((Math.round(targetAngle) + offset) * multiplier);
+        right.setPosition((Math.round(targetAngle) + offset) * multiplier);
     }
 
     public Action alignAction(double angle, double time) {

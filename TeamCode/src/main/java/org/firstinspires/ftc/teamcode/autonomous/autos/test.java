@@ -45,16 +45,17 @@ public class test extends LinearOpMode implements FCV2 {
 
         Actions.runBlocking(
                 new ParallelAction(
-                        new Action() {
-                            @Override
-                            public boolean run(@NonNull TelemetryPacket telemetryPacket) {
-                                telemetry.addData("velocity", robot.outtake.getVelocity());
-                                telemetry.addData("setpoint", 1130);
-                                telemetry.update();
-                                return false;
-                            }
-                        },
-                        robot.outtake.shootVelocityTimeAction(1130, 30)
+//                        new Action() {
+//                            @Override
+//                            public boolean run(@NonNull TelemetryPacket telemetryPacket) {
+//                                telemetry.addData("velocity", robot.outtake.getVelocity());
+//                                telemetry.addData("setpoint", 1130);
+//                                telemetry.update();
+//                                return false;
+//                            }
+//                        },
+//                        robot.outtake.shootVelocityTimeAction(1130, 30)
+                    robot.transfer.transferTimeAction(10)
                 )
 
 

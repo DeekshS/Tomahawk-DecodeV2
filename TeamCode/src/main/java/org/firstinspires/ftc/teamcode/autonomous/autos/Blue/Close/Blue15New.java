@@ -22,8 +22,8 @@ import org.firstinspires.ftc.teamcode.subsystems.Robot;
 @Config
 public class Blue15New extends LinearOpMode implements FCV2 {
 
-    public static double INTAKE_WAIT_TIME = 3;
-    public static double SHOOTER_TIME = 0.75;
+    public static double INTAKE_WAIT_TIME = 2.75;
+    public static double SHOOTER_TIME = 1.25;
 
 
 
@@ -88,24 +88,26 @@ public class Blue15New extends LinearOpMode implements FCV2 {
                 .build();
 
         Action hp = drive.actionBuilder(new Pose2d(FCV2.BLUE_CLOSE_SHOOT.x, FCV2.BLUE_CLOSE_SHOOT.y, FCV2.BLUE_CLOSE_ANGLE))
-                .strafeToLinearHeading(new Vector2d(FCV2.HP_BLUE_ARTIFACT.x + 10, FCV2.HP_BLUE_ARTIFACT.y), Math.toRadians(180))
+                .strafeToLinearHeading(new Vector2d(FCV2.HP_BLUE_ARTIFACT.x + 14, FCV2.HP_BLUE_ARTIFACT.y), Math.toRadians(180))
                 .strafeTo(new Vector2d(FCV2.HP_BLUE_ARTIFACT.x, FCV2.HP_BLUE_ARTIFACT.y))
                 .build();
 
         Action hp_return = drive.actionBuilder(new Pose2d(FCV2.HP_BLUE_ARTIFACT.x, FCV2.HP_BLUE_ARTIFACT.y, Math.toRadians(180)))
 //                .strafeToLinearHeading(FCV2.BLUE_CLOSE_SHOOT, FCV2.BLUE_CLOSE_ANGLE)
-                .setTangent(Math.toRadians(270))
-                .splineToLinearHeading(new Pose2d(FCV2.BLUE_CLOSE_SHOOT, FCV2.BLUE_CLOSE_ANGLE), Math.toRadians(0))
+                .setTangent(Math.toRadians(0))
+                .splineToLinearHeading(new Pose2d(FCV2.BLUE_CLOSE_SHOOT, FCV2.BLUE_CLOSE_ANGLE), Math.toRadians(180))
                 .build();
 
         Action hp2 = drive.actionBuilder(new Pose2d(FCV2.BLUE_CLOSE_SHOOT.x, FCV2.BLUE_CLOSE_SHOOT.y, FCV2.BLUE_CLOSE_ANGLE))
 //            .strafeToLinearHeading(FCV2.HP_BLUE_ARTIFACT, Math.toRadians(180))
-            .strafeToLinearHeading(new Vector2d(FCV2.HP_BLUE_ARTIFACT.x + 10, FCV2.HP_BLUE_ARTIFACT.y), Math.toRadians(180))
-            .strafeTo(new Vector2d(FCV2.HP_BLUE_ARTIFACT.x, FCV2.HP_BLUE_ARTIFACT.y))
+            .strafeToLinearHeading(new Vector2d(FCV2.HP_BLUE_ARTIFACT.x + 14, FCV2.HP_BLUE_ARTIFACT.y - 4), Math.toRadians(180))
+            .strafeTo(new Vector2d(FCV2.HP_BLUE_ARTIFACT.x, FCV2.HP_BLUE_ARTIFACT.y - 4))
             .build();
 
-        Action hp_return2 = drive.actionBuilder(new Pose2d(FCV2.HP_BLUE_ARTIFACT.x, FCV2.HP_BLUE_ARTIFACT.y, Math.toRadians(180)))
-            .strafeToLinearHeading(FCV2.BLUE_CLOSE_SHOOT, FCV2.BLUE_CLOSE_ANGLE)
+        Action hp_return2 = drive.actionBuilder(new Pose2d(FCV2.HP_BLUE_ARTIFACT.x, FCV2.HP_BLUE_ARTIFACT.y - 4, Math.toRadians(180)))
+//                .strafeToLinearHeading(FCV2.BLUE_CLOSE_SHOOT, FCV2.BLUE_CLOSE_ANGLE)
+            .setTangent(Math.toRadians(270))
+            .splineToLinearHeading(new Pose2d(FCV2.BLUE_CLOSE_SHOOT, FCV2.BLUE_CLOSE_ANGLE), Math.toRadians(0))
             .build();
 
 
@@ -211,25 +213,23 @@ public class Blue15New extends LinearOpMode implements FCV2 {
                         ),
 
                         robot.intake.stop(),
-                        new ParallelAction(
-                            hp_return2
-    //                                robot.outtake.shootCloseAction(robot)
-                        ),
-                        new ParallelAction(
-                            robot.outtake.shootCloseAction(robot),
-                            robot.transfer.intakeTransferTimeAction(SHOOTER_TIME),
-                            new SleepAction(SHOOTER_TIME)
-
-                        ),
-                        park
+//                        new ParallelAction(
+//                            hp_return2
+//    //                                robot.outtake.shootCloseAction(robot)
+//                        ),
+//                        new ParallelAction(
+//                            robot.outtake.shootCloseAction(robot),
+//                            robot.transfer.intakeTransferTimeAction(SHOOTER_TIME),
+//                            new SleepAction(SHOOTER_TIME)
+//
+//                        ),
+                        park,
+                        PoseStorage.setEndPose(new Pose2d(new Vector2d(FCV2.PGP_BLUE_ARTIFACT.x, FCV2.PGP_BLUE_ARTIFACT.y-5), BLUE_CLOSE_ANGLE))
 //
                 )
 
             )
         );
-//        robot.drive.localizer.update();
-//        PoseStorage.endPose = robot.drive.localizer.getPose();
-//        PoseStorage.side = PoseStorage.SIDE.BLUE;
     }
 
 }

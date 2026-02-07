@@ -28,7 +28,7 @@ public class Robot {
         turret = new Turret(mode);
         outtake = new Outtake(mode);
         transfer = new Intake(mode);
-        drive = new MecanumDrive(mode.hardwareMap, new Pose2d(0, 0, 0));
+        drive = new MecanumDrive(mode.hardwareMap, PoseStorage.endPose);
     }
 
 }

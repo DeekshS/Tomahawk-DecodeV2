@@ -23,15 +23,11 @@ import org.firstinspires.ftc.teamcode.subsystems.Outtake.Outtake;
 @TeleOp
 @Config
 public class FlywheelTuner extends LinearOpMode {
-    public static double VELOCITY = 1330;
+    public static double VELOCITY = -1330;
     public static double POS = 0.86;
     public static double POWER = 0.77;
-    public static boolean autoVelo = false;
     public static boolean intaking = true;
     public static boolean transfering = true;
-    public static boolean setPower = false;
-    public static boolean flywheelActive = true;
-    public static boolean hoodthingy = false;
     public static double transferPower = 1;
     public static double intakePower = 1;
     public static double velocityError = 150;
@@ -58,14 +54,9 @@ public class FlywheelTuner extends LinearOpMode {
 
         while (opModeIsActive()) {
             double currentVelocity = Math.abs(flywheel.getVelocity());
-            double error = VELOCITY - currentVelocity;
+            double error = Math.abs(VELOCITY) - Math.abs(currentVelocity);
             drive.localizer.update();
             flywheel.hood.setPosition(POS);
-
-
-
-
-
 
 //            flywheel.motor1.setVelocityPIDFCoefficients(P, I, D, F);
 //            flywheel.motor2.setVelocityPIDFCoefficients(P, I, D, F);
@@ -73,8 +64,8 @@ public class FlywheelTuner extends LinearOpMode {
 //            flywheel.motor2.setPIDFCoefficients(DcMotor.RunMode.RUN_USING_ENCODER, new PIDFCoefficients(P, I, D, F));
 
             if (error > 50) {
-                flywheel.motor1.setPower(10);
-                flywheel.motor2.setPower(10);
+                flywheel.motor1.setPower(-1);
+                flywheel.motor2.setPower(-1);
             }
             else {
                 flywheel.motor1.setPower(0);
@@ -83,12 +74,12 @@ public class FlywheelTuner extends LinearOpMode {
 
 
 
-//            flywheel.autoVelocity(drive.localizer.getPose());
+//            flywheel.setVelocity(VELOCITY);
             if (intaking) {
                 intake.intakePower(intakePower);
             }
             if (transfering) {
-                if (currentVelocity <= VELOCITY - velocityError) {
+                if (Math.abs(currentVelocity) <= Math.abs(VELOCITY) - Math.abs(velocityError)) {
                     intake.transferOut(Math.min(transferPower - 0.2, 0.4));
                 } else {
                     intake.transferIn(transferPower);

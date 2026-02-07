@@ -97,11 +97,18 @@ public class Blue15 {
                 .strafeTo(new Vector2d(FCV2.HP_BLUE_ARTIFACT.x-20, FCV2.HP_BLUE_ARTIFACT.y))
                 .build();
 
+        Action hp_return = drive.getDrive().actionBuilder(new Pose2d(FCV2.HP_BLUE_ARTIFACT.x, FCV2.HP_BLUE_ARTIFACT.y, Math.toRadians(180)))
+//                .strafeToLinearHeading(FCV2.BLUE_CLOSE_SHOOT, FCV2.BLUE_CLOSE_ANGLE)
+            .setTangent(Math.toRadians(0))
+            .splineToLinearHeading(new Pose2d(FCV2.BLUE_CLOSE_SHOOT, FCV2.BLUE_CLOSE_ANGLE), Math.toRadians(180))
+            .build();
+
         drive.runAction(
-            drive.getDrive().actionBuilder(new Pose2d(FCV2.HP_BLUE_ARTIFACT.x, FCV2.HP_BLUE_ARTIFACT.y, Math.toRadians(180)))
-                .setTangent(Math.toRadians(270))
-                .splineToLinearHeading(new Pose2d(FCV2.BLUE_CLOSE_SHOOT, FCV2.BLUE_CLOSE_ANGLE), Math.toRadians(0))
-                .build()
+//            drive.getDrive().actionBuilder(new Pose2d(FCV2.HP_BLUE_ARTIFACT.x, FCV2.HP_BLUE_ARTIFACT.y, Math.toRadians(180)))
+//                .setTangent(Math.toRadians(270))
+//                .splineToLinearHeading(new Pose2d(FCV2.BLUE_CLOSE_SHOOT, FCV2.BLUE_CLOSE_ANGLE), Math.toRadians(0))
+//                .build()
+            hp_return
 //            new SequentialAction(
 //                preload,
 //                artifact1,
