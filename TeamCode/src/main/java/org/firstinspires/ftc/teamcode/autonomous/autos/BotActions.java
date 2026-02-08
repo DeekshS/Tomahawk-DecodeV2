@@ -1,9 +1,16 @@
  package org.firstinspires.ftc.teamcode.autonomous.autos;
 
+ import androidx.annotation.NonNull;
+
+ import com.acmerobotics.dashboard.telemetry.TelemetryPacket;
  import com.acmerobotics.roadrunner.Action;
  import com.acmerobotics.roadrunner.ParallelAction;
  import com.acmerobotics.roadrunner.SequentialAction;
+ import com.qualcomm.robotcore.util.ElapsedTime;
 
+ import org.firstinspires.ftc.teamcode.Constants;
+ import org.firstinspires.ftc.teamcode.subsystems.Outtake.Outtake;
+ import org.firstinspires.ftc.teamcode.subsystems.Outtake.OuttakeConstants;
  import org.firstinspires.ftc.teamcode.subsystems.Robot;
 
  public class BotActions {
@@ -12,6 +19,7 @@
 
      public static double INTAKE_WAIT_TIME = 3;
      public static double SHOOTER_TIME = 2.5;
+     public static double transferPower = 1;
 
 
 
@@ -73,6 +81,50 @@
                  //robot.outtake.reverseTimeAction(1)
          );
 
+     }
+
+//     public static Action transferHold(Robot robot, double time) {
+//         return new Action() {
+//             @Override
+//             public boolean run(@NonNull TelemetryPacket telemetryPacket) {
+//                 ElapsedTime timer = new ElapsedTime();
+//                 while (timer.seconds() <= time) {
+//
+//                 }
+//                 return false;
+//             }
+//         };
+//     }
+
+     public static Action transferHold(Robot robot, double time) {
+         return new Action() {
+             private boolean init = false;
+             ElapsedTime timer = new ElapsedTime();
+
+
+             @Override
+             public boolean run(@NonNull TelemetryPacket telemetryPacket) {
+                 if (!init) {
+                     init = true;
+                     timer.reset();
+                 }
+
+
+                 if (timer.seconds() < time) {
+                     if (Math.abs(robot.outtake.getVelocity()) <= Math.abs(OuttakeConstants.CLOSE_VELOCITY2) - Math.abs(OuttakeConstants.velocityError)) {
+                         robot.intake.transferOut(Math.min(transferPower - 0.2, 0.4));
+                     } else {
+                         robot.intake.transferIn(transferPower);
+                     }
+                     return true;
+                 } else {
+                     robot.intake.stop();
+                 }
+
+
+                 return timer.seconds() <= time;
+             }
+         };
      }
 
 

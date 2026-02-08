@@ -206,7 +206,6 @@ public class Intake {
     public double getPower() {
         return transfer.getPower();
     }
-
     public void setPower(double i) {
         transfer.setPower(i);
     }

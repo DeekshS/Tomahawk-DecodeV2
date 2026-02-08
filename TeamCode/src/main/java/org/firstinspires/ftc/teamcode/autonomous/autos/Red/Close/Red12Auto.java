@@ -22,8 +22,8 @@ public class Red12Auto extends LinearOpMode implements FCV2 {
 
     //TODO: maybe make intake run for the entire thing
 
-    public static double INTAKE_WAIT_TIME = 4.6;
-    public static double SHOOTER_TIME = 2.5;
+    public static double INTAKE_WAIT_TIME = 3;
+    public static double SHOOTER_TIME = 1.5;
 
     public static int ARTIFACT_SHOOT_VEL = 1050;
 

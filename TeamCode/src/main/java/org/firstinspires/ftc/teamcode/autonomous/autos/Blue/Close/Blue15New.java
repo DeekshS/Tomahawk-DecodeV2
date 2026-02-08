@@ -41,7 +41,7 @@ public class Blue15New extends LinearOpMode implements FCV2 {
 
         Action artifact1 = drive.actionBuilder(new Pose2d(FCV2.BLUE_CLOSE_SHOOT.x, FCV2.BLUE_CLOSE_SHOOT.y, FCV2.BLUE_CLOSE_ANGLE))
                 .strafeToLinearHeading(new Vector2d(FCV2.PPG_BLUE_ARTIFACT.x, FCV2.PPG_BLUE_ARTIFACT.y), FCV2.BLUE_ARTIFACT_ANGLE)
-                .lineToY(FCV2.PPG_BLUE_ARTIFACT.y + ARTIFACT_DIST-1)
+                .lineToY(FCV2.PPG_BLUE_ARTIFACT.y + ARTIFACT_DIST-12)
                 .strafeToLinearHeading(FCV2.BLUE_GATE, 0)
                 .build();
 

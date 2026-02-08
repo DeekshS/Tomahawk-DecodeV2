@@ -35,12 +35,12 @@ public interface FCV2 {
 
 
     // ======Artifact Length======
-    double ARTIFACT_DIST = 33;
+    double ARTIFACT_DIST = 29;
     double HP_ARTIFACT_DIST = 62;
     // ======RED ARTIFACTS======
-    Vector2d GPP_RED_ARTIFACT = new Vector2d(-36, -20);
-    Vector2d PGP_RED_ARTIFACT = new Vector2d(-12, -27);
-    Vector2d PPG_RED_ARTIFACT = new Vector2d(12, -27);
+    Vector2d GPP_RED_ARTIFACT = new Vector2d(-36, -17);
+    Vector2d PGP_RED_ARTIFACT = new Vector2d(-12, -24);
+    Vector2d PPG_RED_ARTIFACT = new Vector2d(12, -24);
     Vector2d HP_RED_ARTIFACT = new Vector2d(-66,-62);
 
 
@@ -52,9 +52,9 @@ public interface FCV2 {
 
 
     // ======BLUE ARTIFACTS======
-    Vector2d GPP_BLUE_ARTIFACT = new Vector2d(-36, 20);
-    Vector2d PGP_BLUE_ARTIFACT = new Vector2d(-14, 27);
-    Vector2d PPG_BLUE_ARTIFACT = new Vector2d(12, 27);
+    Vector2d GPP_BLUE_ARTIFACT = new Vector2d(-36, 17);
+    Vector2d PGP_BLUE_ARTIFACT = new Vector2d(-14, 24);
+    Vector2d PPG_BLUE_ARTIFACT = new Vector2d(12, 24);
     Vector2d HP_BLUE_ARTIFACT = new Vector2d(-66,62);
 
 
@@ -71,7 +71,7 @@ public interface FCV2 {
     Vector2d BLUE_GATE_INTAKE_TWO = new Vector2d(-25, 62);
     double BLUE_GATE_INTAKE_TWO_ANGLE = Math.toRadians(0);
     double BLUE_GATE_INTAKE_ANGLE = Math.toRadians(64);
-    Vector2d RED_GATE = new Vector2d(0, -52);
+    Vector2d RED_GATE = new Vector2d(0, -50);
     Vector2d RED_GATE_INTAKE = new Vector2d(-24, -62);
     double RED_GATE_INTAKE_ANGLE = Math.toRadians(235);
 

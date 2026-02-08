@@ -312,6 +312,29 @@ public class Outtake {
         };
     }
 
+    public Action shootFarAction(Robot robot) {
+        return new Action() {
+
+
+            @Override
+            public boolean run(@NonNull TelemetryPacket telemetryPacket) {
+
+
+                setVelocity(OuttakeConstants.FAR_VELOCITY1);
+//                bangController(OuttakeConstants.CLOSE_VELOCITY);
+                hood.setPosition(OuttakeConstants.FAR_HOOD1);
+                robot.outtake.transferHold(robot);
+
+
+                double error = Math.abs(getVelocity() - Math.abs(OuttakeConstants.FAR_VELOCITY1));
+
+
+                telemetryPacket.put("Error", error);
+                return error > 50;
+            }
+        };
+    }
+
     public Action autoVelocityTimeAction(double robotX, double robotY, double goalX, double goalY, double timeLimit) {
         return new Action() {
             private boolean init = false;
