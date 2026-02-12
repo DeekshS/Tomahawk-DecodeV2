@@ -12,6 +12,7 @@ import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
 import org.firstinspires.ftc.teamcode.PoseStorage;
+import org.firstinspires.ftc.teamcode.R;
 import org.firstinspires.ftc.teamcode.subsystems.Outtake.OuttakeConstants;
 import org.firstinspires.ftc.teamcode.autonomous.autos.BotActions;
 import org.firstinspires.ftc.teamcode.autonomous.autos.FCV2;
@@ -28,12 +29,13 @@ public class Blue15New extends LinearOpMode implements FCV2 {
 
 
     public void runOpMode() throws InterruptedException {
-
         Robot robot = new Robot(this);
-        BotActions botActions = new BotActions(robot);
 
-        MecanumDrive drive = new MecanumDrive(hardwareMap, BLUE_CLOSE_START);
+        BotActions botActions = new BotActions();
 
+        Robot.drive = new MecanumDrive(hardwareMap, FCV2.BLUE_CLOSE_START);
+
+        MecanumDrive drive = Robot.drive;
 
         Action preload = drive.actionBuilder(FCV2.BLUE_CLOSE_START)
                 .strafeToLinearHeading(FCV2.BLUE_CLOSE_SHOOT, FCV2.BLUE_CLOSE_ANGLE)
@@ -119,100 +121,100 @@ public class Blue15New extends LinearOpMode implements FCV2 {
                 new SequentialAction(
                         new ParallelAction(
                                 preload,
-                                robot.outtake.shootCloseAction(robot)
+                                Robot.outtake.shootCloseAction()
                                 ),
 //
                         new ParallelAction(
-                                robot.outtake.shootCloseAction(robot),
-                                robot.transfer.intakeTransferTimeAction(SHOOTER_TIME),
+                                Robot.outtake.shootCloseAction(),
+                                Robot.transfer.intakeTransferTimeAction(SHOOTER_TIME),
                                 new SleepAction(SHOOTER_TIME)
 
                         ),
-                        robot.transfer.transferStopAction(),
+                        Robot.transfer.transferStopAction(),
                         //FIRST SPIKE
                         new ParallelAction(
                                 artifact2,
-                                robot.intake.intakeTimeAction(INTAKE_WAIT_TIME)
+                                Robot.intake.intakeTimeAction(INTAKE_WAIT_TIME)
                         ),
 //
-                        robot.intake.stop(),
+                        Robot.intake.stop(),
 
 
                         new ParallelAction(
                                 artifact2_return,
-                                robot.outtake.shootCloseAction(robot)
+                                Robot.outtake.shootCloseAction()
                         ),
 
                         new ParallelAction(
-                                robot.outtake.shootCloseAction(robot),
-                                robot.transfer.intakeTransferTimeAction(SHOOTER_TIME),
+                                Robot.outtake.shootCloseAction(),
+                                Robot.transfer.intakeTransferTimeAction(SHOOTER_TIME),
                                 new SleepAction(SHOOTER_TIME)
 
                         ),
 
-                        robot.transfer.transferStopAction(),
+                        Robot.transfer.transferStopAction(),
 //
                         //SECOND SPIKE
                         new ParallelAction(
-                                artifact1,
-                                robot.intake.intakeTimeAction(INTAKE_WAIT_TIME)
+                            artifact1,
+                            Robot.intake.intakeTimeAction(INTAKE_WAIT_TIME)
 
                         ),
 //
-                        robot.intake.stop(),
+                        Robot.intake.stop(),
 
                         new ParallelAction(
-                                artifact1_return,
-                                robot.outtake.shootCloseAction(robot)
+                            artifact1_return,
+                            Robot.outtake.shootCloseAction()
                         ),
 //
                         new ParallelAction(
-                                robot.outtake.shootCloseAction(robot),
-                                robot.transfer.intakeTransferTimeAction(SHOOTER_TIME),
-                                new SleepAction(SHOOTER_TIME)
+                            Robot.outtake.shootCloseAction(),
+                            Robot.transfer.intakeTransferTimeAction(SHOOTER_TIME),
+                            new SleepAction(SHOOTER_TIME)
                         ),
                         //THIRD SPIKE
-                        robot.transfer.transferStopAction(),
+                        Robot.transfer.transferStopAction(),
                         new ParallelAction(
-                                artifact3,
-                                robot.intake.intakeTimeAction(INTAKE_WAIT_TIME)
+                            artifact3,
+                            Robot.intake.intakeTimeAction(INTAKE_WAIT_TIME)
                         ),
 
-                        robot.intake.stop(),
+                        Robot.intake.stop(),
                         new ParallelAction(
-                                artifact3_return,
-                                robot.outtake.shootCloseAction(robot)
+                            artifact3_return,
+                            Robot.outtake.shootCloseAction()
                         ),
                         new ParallelAction(
-                                robot.outtake.shootCloseAction(robot),
-                                robot.transfer.intakeTransferTimeAction(SHOOTER_TIME),
-                                new SleepAction(SHOOTER_TIME)
+                            Robot.outtake.shootCloseAction(),
+                            Robot.transfer.intakeTransferTimeAction(SHOOTER_TIME),
+                            new SleepAction(SHOOTER_TIME)
 
                         ),
-                        robot.transfer.transferStopAction(),
+                        Robot.transfer.transferStopAction(),
                         new ParallelAction(
-                                hp,
-                                robot.intake.intakeTimeAction(INTAKE_WAIT_TIME)
+                            hp,
+                            Robot.intake.intakeTimeAction(INTAKE_WAIT_TIME)
                         ),
 
-                        robot.intake.stop(),
+                        Robot.intake.stop(),
                         new ParallelAction(
                                 hp_return
 //                                robot.outtake.shootCloseAction(robot)
                         ),
                         new ParallelAction(
-                                robot.outtake.shootCloseAction(robot),
-                                robot.transfer.intakeTransferTimeAction(SHOOTER_TIME),
-                                new SleepAction(SHOOTER_TIME)
+                            Robot.outtake.shootCloseAction(),
+                            Robot.transfer.intakeTransferTimeAction(SHOOTER_TIME),
+                            new SleepAction(SHOOTER_TIME)
 
                         ),
-                        robot.transfer.transferStopAction(),
+                        Robot.transfer.transferStopAction(),
                         new ParallelAction(
                             hp2,
-                            robot.intake.intakeTimeAction(INTAKE_WAIT_TIME)
+                            Robot.intake.intakeTimeAction(INTAKE_WAIT_TIME)
                         ),
 
-                        robot.intake.stop(),
+                        Robot.intake.stop(),
 //                        new ParallelAction(
 //                            hp_return2
 //    //                                robot.outtake.shootCloseAction(robot)

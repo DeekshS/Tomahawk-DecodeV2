@@ -100,8 +100,8 @@ public class Outtake {
     public void shootVelocity(int velocity) {
 //        motor1.setPIDFCoefficients(DcMotor.RunMode.RUN_USING_ENCODER, new PIDFCoefficients(P, I, D, F));
 //        motor2.setPIDFCoefficients(DcMotor.RunMode.RUN_USING_ENCODER, new PIDFCoefficients(P, I, D, F));
-//        motor1.setVelocityPIDFCoefficients(P, I, D, F);
-//        motor2.setVelocityPIDFCoefficients(P, I, D, F);
+        motor1.setVelocityPIDFCoefficients(P, I, D, F);
+        motor2.setVelocityPIDFCoefficients(P, I, D, F);
 //
 //
 //
@@ -289,7 +289,7 @@ public class Outtake {
         };
     }
 
-    public Action shootCloseAction(Robot robot) {
+    public Action shootCloseAction() {
         return new Action() {
 
 
@@ -298,10 +298,11 @@ public class Outtake {
 
 
                 setVelocity(OuttakeConstants.CLOSE_VELOCITY2);
-//                bangController(OuttakeConstants.CLOSE_VELOCITY);
                 hood.setPosition(OuttakeConstants.CLOSE_HOOD2);
-                robot.outtake.transferHold(robot);
+//                bangController(OuttakeConstants.CLOSE_VELOCITY);
 
+//                Robot.outtake.transferHold();
+//                Robot.transfer.transferInAction(1);
 
                 double error = Math.abs(getVelocity() - Math.abs(OuttakeConstants.CLOSE_VELOCITY2));
 
@@ -312,7 +313,7 @@ public class Outtake {
         };
     }
 
-    public Action shootFarAction(Robot robot) {
+    public Action shootFarAction() {
         return new Action() {
 
 
@@ -320,10 +321,10 @@ public class Outtake {
             public boolean run(@NonNull TelemetryPacket telemetryPacket) {
 
 
-                setVelocity(OuttakeConstants.FAR_VELOCITY1);
+                shootVelocityAction(OuttakeConstants.FAR_VELOCITY1);
 //                bangController(OuttakeConstants.CLOSE_VELOCITY);
                 hood.setPosition(OuttakeConstants.FAR_HOOD1);
-                robot.outtake.transferHold(robot);
+                Robot.outtake.transferHold();
 
 
                 double error = Math.abs(getVelocity() - Math.abs(OuttakeConstants.FAR_VELOCITY1));
@@ -379,16 +380,16 @@ public class Outtake {
         };
     }
 
-    public Action transferHold(Robot robot) {
+    public Action transferHold() {
         return new Action() {
             @Override
             public boolean run(@NonNull TelemetryPacket telemetryPacket) {
                 if (Math.abs(Math.abs(getVelocity()) - Math.abs(currentVelocity)) <= OuttakeConstants.velocityError) {
-                    robot.intake.transferReverseAction(Math.min(1 - 0.2, 0.4));
+                    Robot.intake.transferReverseAction(Math.min(1 - 0.2, 0.4));
                 } else {
-                    robot.intake.transferInAction(1);
+                    Robot.intake.transferInAction(1);
                 }
-                robot.intake.transferInAction(0);
+                Robot.intake.transferInAction(0);
                 return false;
             }
         };

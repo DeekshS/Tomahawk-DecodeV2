@@ -8,30 +8,22 @@
  import com.acmerobotics.roadrunner.SequentialAction;
  import com.qualcomm.robotcore.util.ElapsedTime;
 
- import org.firstinspires.ftc.teamcode.Constants;
  import org.firstinspires.ftc.teamcode.subsystems.Outtake.Outtake;
  import org.firstinspires.ftc.teamcode.subsystems.Outtake.OuttakeConstants;
  import org.firstinspires.ftc.teamcode.subsystems.Robot;
 
  public class BotActions {
 
-     Robot robot;
 
      public static double INTAKE_WAIT_TIME = 3;
      public static double SHOOTER_TIME = 2.5;
      public static double transferPower = 1;
 
-
-
-     public BotActions(Robot robot) {
-         this.robot = robot;
-     }
-
      public Action preload_parallel_blue(Action path) {
 
          return new ParallelAction(
                  path,
-                 robot.outtake.shootVelocityAction(FieldConstants.CLOSE_VELOCITY)
+                 Robot.outtake.shootVelocityAction(OuttakeConstants.CLOSE_VELOCITY2)
  //                subsystems.turret.blue_init()
          );
      }
@@ -41,7 +33,7 @@
 
          return new ParallelAction(
                  path,
-                 robot.outtake.shootVelocityAction(FieldConstants.CLOSE_VELOCITY)
+                 Robot.outtake.shootVelocityAction(OuttakeConstants.CLOSE_VELOCITY2)
  //                subsystems.turret.red_init()
          );
      }
@@ -49,14 +41,14 @@
      public Action shoot_parallel() {
 
          return new ParallelAction(
-                 robot.intake.intakeTimeAction(2)
+             Robot.intake.intakeTimeAction(2)
          );
      }
 
      public Action shoot_close_spin_up() {
 
          return new SequentialAction(
-                 robot.outtake.shootVelocityAction(FieldConstants.CLOSE_VELOCITY)
+                Robot.outtake.shootVelocityAction(OuttakeConstants.CLOSE_VELOCITY2)
  //                subsystems.intake.intake(SHOOTER_TIME)
          );
      }
@@ -67,7 +59,7 @@
 
          return new ParallelAction(
                  path,
-                 robot.intake.intakeTimeAction(INTAKE_WAIT_TIME)
+                 Robot.intake.intakeTimeAction(INTAKE_WAIT_TIME)
                  //robot.outtake.reverseTimeAction(INTAKE_WAIT_TIME)
          );
 
@@ -96,7 +88,7 @@
 //         };
 //     }
 
-     public static Action transferHold(Robot robot, double time) {
+     public static Action transferHold(double time) {
          return new Action() {
              private boolean init = false;
              ElapsedTime timer = new ElapsedTime();
@@ -111,14 +103,14 @@
 
 
                  if (timer.seconds() < time) {
-                     if (Math.abs(robot.outtake.getVelocity()) <= Math.abs(OuttakeConstants.CLOSE_VELOCITY2) - Math.abs(OuttakeConstants.velocityError)) {
-                         robot.intake.transferOut(Math.min(transferPower - 0.2, 0.4));
+                     if (Math.abs(Robot.outtake.getVelocity()) <= Math.abs(OuttakeConstants.CLOSE_VELOCITY2) - Math.abs(OuttakeConstants.velocityError)) {
+                         Robot.intake.transferOut(Math.min(transferPower - 0.2, 0.4));
                      } else {
-                         robot.intake.transferIn(transferPower);
+                         Robot.intake.transferIn(transferPower);
                      }
                      return true;
                  } else {
-                     robot.intake.stop();
+                     Robot.intake.stop();
                  }
 
 

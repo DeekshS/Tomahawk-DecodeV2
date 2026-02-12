@@ -10,13 +10,10 @@ import com.qualcomm.hardware.limelightvision.LLResult;
 import com.qualcomm.hardware.limelightvision.Limelight3A;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.AnalogInput;
-import com.qualcomm.robotcore.hardware.CRServo;
 import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
-import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import org.firstinspires.ftc.teamcode.PoseStorage;
-import org.firstinspires.ftc.teamcode.Constants;
 import org.firstinspires.ftc.teamcode.drive.MecanumDrive;
 
 @Config
@@ -50,7 +47,6 @@ public class Turret {
 //        limelight.setPollRateHz(10);
 //        limelight.pipelineSwitch((PoseStorage.side.equals(PoseStorage.SIDE.BLUE) ? 1 : 0));
 //        limelight.start();
-        initialAngle = Constants.turretOffset;
     }
 
     // ---------------- Control ----------------

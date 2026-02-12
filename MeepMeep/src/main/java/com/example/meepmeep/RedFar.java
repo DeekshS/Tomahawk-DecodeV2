@@ -25,7 +25,7 @@ import java.io.IOException;
 import javax.imageio.ImageIO;
 
 
-public class BlueFar {
+public class RedFar {
 
     public static void main(String[] args) {
         MeepMeep meepMeep = new MeepMeep(700);
@@ -37,54 +37,54 @@ public class BlueFar {
 
         DriveShim drive = d.getDrive();
 
-        Action preload = drive.actionBuilder(FCV2.BLUE_FAR_START)
+        Action preload = drive.actionBuilder(FCV2.RED_FAR_START)
 //            .setTangent(Math.toRadians(0))
-            .strafeToLinearHeading(FCV2.BLUE_FAR_SHOOT, FCV2.BLUE_FAR_ANGLE)
+            .strafeToLinearHeading(FCV2.RED_FAR_SHOOT, FCV2.RED_FAR_ANGLE)
             .build();
 
-        Action gpp = drive.actionBuilder(new Pose2d(FCV2.BLUE_FAR_SHOOT, FCV2.BLUE_FAR_ANGLE))
-            .setTangent(0)
-            .splineToSplineHeading(new Pose2d(new Vector2d(FCV2.GPP_BLUE_ARTIFACT.x, FCV2.GPP_BLUE_ARTIFACT.y+FCV2.ARTIFACT_DIST+10), FCV2.BLUE_ARTIFACT_ANGLE), Math.toRadians(90))
+        Action gpp = drive.actionBuilder(new Pose2d(FCV2.RED_FAR_SHOOT, FCV2.RED_FAR_ANGLE))
+//            .setTangent(Math.toRadians(0))
+            .splineToLinearHeading(new Pose2d(new Vector2d(FCV2.GPP_RED_ARTIFACT.x, FCV2.GPP_RED_ARTIFACT.y-FCV2.ARTIFACT_DIST), FCV2.RED_ARTIFACT_ANGLE), Math.toRadians(90))
             .build();
 
-        Action gpp_return = drive.actionBuilder(new Pose2d(new Vector2d(FCV2.GPP_BLUE_ARTIFACT.x, FCV2.GPP_BLUE_ARTIFACT.y+FCV2.ARTIFACT_DIST+10), FCV2.BLUE_ARTIFACT_ANGLE))
-            .strafeToLinearHeading(FCV2.BLUE_FAR_SHOOT, FCV2.BLUE_FAR_ANGLE)
+        Action gpp_return = drive.actionBuilder(new Pose2d(new Vector2d(FCV2.GPP_RED_ARTIFACT.x, FCV2.GPP_RED_ARTIFACT.y-FCV2.ARTIFACT_DIST), FCV2.RED_ARTIFACT_ANGLE))
+            .strafeToLinearHeading(FCV2.RED_FAR_SHOOT, FCV2.RED_FAR_ANGLE)
             .build();
 
-        Action human1 = drive.actionBuilder(new Pose2d(FCV2.BLUE_FAR_SHOOT, FCV2.BLUE_FAR_ANGLE))
+        Action human1 = drive.actionBuilder(new Pose2d(FCV2.RED_FAR_SHOOT, FCV2.RED_FAR_ANGLE))
 //            .setTangent(0)
 //
-//            .splineToLinearHeading(new Pose2d(FCV2.HP_BLUE_ARTIFACT, Math.PI), Math.PI, new VelConstraint() {
+//            .splineToLinearHeading(new Pose2d(FCV2.HP_RED_ARTIFACT, Math.PI), Math.PI, new VelConstraint() {
 //                @Override
 //                public double maxRobotVel(@NotNull Pose2dDual<Arclength> pose2dDual, @NotNull PosePath posePath, double v) {
 //                    return 20;
 //                }
 //            })
-            .strafeToLinearHeading(new Vector2d(FCV2.HP_BLUE_ARTIFACT.x, FCV2.HP_BLUE_ARTIFACT.y - 10), FCV2.BLUE_ARTIFACT_ANGLE)
-            .strafeToLinearHeading(new Vector2d(FCV2.HP_BLUE_ARTIFACT.x, FCV2.HP_BLUE_ARTIFACT.y), FCV2.BLUE_ARTIFACT_ANGLE)
+            .strafeToLinearHeading(new Vector2d(FCV2.HP_RED_ARTIFACT.x, FCV2.HP_RED_ARTIFACT.y + 10), FCV2.RED_ARTIFACT_ANGLE)
+            .strafeToLinearHeading(new Vector2d(FCV2.HP_RED_ARTIFACT.x, FCV2.HP_RED_ARTIFACT.y), FCV2.RED_ARTIFACT_ANGLE)
             .build();
 //
-        Action human1_return = drive.actionBuilder(new Pose2d(new Vector2d(FCV2.HP_BLUE_ARTIFACT.x, FCV2.HP_BLUE_ARTIFACT.y), FCV2.BLUE_ARTIFACT_ANGLE))
+        Action human1_return = drive.actionBuilder(new Pose2d(new Vector2d(FCV2.HP_RED_ARTIFACT.x + 5, FCV2.HP_RED_ARTIFACT.y), Math.PI))
 //            .setTangent(Math.toRadians(0))
-            .strafeToSplineHeading(FCV2.BLUE_FAR_SHOOT, FCV2.BLUE_FAR_ANGLE)
+            .strafeToSplineHeading(FCV2.RED_FAR_SHOOT, FCV2.RED_FAR_ANGLE)
             .build();
 //
-        Action human2 = drive.actionBuilder(new Pose2d(FCV2.BLUE_FAR_SHOOT, FCV2.BLUE_FAR_ANGLE))
-            .turnTo(FCV2.BLUE_ARTIFACT_ANGLE)
-            .strafeToConstantHeading(FCV2.HP_BLUE_ARTIFACT)
+        Action human2 = drive.actionBuilder(new Pose2d(FCV2.RED_FAR_SHOOT, FCV2.RED_FAR_ANGLE))
+            .turnTo(FCV2.RED_ARTIFACT_ANGLE)
+            .strafeToConstantHeading(FCV2.HP_RED_ARTIFACT)
             .build();
 
-        Action human2_return = drive.actionBuilder(new Pose2d(FCV2.HP_BLUE_ARTIFACT, FCV2.BLUE_ARTIFACT_ANGLE))
-            .strafeToLinearHeading(FCV2.BLUE_FAR_SHOOT, FCV2.BLUE_FAR_ANGLE)
+        Action human2_return = drive.actionBuilder(new Pose2d(FCV2.HP_RED_ARTIFACT, FCV2.RED_ARTIFACT_ANGLE))
+            .strafeToLinearHeading(FCV2.RED_FAR_SHOOT, FCV2.RED_FAR_ANGLE)
             .build();
 
-        Action human3 = drive.actionBuilder(new Pose2d(FCV2.BLUE_FAR_SHOOT, FCV2.BLUE_FAR_ANGLE))
-            .turnTo(FCV2.BLUE_ARTIFACT_ANGLE)
-            .strafeToConstantHeading(FCV2.HP_BLUE_ARTIFACT)
+        Action human3 = drive.actionBuilder(new Pose2d(FCV2.RED_FAR_SHOOT, FCV2.RED_FAR_ANGLE))
+            .turnTo(FCV2.RED_ARTIFACT_ANGLE)
+            .strafeToConstantHeading(FCV2.HP_RED_ARTIFACT)
             .build();
 
-        Action human3_return = drive.actionBuilder(new Pose2d(FCV2.HP_BLUE_ARTIFACT, FCV2.BLUE_ARTIFACT_ANGLE))
-            .strafeToLinearHeading(FCV2.BLUE_FAR_SHOOT, FCV2.BLUE_FAR_ANGLE)
+        Action human3_return = drive.actionBuilder(new Pose2d(FCV2.HP_RED_ARTIFACT, FCV2.RED_ARTIFACT_ANGLE))
+            .strafeToLinearHeading(FCV2.RED_FAR_SHOOT, FCV2.RED_FAR_ANGLE)
             .build();
 
         d.runAction(

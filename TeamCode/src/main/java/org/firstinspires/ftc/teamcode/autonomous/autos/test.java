@@ -1,5 +1,7 @@
 package org.firstinspires.ftc.teamcode.autonomous.autos;
 
+import static org.firstinspires.ftc.teamcode.subsystems.Outtake.OuttakeConstants.CLOSE_VELOCITY2;
+
 import androidx.annotation.NonNull;
 
 import com.acmerobotics.dashboard.config.Config;
@@ -32,9 +34,9 @@ public class test extends LinearOpMode implements FCV2 {
 
 
     public void runOpMode() throws InterruptedException {
-
         Robot robot = new Robot(this);
-        BotActions botActions = new BotActions(robot);
+
+        BotActions botActions = new BotActions();
 
         MecanumDrive drive = new MecanumDrive(hardwareMap, RED_CLOSE_START);
 
@@ -54,14 +56,15 @@ public class test extends LinearOpMode implements FCV2 {
 //                                return false;
 //                            }
 //                        },
-                    robot.outtake.shootVelocityTimeAction(1130, 30),
-                    BotActions.transferHold(robot, 10)
+                    Robot.outtake.shootVelocityAction(CLOSE_VELOCITY2)
+//                    Robot.intake.intakeTimeAction(30),
+//                    BotActions.transferHold(30)
                 )
 
 
         );
-        robot.drive.localizer.update();
-        PoseStorage.endPose = robot.drive.localizer.getPose();
+        Robot.drive.localizer.update();
+        PoseStorage.endPose = Robot.drive.localizer.getPose();
         PoseStorage.side = PoseStorage.SIDE.RED;
     }
 

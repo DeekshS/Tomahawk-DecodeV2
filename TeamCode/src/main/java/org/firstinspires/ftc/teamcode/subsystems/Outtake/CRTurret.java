@@ -13,7 +13,6 @@ import com.qualcomm.robotcore.hardware.CRServo;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.teamcode.PoseStorage;
-import org.firstinspires.ftc.teamcode.Constants;
 import org.firstinspires.ftc.teamcode.drive.MecanumDrive;
 
 @Config
@@ -43,7 +42,6 @@ public class CRTurret {
         encoder = mode.hardwareMap.get(AnalogInput.class, "turretEncoderRight");
         limelight = mode.hardwareMap.get(Limelight3A.class, "ll");
         limelight.start();
-        initialAngle = Constants.turretOffset;
     }
 
     // --------------- Auto-Align --------------

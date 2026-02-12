@@ -29,10 +29,11 @@ public class Red12Alliance extends LinearOpMode implements FCV2 {
 
     public void runOpMode() throws InterruptedException {
 
-        Robot robot = new Robot(this);
-        BotActions botActions = new BotActions(robot);
+        BotActions botActions = new BotActions();
 
-        MecanumDrive drive = new MecanumDrive(hardwareMap, RED_CLOSE_START);
+        Robot.drive = new MecanumDrive(hardwareMap, FCV2.RED_CLOSE_START);
+
+        MecanumDrive drive = Robot.drive;
 
 
         Action preload = drive.actionBuilder(FCV2.RED_CLOSE_START)
@@ -96,107 +97,107 @@ public class Red12Alliance extends LinearOpMode implements FCV2 {
                 new SequentialAction(
                     new ParallelAction(
                         preload,
-                        robot.outtake.shootCloseAction(robot)
+                        Robot.outtake.shootCloseAction()
                     ),
 
                     new ParallelAction(
-                        robot.outtake.shootCloseAction(robot),
-                        robot.transfer.intakeTransferTimeAction(SHOOTER_TIME),
+                        Robot.outtake.shootCloseAction(),
+                        Robot.transfer.intakeTransferTimeAction(SHOOTER_TIME),
                         new SleepAction(SHOOTER_TIME)
 
                     ),
-                    robot.transfer.transferStopAction(),
+                    Robot.transfer.transferStopAction(),
                     //FIRST SPIKE
                     new ParallelAction(
                         artifact2,
-                        robot.intake.intakeTimeAction(INTAKE_WAIT_TIME)
+                        Robot.intake.intakeTimeAction(INTAKE_WAIT_TIME)
                     ),
 //
-                    robot.intake.stop(),
+                    Robot.intake.stop(),
 
 
                     new ParallelAction(
                         artifact2_return,
-                        robot.outtake.shootCloseAction(robot)
+                        Robot.outtake.shootCloseAction()
                     ),
 
                     new ParallelAction(
-                        robot.outtake.shootCloseAction(robot),
-                        robot.transfer.intakeTransferTimeAction(SHOOTER_TIME),
+                        Robot.outtake.shootCloseAction(),
+                        Robot.transfer.intakeTransferTimeAction(SHOOTER_TIME),
                         new SleepAction(SHOOTER_TIME)
 
                     ),
 
-                    robot.transfer.transferStopAction(),
+                    Robot.transfer.transferStopAction(),
 //
                     //SECOND SPIKE
                     new ParallelAction(
                         artifact1,
-                        robot.intake.intakeTimeAction(INTAKE_WAIT_TIME)
+                        Robot.intake.intakeTimeAction(INTAKE_WAIT_TIME)
 
                     ),
 //
-                    robot.intake.stop(),
+                    Robot.intake.stop(),
 
                     new ParallelAction(
                         artifact1_return,
-                        robot.outtake.shootCloseAction(robot)
+                        Robot.outtake.shootCloseAction()
                     ),
 //
                     new ParallelAction(
-                        robot.outtake.shootCloseAction(robot),
-                        robot.transfer.intakeTransferTimeAction(SHOOTER_TIME),
+                        Robot.outtake.shootCloseAction(),
+                        Robot.transfer.intakeTransferTimeAction(SHOOTER_TIME),
                         new SleepAction(SHOOTER_TIME)
                     ),
                     //THIRD SPIKE
-                    robot.transfer.transferStopAction(),
+                    Robot.transfer.transferStopAction(),
                     new ParallelAction(
                         artifact3,
-                        robot.intake.intakeTimeAction(INTAKE_WAIT_TIME)
+                        Robot.intake.intakeTimeAction(INTAKE_WAIT_TIME)
                     ),
 
-                    robot.intake.stop(),
+                    Robot.intake.stop(),
                     new ParallelAction(
                         artifact3_return,
-                        robot.outtake.shootCloseAction(robot)
+                        Robot.outtake.shootCloseAction()
                     ),
                     new ParallelAction(
-                        robot.outtake.shootCloseAction(robot),
-                        robot.transfer.intakeTransferTimeAction(SHOOTER_TIME),
+                        Robot.outtake.shootCloseAction(),
+                        Robot.transfer.intakeTransferTimeAction(SHOOTER_TIME),
                         new SleepAction(SHOOTER_TIME)
 
                     ),
-                    robot.transfer.transferStopAction(),
+                    Robot.transfer.transferStopAction(),
 //                    new ParallelAction(
 //                        hp,
-//                        robot.intake.intakeTimeAction(INTAKE_WAIT_TIME)
+//                        Robot.intake.intakeTimeAction(INTAKE_WAIT_TIME)
 //                    ),
 //
-//                    robot.intake.stop(),
+//                    Robot.intake.stop(),
 //                    new ParallelAction(
 //                        hp_return
-////                                robot.outtake.shootCloseAction(robot)
+////                                Robot.outtake.shootCloseAction()
 //                    ),
 //                    new ParallelAction(
-//                        robot.outtake.shootCloseAction(robot),
-//                        robot.transfer.intakeTransferTimeAction(SHOOTER_TIME),
+//                        Robot.outtake.shootCloseAction(),
+//                        Robot.transfer.intakeTransferTimeAction(SHOOTER_TIME),
 //                        new SleepAction(SHOOTER_TIME)
 //
 //                    ),
-//                    robot.transfer.transferStopAction(),
+//                    Robot.transfer.transferStopAction(),
 //                    new ParallelAction(
 //                        hp2,
-//                        robot.intake.intakeTimeAction(INTAKE_WAIT_TIME)
+//                        Robot.intake.intakeTimeAction(INTAKE_WAIT_TIME)
 //                    ),
 
-                    robot.intake.stop(),
+                    Robot.intake.stop(),
 //                        new ParallelAction(
 //                            hp_return2
-//    //                                robot.outtake.shootCloseAction(robot)
+//    //                                Robot.outtake.shootCloseAction()
 //                        ),
 //                        new ParallelAction(
-//                            robot.outtake.shootCloseAction(robot),
-//                            robot.transfer.intakeTransferTimeAction(SHOOTER_TIME),
+//                            Robot.outtake.shootCloseAction(),
+//                            Robot.transfer.intakeTransferTimeAction(SHOOTER_TIME),
 //                            new SleepAction(SHOOTER_TIME)
 //
 //                        ),
@@ -207,8 +208,8 @@ public class Red12Alliance extends LinearOpMode implements FCV2 {
 
             )
         );
-//        robot.drive.localizer.update();
-//        PoseStorage.endPose = robot.drive.localizer.getPose();
+//        Robot.drive.localizer.update();
+//        PoseStorage.endPose = Robot.drive.localizer.getPose();
 //        PoseStorage.side = PoseStorage.SIDE.RED;
     }
 

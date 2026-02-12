@@ -8,7 +8,7 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.robotcore.external.navigation.Pose3D;
-import org.firstinspires.ftc.teamcode.subsystems.Outtake.Turret;
+//import org.firstinspires.ftc.teamcode.subsystems.Outtake.Turret;
 
 public class LimelightCamera {
 
@@ -21,11 +21,11 @@ public class LimelightCamera {
     double pidOutput;
     Telemetry telemetry;
 
-    Turret turret;
+//    Turret turret;
 
     public LimelightCamera(LinearOpMode mode) {
         this.mode = mode;
-        turret = new Turret(mode);
+//        turret = new Turret(mode);
         telemetry = new MultipleTelemetry(mode.telemetry, FtcDashboard.getInstance().getTelemetry());
         limelight = mode.hardwareMap.get(Limelight3A.class, "ll");
         telemetry.setMsTransmissionInterval(1);
@@ -54,7 +54,7 @@ public class LimelightCamera {
 
         double tx = result.getTx();
 //        if (tx == 0) turret.setState(Turret.State.ZERO);
-        turret.changeTargetAngle(tx);
+//        turret.changeTargetAngle(tx);
 
         Pose3D botPose = result.getBotpose();
         telemetry.addData("tx", result.getTx());

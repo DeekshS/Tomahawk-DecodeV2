@@ -12,6 +12,7 @@ import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
 import org.firstinspires.ftc.teamcode.PoseStorage;
+import org.firstinspires.ftc.teamcode.R;
 import org.firstinspires.ftc.teamcode.subsystems.Outtake.OuttakeConstants;
 import org.firstinspires.ftc.teamcode.autonomous.autos.BotActions;
 import org.firstinspires.ftc.teamcode.autonomous.autos.FCV2;
@@ -26,14 +27,12 @@ public class CloseShoot extends LinearOpMode implements FCV2 {
 
 
     public void runOpMode() throws InterruptedException {
-
         Robot robot = new Robot(this);
-
         waitForStart();
         if (isStopRequested()) return;
 
         Actions.runBlocking(
-            robot.outtake.shootCloseAction(robot)
+            Robot.outtake.shootCloseAction()
         );
 //        robot.drive.localizer.update();
 //        PoseStorage.endPose = robot.drive.localizer.getPose();

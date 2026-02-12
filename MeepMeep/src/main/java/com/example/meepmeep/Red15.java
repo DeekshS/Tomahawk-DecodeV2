@@ -1,6 +1,5 @@
 package com.example.meepmeep;
 
-import static com.example.meepmeep.FCV2.ARTIFACT_DIST;
 
 import com.acmerobotics.roadrunner.Action;
 import com.acmerobotics.roadrunner.ParallelAction;
@@ -13,6 +12,7 @@ import com.noahbres.meepmeep.roadrunner.DriveShim;
 import com.noahbres.meepmeep.roadrunner.entity.RoadRunnerBotEntity;
 
 //import org.firstinspires.ftc.teamcode.autonomous.autos.FieldConstants;
+
 
 import java.awt.image.BufferedImage;
 import java.io.File;
@@ -37,7 +37,7 @@ public class Red15 {
 
         Action artifact1 = drive.actionBuilder(new Pose2d(FCV2.RED_CLOSE_SHOOT.x, FCV2.RED_CLOSE_SHOOT.y, FCV2.RED_CLOSE_ANGLE))
             .strafeToLinearHeading(new Vector2d(FCV2.PPG_RED_ARTIFACT.x, FCV2.PPG_RED_ARTIFACT.y), FCV2.RED_ARTIFACT_ANGLE)
-            .lineToY(FCV2.PPG_RED_ARTIFACT.y - ARTIFACT_DIST - 1)
+            .lineToY(FCV2.PPG_RED_ARTIFACT.y - FCV2.ARTIFACT_DIST - 1)
             .strafeToLinearHeading(FCV2.RED_GATE, 0)
             .build();
 
@@ -52,13 +52,13 @@ public class Red15 {
 
             .setTangent(FCV2.RED_ARTIFACT_ANGLE)
 
-            .lineToY(FCV2.PGP_RED_ARTIFACT.y - ARTIFACT_DIST- 2)
+            .lineToY(FCV2.PGP_RED_ARTIFACT.y - FCV2.ARTIFACT_DIST- 2)
 //            .setReversed(true)
 //            .splineToLinearHeading(new Pose2d(FCV2.PGP_RED_ARTIFACT.x, FCV2.PGP_RED_ARTIFACT.y+FCV2.ARTIFACT_DIST, FCV2.RED_ARTIFACT_ANGLE), -Math.PI/2.2)
 
             .build();
 
-        Action artifact2_return = drive.actionBuilder(new Pose2d(FCV2.PGP_RED_ARTIFACT.x, FCV2.PGP_RED_ARTIFACT.y - ARTIFACT_DIST - 2, FCV2.RED_ARTIFACT_ANGLE))
+        Action artifact2_return = drive.actionBuilder(new Pose2d(FCV2.PGP_RED_ARTIFACT.x, FCV2.PGP_RED_ARTIFACT.y - FCV2.ARTIFACT_DIST - 2, FCV2.RED_ARTIFACT_ANGLE))
             .setReversed(true)
             .splineToLinearHeading(new Pose2d(FCV2.RED_CLOSE_SHOOT.x, FCV2.RED_CLOSE_SHOOT.y, FCV2.RED_CLOSE_ANGLE), Math.PI/8)
 
@@ -68,11 +68,11 @@ public class Red15 {
 
         Action artifact3 = drive.actionBuilder(new Pose2d(FCV2.RED_CLOSE_SHOOT.x, FCV2.RED_CLOSE_SHOOT.y, FCV2.RED_CLOSE_ANGLE))
             .strafeToLinearHeading(FCV2.GPP_RED_ARTIFACT, FCV2.RED_ARTIFACT_ANGLE)
-            .strafeToConstantHeading(new Vector2d(FCV2.GPP_RED_ARTIFACT.x, FCV2.GPP_RED_ARTIFACT.y - ARTIFACT_DIST - 2))
+            .strafeToConstantHeading(new Vector2d(FCV2.GPP_RED_ARTIFACT.x, FCV2.GPP_RED_ARTIFACT.y - FCV2.ARTIFACT_DIST - 2))
 //                .strafeToLinearHeading(FCV2.RED_GATE, 0)
             .build();
 
-        Action artifact3_return = drive.actionBuilder(new Pose2d(FCV2.GPP_RED_ARTIFACT.x, FCV2.GPP_RED_ARTIFACT.y - ARTIFACT_DIST, FCV2.RED_ARTIFACT_ANGLE))
+        Action artifact3_return = drive.actionBuilder(new Pose2d(FCV2.GPP_RED_ARTIFACT.x, FCV2.GPP_RED_ARTIFACT.y - FCV2.ARTIFACT_DIST, FCV2.RED_ARTIFACT_ANGLE))
 
             //                .setReversed(true)
             .strafeToLinearHeading(FCV2.RED_CLOSE_SHOOT, FCV2.RED_CLOSE_ANGLE)
@@ -84,14 +84,14 @@ public class Red15 {
             .build();
 
         Action hp = drive.actionBuilder(new Pose2d(FCV2.RED_CLOSE_SHOOT.x, FCV2.RED_CLOSE_SHOOT.y, FCV2.RED_CLOSE_ANGLE))
-            .strafeToLinearHeading(new Vector2d(FCV2.HP_RED_ARTIFACT.x - 10, FCV2.HP_RED_ARTIFACT.y), Math.toRadians(180))
+            .strafeToLinearHeading(new Vector2d(FCV2.HP_RED_ARTIFACT.x + 14, FCV2.HP_RED_ARTIFACT.y), Math.toRadians(-180))
             .strafeTo(new Vector2d(FCV2.HP_RED_ARTIFACT.x, FCV2.HP_RED_ARTIFACT.y))
             .build();
 
-        Action hp_return = drive.actionBuilder(new Pose2d(FCV2.HP_RED_ARTIFACT.x, FCV2.HP_RED_ARTIFACT.y, Math.toRadians(180)))
+        Action hp_return = drive.actionBuilder(new Pose2d(FCV2.HP_RED_ARTIFACT.x, FCV2.HP_RED_ARTIFACT.y, Math.toRadians(-180)))
 //                .strafeToLinearHeading(FCV2.RED_CLOSE_SHOOT, FCV2.RED_CLOSE_ANGLE)
-            .setTangent(Math.toRadians(270))
-            .splineToLinearHeading(new Pose2d(FCV2.RED_CLOSE_SHOOT, FCV2.RED_CLOSE_ANGLE), Math.toRadians(0))
+            .setTangent(Math.toRadians(0))
+            .splineToLinearHeading(new Pose2d(FCV2.RED_CLOSE_SHOOT, FCV2.RED_CLOSE_ANGLE), Math.toRadians(-180))
             .build();
 
         Action hp2 = drive.actionBuilder(new Pose2d(FCV2.RED_CLOSE_SHOOT.x, FCV2.RED_CLOSE_SHOOT.y, FCV2.RED_CLOSE_ANGLE))
@@ -107,12 +107,12 @@ public class Red15 {
         bot.runAction(
             new SequentialAction(
                 preload,
-                artifact2,
-                artifact2_return,
-                artifact1,
-                artifact1_return,
-                artifact3,
-                artifact3_return,
+//                artifact2,
+//                artifact2_return,
+//                artifact1,
+//                artifact1_return,
+//                artifact3,
+//                artifact3_return,
                 hp,
                 hp_return
             )

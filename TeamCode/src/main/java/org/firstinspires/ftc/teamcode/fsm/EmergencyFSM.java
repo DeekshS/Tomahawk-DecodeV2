@@ -1,12 +1,16 @@
 package org.firstinspires.ftc.teamcode.fsm;
 
+
 import com.acmerobotics.dashboard.config.Config;
 import com.acmerobotics.roadrunner.Pose2d;
+import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
+
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.teamcode.PoseStorage;
 import org.firstinspires.ftc.teamcode.gamepad.GamepadMappings;
 import org.firstinspires.ftc.teamcode.subsystems.Intake.Intake;
+import org.firstinspires.ftc.teamcode.subsystems.Intake.IntakeConstants;
 import org.firstinspires.ftc.teamcode.subsystems.Outtake.Outtake;
 import org.firstinspires.ftc.teamcode.subsystems.Outtake.OuttakeConstants;
 import org.firstinspires.ftc.teamcode.subsystems.Outtake.Turret;
@@ -14,38 +18,41 @@ import org.firstinspires.ftc.teamcode.subsystems.Robot;
 @Config
 public class EmergencyFSM {
 
+
     private Intake intake;
     private Intake transfer;
     private Outtake outtake;
-    private final Turret turret;
-    private final Robot robot;
+//    private final Turret turret;
     private final GamepadMappings controls;
     private final Telemetry telemetry;
     private GazelleState gazelleState;
     public String telemetry1;
     public static int transferPower = 1;
-    public EmergencyFSM(Telemetry telemetry, GamepadMappings controls, Robot robot) {
-        this.robot = robot;
-        this.intake = robot.intake;
-        this.transfer = robot.transfer;
-        this.turret = robot.turret;
-        this.outtake = robot.outtake;
+    public EmergencyFSM(LinearOpMode mode, Telemetry telemetry, GamepadMappings controls) {
+        Robot robot = new Robot(mode);
+        this.intake = Robot.intake;
+        this.transfer = Robot.transfer;
+//        this.turret = Robot.turret;
+        this.outtake = Robot.outtake;
         this.controls = controls;
         this.telemetry = telemetry;
-        turret.setTargetAngle(0);
+//        turret.setTargetAngle(0);
     }
+
 
     // ---------------- Main update loop ----------------
     public void gazelleUpdate() {
         controls.update();
-        robot.driveTrain.update();
-        robot.drive.localizer.update();
+        Robot.driveTrain.update();
+        Robot.drive.localizer.update();
+        Robot.driveTrain.setCurrentHeading(Robot.drive.localizer.getPose().heading.toDouble());
+        //turret.update();
+        telemetry.update();
 
-        //Drivetrain stuff
-        if (controls.reset.value()) {
-            robot.drive.localizer.setPose(new Pose2d(PoseStorage.hpX, PoseStorage.hpY, PoseStorage.hpHeading));
-            turret.setTargetAngle(0);
-        }
+
+
+
+
 
         // ---------------- Outtake / Flywheel ----------------
         //close velocities
@@ -66,8 +73,9 @@ public class EmergencyFSM {
             controls.flywheelClose3.set(false);
             controls.flywheelFar1.set(false);
             controls.flywheelFar2.set(false);
-            if (!controls.turretAuto.value()) turret.autoAlign(robot.drive.localizer.getPose());
-            else turret.setTargetAngle(0);
+//            if (!controls.turretAuto.value()) turret.autoAlign(robot.drive.localizer.getPose());
+//            else turret.setTargetAngle(0);
+
 
 //        } else if (controls.flywheelClose3.value()) {
 //            outtake.shootVelocity(OuttakeConstants.CLOSE_VELOCITY3);
@@ -80,18 +88,20 @@ public class EmergencyFSM {
 //            if (!controls.turretAuto.value()) turret.autoAlign(robot.drive.localizer.getPose()); else turret.setTargetAngle(0);
 //        }
 
+
             //far velocities
-            } else if (controls.flywheelFar1.value()) {
-                outtake.shootVelocity(OuttakeConstants.FAR_VELOCITY1);
-                outtake.hood.setPosition(OuttakeConstants.FAR_HOOD1);
-                outtake.currentVelocity = OuttakeConstants.FAR_VELOCITY1;
-    //            controls.flywheelClose1.set(false);
-                controls.flywheelClose2.set(false);
-    //            controls.flywheelClose3.set(false);
-                controls.flywheelFar2.set(false);
-                if (!controls.turretAuto.value()) turret.autoAlign(robot.drive.localizer.getPose());
-                else turret.setTargetAngle(0);
-            }
+        } else if (controls.flywheelFar1.value()) {
+            outtake.shootVelocity(OuttakeConstants.FAR_VELOCITY1);
+            outtake.hood.setPosition(OuttakeConstants.FAR_HOOD1);
+            outtake.currentVelocity = OuttakeConstants.FAR_VELOCITY1;
+
+
+            controls.flywheelClose2.set(false);
+
+
+//            if (!controls.turretAuto.value()) turret.autoAlign(robot.drive.localizer.getPose());
+//            else turret.setTargetAngle(0);
+        }
 //        } else if (controls.flywheelFar2.value()) {
 //            outtake.shootVelocity(OuttakeConstants.FAR_VELOCITY2);
 //            outtake.hood.setPosition(OuttakeConstants.FAR_HOOD2);
@@ -105,10 +115,12 @@ public class EmergencyFSM {
         else {
             outtake.shootVelocity(OuttakeConstants.OFF_VELOCITY);
             outtake.currentVelocity = 0;
-            turret.setTargetAngle(0);
+//            turret.setTargetAngle(0);
         }
 
+
 //         ---------------------- Turret ----------------------
+
 
         //Turret Manual
 //        if (controls.turretLeft.locked()) {
@@ -117,6 +129,7 @@ public class EmergencyFSM {
 //        if (controls.turretRight.locked()) {
 //            turret.changeTargetAngle(-5);
 //        }
+
 
         // ---------------- Intake / Transfer ----------------
         if (controls.intake.locked() || controls.intake2.locked()) {
@@ -127,26 +140,60 @@ public class EmergencyFSM {
             transfer.setPower(-1);
         } else if (controls.transfer.locked()) {
             intake.intake();
+
+
             if (Math.abs(outtake.getVelocity()) <= Math.abs(outtake.currentVelocity) - Math.abs(OuttakeConstants.velocityError)) {
                 intake.transferOut(Math.min(transferPower - 0.2, 0.4));
             } else {
                 intake.transferIn(transferPower);
             }
+
+
         } else if (!controls.transfer.locked() && !controls.intakeReverse.locked()) {
             intake.intakeStop();
             transfer.setPower(0);
         }
-        
-        //--------------- reset position :)---------------
+
+
+//        if (controls.stopper.value()) {
+//            intake.stopper.setPosition(IntakeConstants.BLOCKER_OPEN);
+//        } else {
+//            intake.stopper.setPosition(IntakeConstants.BLOCKER_CLOSED);
+//        }
+
+
+
+
+
+        //--------------- Drivetrain ---------------
+
+
+        //reset odo
         if (controls.reset.changed()) {
-            robot.drive.localizer.setPose(new Pose2d(PoseStorage.hpX, PoseStorage.hpY, PoseStorage.hpHeading));
+            Robot.drive.localizer.setPose(new Pose2d(PoseStorage.hpX, PoseStorage.hpY, PoseStorage.hpHeading));
+//            turret.setTargetAngle(0);
         }
-        turret.update();
-        telemetry.update();
+
+
+        //auto turn IN TESTING
+        if (controls.autoTurn.changed()) {
+            Robot.driveTrain.setIsAutoTurning(true);
+
+
+            Robot.driveTrain.setTargetHeading(
+                Robot.driveTrain.calculateHeading(
+                    Robot.drive.localizer.getPose()
+                )
+            );
+        }
+
+
     }
+
 
     // ---------------- Getters / Setters ----------------
     public enum GazelleState {
         BASE_STATE, INTAKING, TRANSFERRING
     }
 }
+
