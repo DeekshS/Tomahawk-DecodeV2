@@ -37,6 +37,7 @@ public class EmergencyTeleOp extends LinearOpMode {
             telemetry.addData("TransferState", fsm.telemetry1);
             telemetry.addData("botX", Robot.drive.localizer.getPose().position.x);
             telemetry.addData("botY", Robot.drive.localizer.getPose().position.y);
+            telemetry.addData("botHeading", Math.toDegrees(Robot.drive.localizer.getPose().heading.toDouble()));
 
             // Optional telemetry
             telemetry.update();

@@ -135,7 +135,7 @@ public interface FCV2 {
 
 
     // ======Artifact Length======
-    double ARTIFACT_DIST = 29;
+    double ARTIFACT_DIST = 30;
     double HP_ARTIFACT_DIST = 62;
     // ======RED ARTIFACTS======
     Vector2d GPP_RED_ARTIFACT = new Vector2d(-36, -17);

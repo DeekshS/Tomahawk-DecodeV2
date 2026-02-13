@@ -75,18 +75,7 @@
 
      }
 
-//     public static Action transferHold(Robot robot, double time) {
-//         return new Action() {
-//             @Override
-//             public boolean run(@NonNull TelemetryPacket telemetryPacket) {
-//                 ElapsedTime timer = new ElapsedTime();
-//                 while (timer.seconds() <= time) {
-//
-//                 }
-//                 return false;
-//             }
-//         };
-//     }
+
 
      public static Action transferHold(double time) {
          return new Action() {
@@ -101,14 +90,14 @@
                      timer.reset();
                  }
 
-
                  if (timer.seconds() < time) {
-                     if (Math.abs(Robot.outtake.getVelocity()) <= Math.abs(OuttakeConstants.CLOSE_VELOCITY2) - Math.abs(OuttakeConstants.velocityError)) {
+                     Robot.intake.intake();
+                     if (Math.abs(Robot.outtake.getVelocity()) <= Math.abs(OuttakeConstants.CLOSE_VELOCITY2) - Math.abs(OuttakeConstants.autonVelocityError)) {
                          Robot.intake.transferOut(Math.min(transferPower - 0.2, 0.4));
+
                      } else {
                          Robot.intake.transferIn(transferPower);
                      }
-                     return true;
                  } else {
                      Robot.intake.stop();
                  }

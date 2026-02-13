@@ -21,6 +21,7 @@
  import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
  import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
+ import org.firstinspires.ftc.teamcode.autonomous.autos.BotActions;
  import org.firstinspires.ftc.teamcode.autonomous.autos.FCV2;
  import org.firstinspires.ftc.teamcode.drive.MecanumDrive;
  import org.firstinspires.ftc.teamcode.subsystems.Robot;
@@ -113,7 +114,7 @@
 //
                      new ParallelAction(
                          Robot.outtake.shootFarAction(),
-                         Robot.transfer.intakeTransferTimeAction(SHOOTER_TIME),
+                         BotActions.transferHold(SHOOTER_TIME),
                          new SleepAction(SHOOTER_TIME)
 
                      ),
@@ -135,7 +136,7 @@
 
                      new ParallelAction(
                          Robot.outtake.shootFarAction(),
-                         Robot.transfer.intakeTransferTimeAction(SHOOTER_TIME),
+                         BotActions.transferHold(SHOOTER_TIME),
                          new SleepAction(SHOOTER_TIME)
 
                      ),
@@ -157,7 +158,7 @@
 
                      new ParallelAction(
                          Robot.outtake.shootFarAction(),
-                         Robot.transfer.intakeTransferTimeAction(SHOOTER_TIME),
+                         BotActions.transferHold(SHOOTER_TIME),
                          new SleepAction(SHOOTER_TIME)
 
                      ),
@@ -179,7 +180,7 @@
 
                      new ParallelAction(
                          Robot.outtake.shootFarAction(),
-                         Robot.transfer.intakeTransferTimeAction(SHOOTER_TIME),
+                         BotActions.transferHold(SHOOTER_TIME),
                          new SleepAction(SHOOTER_TIME)
 
                      ),
@@ -201,7 +202,7 @@
 
                      new ParallelAction(
                          Robot.outtake.shootFarAction(),
-                         Robot.transfer.intakeTransferTimeAction(SHOOTER_TIME),
+                         BotActions.transferHold(SHOOTER_TIME),
                          new SleepAction(SHOOTER_TIME)
 
                      ),

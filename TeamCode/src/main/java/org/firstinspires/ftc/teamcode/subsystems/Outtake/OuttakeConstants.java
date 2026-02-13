@@ -13,7 +13,8 @@ public class OuttakeConstants {
 
     public static int FAR_VELOCITY1 = -1360;
 
-    public static int velocityError = 90;
+    public static int velocityError = 250;
+    public static int autonVelocityError = 110;
     public static int OFF_VELOCITY = 0;
 
 }

@@ -135,12 +135,12 @@ public interface FCV2 {
 
 
     // ======Artifact Length======
-    double ARTIFACT_DIST = 26;
+    double ARTIFACT_DIST = 33;
     double HP_ARTIFACT_DIST = 62;
     // ======RED ARTIFACTS======
-    Vector2d GPP_RED_ARTIFACT = new Vector2d(-36, -12);
-    Vector2d PGP_RED_ARTIFACT = new Vector2d(-15, -17);
-    Vector2d PPG_RED_ARTIFACT = new Vector2d(12, -17);
+    Vector2d GPP_RED_ARTIFACT = new Vector2d(-36, -18);
+    Vector2d PGP_RED_ARTIFACT = new Vector2d(-15, -24);
+    Vector2d PPG_RED_ARTIFACT = new Vector2d(10, -24);
     Vector2d HP_RED_ARTIFACT = new Vector2d(-60,-35);
 
 
@@ -152,10 +152,10 @@ public interface FCV2 {
 
 
     // ======BLUE ARTIFACTS======
-    Vector2d GPP_BLUE_ARTIFACT = new Vector2d(-36, 17);
-    Vector2d PGP_BLUE_ARTIFACT = new Vector2d(-14, 24);
-    Vector2d PPG_BLUE_ARTIFACT = new Vector2d(12, 24);
-    Vector2d HP_BLUE_ARTIFACT = new Vector2d(-60,52);
+    Vector2d GPP_BLUE_ARTIFACT = new Vector2d(-33, 18);
+    Vector2d PGP_BLUE_ARTIFACT = new Vector2d(-13, 24);
+    Vector2d PPG_BLUE_ARTIFACT = new Vector2d(10, 24);
+    Vector2d HP_BLUE_ARTIFACT = new Vector2d(-60,64);
     Vector2d HP_SIDE_BLUE_ARTIFACT = new Vector2d(-61,50);
 
 
@@ -182,13 +182,14 @@ public interface FCV2 {
     Pose2d RED_FAR_START = new Pose2d(-61.25, -5, Math.toRadians(0));
 
 
-    Pose2d RED_CLOSE_START = new Pose2d(55.5, -43.5, Math.toRadians(-53));
+//    Pose2d RED_CLOSE_START = new Pose2d(55.5, -43.5, Math.toRadians(-47));
+    Pose2d RED_CLOSE_START = new Pose2d(62, -46, Math.toRadians(-47));
 
 
     Pose2d BLUE_FAR_START = new Pose2d(-61.25, 24, Math.toRadians(0));
 
 
-    Pose2d BLUE_CLOSE_START = new Pose2d(55.5, 43.5, Math.toRadians(53));
+    Pose2d BLUE_CLOSE_START = new Pose2d(55.5, 43.5, Math.toRadians(47));
 
 
     Pose2d BLUE_GOAL_START = new Pose2d(-47.5, 51.5,  Math.toRadians(323));

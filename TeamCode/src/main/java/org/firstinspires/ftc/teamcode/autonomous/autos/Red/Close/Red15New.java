@@ -81,11 +81,11 @@ public class Red15New extends LinearOpMode implements FCV2 {
         Action artifact3_return = drive.actionBuilder(new Pose2d(FCV2.GPP_RED_ARTIFACT.x, FCV2.GPP_RED_ARTIFACT.y - ARTIFACT_DIST, FCV2.RED_ARTIFACT_ANGLE))
 
             //                .setReversed(true)
-            .strafeToLinearHeading(FCV2.RED_CLOSE_SHOOT, FCV2.RED_CLOSE_ANGLE)
+            .strafeToLinearHeading(FCV2.RED_CLOSE_SHOOT, FCV2.RED_CLOSE_ANGLE - 4)
 
             .build();
 
-        Action park = drive.actionBuilder(new Pose2d(FCV2.RED_CLOSE_SHOOT.x, FCV2.RED_CLOSE_SHOOT.y, FCV2.RED_CLOSE_ANGLE))
+        Action park = drive.actionBuilder(new Pose2d(FCV2.RED_CLOSE_SHOOT.x, FCV2.RED_CLOSE_SHOOT.y, FCV2.RED_CLOSE_ANGLE - 4))
             .strafeTo(new Vector2d(FCV2.PGP_RED_ARTIFACT.x, FCV2.PGP_RED_ARTIFACT.y - 5))
             .build();
 
@@ -142,8 +142,7 @@ public class Red15New extends LinearOpMode implements FCV2 {
 
                     new ParallelAction(
                         Robot.outtake.shootCloseAction(),
-                        Robot.transfer.transferInAction(1),
-                        Robot.intake.intakeTransferTimeAction(SHOOTER_TIME),
+                        BotActions.transferHold(SHOOTER_TIME),
                         new SleepAction(SHOOTER_TIME)
 
                     ),
@@ -164,8 +163,7 @@ public class Red15New extends LinearOpMode implements FCV2 {
 
                     new ParallelAction(
                         Robot.outtake.shootCloseAction(),
-                        Robot.transfer.transferInAction(1),
-                        Robot.transfer.intakeTransferTimeAction(SHOOTER_TIME),
+                        BotActions.transferHold(SHOOTER_TIME),
                         new SleepAction(SHOOTER_TIME)
 
                     ),
@@ -188,8 +186,7 @@ public class Red15New extends LinearOpMode implements FCV2 {
 //
                     new ParallelAction(
                         Robot.outtake.shootCloseAction(),
-                        Robot.transfer.transferInAction(1),
-                        Robot.transfer.intakeTransferTimeAction(SHOOTER_TIME),
+                        BotActions.transferHold(SHOOTER_TIME),
                         new SleepAction(SHOOTER_TIME)
                     ),
                     //THIRD SPIKE
@@ -206,8 +203,7 @@ public class Red15New extends LinearOpMode implements FCV2 {
                     ),
                     new ParallelAction(
                         Robot.outtake.shootCloseAction(),
-                        Robot.transfer.transferInAction(1),
-                        Robot.transfer.intakeTransferTimeAction(SHOOTER_TIME),
+                        BotActions.transferHold(SHOOTER_TIME),
                         new SleepAction(SHOOTER_TIME)
 
                     ),
@@ -224,8 +220,7 @@ public class Red15New extends LinearOpMode implements FCV2 {
                     ),
                     new ParallelAction(
                         Robot.outtake.shootCloseAction(),
-                        Robot.transfer.transferInAction(1),
-                        Robot.transfer.intakeTransferTimeAction(SHOOTER_TIME),
+                        BotActions.transferHold(SHOOTER_TIME),
                         new SleepAction(SHOOTER_TIME)
 
                     ),
