@@ -5,6 +5,8 @@ package org.firstinspires.ftc.teamcode.autonomous.autos.Red.Far;
 import static org.firstinspires.ftc.teamcode.subsystems.Outtake.OuttakeConstants.FAR_HOOD1;
 import static org.firstinspires.ftc.teamcode.subsystems.Outtake.OuttakeConstants.FAR_VELOCITY1;
 
+import androidx.annotation.NonNull;
+
 import com.acmerobotics.dashboard.config.Config;
 import com.acmerobotics.roadrunner.Action;
 import com.acmerobotics.roadrunner.Arclength;
@@ -21,6 +23,7 @@ import com.acmerobotics.roadrunner.ftc.Actions;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
+import org.firstinspires.ftc.teamcode.autonomous.autos.BotActions;
 import org.firstinspires.ftc.teamcode.autonomous.autos.FCV2;
 import org.firstinspires.ftc.teamcode.drive.MecanumDrive;
 import org.firstinspires.ftc.teamcode.subsystems.Robot;
@@ -31,11 +34,11 @@ import org.jetbrains.annotations.NotNull;
 @Config
 public class RedFarAuto extends LinearOpMode implements FCV2 {
 
-    public static double INTAKE_WAIT_TIME = 1.4;
+    public static double INTAKE_WAIT_TIME = 3.2;
 
     public static int ARTIFACT_SHOOT_VEL = FAR_VELOCITY1;
     public static double HOOD_POS = FAR_HOOD1;
-    public static double SHOOTER_TIME = 1.25;
+    public static double SHOOTER_TIME = 1.05;
 
 
     public void runOpMode() throws InterruptedException {
@@ -47,17 +50,22 @@ public class RedFarAuto extends LinearOpMode implements FCV2 {
 
         Action preload = drive.actionBuilder(FCV2.RED_FAR_START)
 //            .setTangent(Math.toRadians(0))
-            .strafeToLinearHeading(FCV2.RED_FAR_SHOOT, FCV2.RED_FAR_ANGLE)
-            .build();
+                .strafeToLinearHeading(FCV2.RED_FAR_SHOOT, FCV2.RED_FAR_ANGLE)
+                .build();
 
         Action gpp = drive.actionBuilder(new Pose2d(FCV2.RED_FAR_SHOOT, FCV2.RED_FAR_ANGLE))
-//            .setTangent(Math.toRadians(0))
-            .splineToLinearHeading(new Pose2d(new Vector2d(FCV2.GPP_RED_ARTIFACT.x, FCV2.GPP_RED_ARTIFACT.y-FCV2.ARTIFACT_DIST), FCV2.RED_ARTIFACT_ANGLE), Math.toRadians(90))
-            .build();
+                .setTangent(0)
+                .splineToSplineHeading(new Pose2d(new Vector2d(FCV2.GPP_RED_ARTIFACT.x, FCV2.GPP_RED_ARTIFACT.y - FCV2.ARTIFACT_DIST - 19), FCV2.RED_ARTIFACT_ANGLE), Math.toRadians(270), new VelConstraint() {
+                    @Override
+                    public double maxRobotVel(@NonNull Pose2dDual<Arclength> pose2dDual, @NonNull PosePath posePath, double v) {
+                        return 40;
+                    }
+                })
+                .build();
 
-        Action gpp_return = drive.actionBuilder(new Pose2d(new Vector2d(FCV2.GPP_RED_ARTIFACT.x, FCV2.GPP_RED_ARTIFACT.y-FCV2.ARTIFACT_DIST), FCV2.RED_ARTIFACT_ANGLE))
-            .strafeToLinearHeading(FCV2.RED_FAR_SHOOT, FCV2.RED_FAR_ANGLE)
-            .build();
+        Action gpp_return = drive.actionBuilder(new Pose2d(new Vector2d(FCV2.GPP_RED_ARTIFACT.x, FCV2.GPP_RED_ARTIFACT.y-FCV2.ARTIFACT_DIST-10), FCV2.RED_ARTIFACT_ANGLE))
+                .strafeToLinearHeading(FCV2.RED_FAR_SHOOT, FCV2.RED_FAR_ANGLE)
+                .build();
 
         Action human1 = drive.actionBuilder(new Pose2d(FCV2.RED_FAR_SHOOT, FCV2.RED_FAR_ANGLE))
 //            .setTangent(0)
@@ -68,147 +76,169 @@ public class RedFarAuto extends LinearOpMode implements FCV2 {
 //                    return 20;
 //                }
 //            })
-            .strafeToLinearHeading(new Vector2d(FCV2.HP_RED_ARTIFACT.x, FCV2.HP_RED_ARTIFACT.y + 10), FCV2.RED_ARTIFACT_ANGLE)
-            .strafeToLinearHeading(new Vector2d(FCV2.HP_RED_ARTIFACT.x, FCV2.HP_RED_ARTIFACT.y), FCV2.RED_ARTIFACT_ANGLE)
-//            .strafeTo(new Vector2d(FCV2.HP_RED_ARTIFACT.x + 5, FCV2.HP_RED_ARTIFACT.y))
-            .build();
+                .strafeToLinearHeading(new Vector2d(FCV2.HP_RED_ARTIFACT.x, FCV2.HP_RED_ARTIFACT.y + 13), FCV2.RED_ARTIFACT_ANGLE)
+//                .splineToLinearHeading(new Pose2d(FCV2.HP_RED_ARTIFACT.x, FCV2.HP_RED_ARTIFACT.y, FCV2.RED_ARTIFACT_ANGLE), 40, new VelConstraint() {
+//                    @Override
+//                    public double maxRobotVel(@NonNull Pose2dDual<Arclength> pose2dDual, @NonNull PosePath posePath, double v) {
+//                        return 28;
+//                    }
+//                })
+
+//             .strafeToLinearHeading(new Vector2d(FCV2.HP_RED_ARTIFACT.x, FCV2.HP_RED_ARTIFACT.y - 19), FCV2.RED_ARTIFACT_ANGLE)
+//             .strafeToLinearHeading(new Vector2d(FCV2.HP_RED_ARTIFACT.x, FCV2.HP_RED_ARTIFACT.y), FCV2.RED_ARTIFACT_ANGLE)
+                .build();
 //
-        Action human1_return = drive.actionBuilder(new Pose2d(new Vector2d(FCV2.HP_RED_ARTIFACT.x + 5, FCV2.HP_RED_ARTIFACT.y), Math.PI))
+        Action human1_return = drive.actionBuilder(new Pose2d(new Vector2d(FCV2.HP_RED_ARTIFACT.x, FCV2.HP_RED_ARTIFACT.y), FCV2.RED_ARTIFACT_ANGLE))
 //            .setTangent(Math.toRadians(0))
-            .strafeToSplineHeading(FCV2.RED_FAR_SHOOT, FCV2.RED_FAR_ANGLE)
-            .build();
+                .strafeToSplineHeading(FCV2.RED_FAR_SHOOT, FCV2.RED_FAR_ANGLE + Math.toRadians(2.5))
+                .build();
 //
         Action human2 = drive.actionBuilder(new Pose2d(FCV2.RED_FAR_SHOOT, FCV2.RED_FAR_ANGLE))
-            .turnTo(FCV2.RED_ARTIFACT_ANGLE)
-            .strafeToConstantHeading(FCV2.HP_RED_ARTIFACT)
-            .build();
+                .turnTo(FCV2.RED_ARTIFACT_ANGLE)
+                .strafeToConstantHeading(FCV2.HP_RED_ARTIFACT, new VelConstraint() {
+                    @Override
+                    public double maxRobotVel(@NonNull Pose2dDual<Arclength> pose2dDual, @NonNull PosePath posePath, double v) {
+                        return 28;
+                    }
+                })
+                .build();
 
         Action human2_return = drive.actionBuilder(new Pose2d(FCV2.HP_RED_ARTIFACT, FCV2.RED_ARTIFACT_ANGLE))
-            .strafeToLinearHeading(FCV2.RED_FAR_SHOOT, FCV2.RED_FAR_ANGLE)
-            .build();
+                .strafeToLinearHeading(FCV2.RED_FAR_SHOOT, FCV2.RED_FAR_ANGLE)
+                .build();
 
         Action human3 = drive.actionBuilder(new Pose2d(FCV2.RED_FAR_SHOOT, FCV2.RED_FAR_ANGLE))
-            .turnTo(FCV2.RED_ARTIFACT_ANGLE)
-            .strafeToConstantHeading(FCV2.HP_RED_ARTIFACT)
-            .build();
+                .turnTo(FCV2.RED_ARTIFACT_ANGLE)
+                .strafeToConstantHeading(FCV2.HP_RED_ARTIFACT, new VelConstraint() {
+                    @Override
+                    public double maxRobotVel(@NonNull Pose2dDual<Arclength> pose2dDual, @NonNull PosePath posePath, double v) {
+                        return 26;
+                    }
+                })
+                .build();
 
         Action human3_return = drive.actionBuilder(new Pose2d(FCV2.HP_RED_ARTIFACT, FCV2.RED_ARTIFACT_ANGLE))
-            .strafeToLinearHeading(FCV2.RED_FAR_SHOOT, FCV2.RED_FAR_ANGLE)
-            .build();
+                .strafeToLinearHeading(FCV2.RED_FAR_SHOOT, FCV2.RED_FAR_ANGLE+Math.toRadians(2))
+                .build();
+
+        Action human_up = drive.actionBuilder(new Pose2d(FCV2.RED_FAR_SHOOT, FCV2.RED_FAR_ANGLE))
+                .strafeToLinearHeading(new Vector2d(FCV2.HP_RED_ARTIFACT.x-20, FCV2.HP_RED_ARTIFACT.y + 13), FCV2.RED_ARTIFACT_ANGLE)
+                .build();
 
         waitForStart();
         if (isStopRequested()) return;
 
 
         Actions.runBlocking(
-            new ParallelAction(
-                Robot.outtake.hoodAction(HOOD_POS, 29.9),
-//                 Robot.outtake.shootVelocityTimeAction(ARTIFACT_SHOOT_VEL, 29.9),
-                Robot.intake.intakeTimeAction(29.9),
-//                 Robot.turret.alignAction(0, 29.9),
-                new SequentialAction(
-                    new ParallelAction(
-                        preload,
-                        Robot.outtake.shootFarAction()
-                    ),
+                new ParallelAction(
+//                 Robot.outtake.hoodAction(HOOD_POS, 29.9),
+//                 robot.outtake.shootVelocityTimeAction(ARTIFACT_SHOOT_VEL, 29.9),
+                        Robot.intake.intakeTimeAction(29.9),
+//                 robot.turret.alignAction(0, 29.9),
+                        new SequentialAction(
+                                new ParallelAction(
+                                        preload,
+                                        Robot.outtake.shootFarAction()
+                                ),
 //
-                    new ParallelAction(
-                        Robot.outtake.shootFarAction(),
-                        Robot.transfer.intakeTransferTimeAction(SHOOTER_TIME),
-                        new SleepAction(SHOOTER_TIME)
+                                new ParallelAction(
+                                        Robot.outtake.shootFarAction(),
+                                        BotActions.transferHold(SHOOTER_TIME),
+                                        new SleepAction(SHOOTER_TIME)
 
-                    ),
-                    Robot.transfer.transferStopAction(),
+                                ),
 
-                    new ParallelAction(
-                        gpp,
-                        Robot.intake.intakeTimeAction(INTAKE_WAIT_TIME)
-                    ),
+                                Robot.transfer.transferStopAction(),
+
+                                new ParallelAction(
+                                        gpp
+//                         Robot.intake.intakeTimeAction(INTAKE_WAIT_TIME)
+                                ),
 //
-                    Robot.intake.stop(),
+//                     Robot.intake.stop(),
 
 
-                    new ParallelAction(
-                        gpp_return,
-                        Robot.outtake.shootFarAction()
-                    ),
+                                new ParallelAction(
+                                        gpp_return,
+                                        Robot.outtake.shootFarAction()
+                                ),
 
-                    new ParallelAction(
-                        Robot.outtake.shootFarAction(),
-                        Robot.transfer.intakeTransferTimeAction(SHOOTER_TIME),
-                        new SleepAction(SHOOTER_TIME)
+                                new ParallelAction(
+                                        Robot.outtake.shootFarAction(),
+                                        BotActions.transferHold(SHOOTER_TIME),
+                                        new SleepAction(SHOOTER_TIME)
 
-                    ),
+                                ),
 
-                    Robot.transfer.transferStopAction(),
+                                Robot.transfer.transferStopAction(),
 
-                    new ParallelAction(
-                        human1,
-                        Robot.intake.intakeTimeAction(INTAKE_WAIT_TIME)
-                    ),
+                                new ParallelAction(
+                                        human1
+//                         Robot.intake.intakeTimeAction(INTAKE_WAIT_TIME+2.5)
+                                ),
 //
-                    Robot.intake.stop(),
+//                     Robot.intake.stop(),
 
 
-                    new ParallelAction(
-                        human1_return,
-                        Robot.outtake.shootFarAction()
-                    ),
+                                new ParallelAction(
+                                        human1_return,
+                                        Robot.outtake.shootFarAction()
+                                ),
 
-                    new ParallelAction(
-                        Robot.outtake.shootFarAction(),
-                        Robot.transfer.intakeTransferTimeAction(SHOOTER_TIME),
-                        new SleepAction(SHOOTER_TIME)
+                                new ParallelAction(
+                                        Robot.outtake.shootFarAction(),
+                                        BotActions.transferHold(SHOOTER_TIME),
+                                        new SleepAction(SHOOTER_TIME)
 
-                    ),
+                                ),
 
-                    Robot.transfer.transferStopAction(),
+                                Robot.transfer.transferStopAction(),
 
-                    new ParallelAction(
-                        human2,
-                        Robot.intake.intakeTimeAction(INTAKE_WAIT_TIME)
-                    ),
+                                new ParallelAction(
+                                        human2
+//                         Robot.intake.intakeTimeAction(INTAKE_WAIT_TIME)
+                                ),
 //
-                    Robot.intake.stop(),
+//                     Robot.intake.stop(),
 
 
-                    new ParallelAction(
-                        human2_return,
-                        Robot.outtake.shootFarAction()
-                    ),
+                                new ParallelAction(
+                                        human2_return,
+                                        Robot.outtake.shootFarAction()
+                                ),
 
-                    new ParallelAction(
-                        Robot.outtake.shootFarAction(),
-                        Robot.transfer.intakeTransferTimeAction(SHOOTER_TIME),
-                        new SleepAction(SHOOTER_TIME)
+                                new ParallelAction(
+                                        Robot.outtake.shootFarAction(),
+                                        BotActions.transferHold(SHOOTER_TIME),
+                                        new SleepAction(SHOOTER_TIME)
 
-                    ),
+                                ),
 
-                    Robot.transfer.transferStopAction(),
+                                Robot.transfer.transferStopAction(),
 
-                    new ParallelAction(
-                        human3,
-                        Robot.intake.intakeTimeAction(INTAKE_WAIT_TIME)
-                    ),
+                                new ParallelAction(
+                                        human3
+//                         Robot.intake.intakeTimeAction(INTAKE_WAIT_TIME)
+                                ),
 //
-                    Robot.intake.stop(),
+//                     Robot.intake.stop(),
 
 
-                    new ParallelAction(
-                        human3_return,
-                        Robot.outtake.shootFarAction()
-                    ),
+                                new ParallelAction(
+                                        human3_return,
+                                        Robot.outtake.shootFarAction()
+                                ),
 
-                    new ParallelAction(
-                        Robot.outtake.shootFarAction(),
-                        Robot.transfer.intakeTransferTimeAction(SHOOTER_TIME),
-                        new SleepAction(SHOOTER_TIME)
+                                new ParallelAction(
+                                        Robot.outtake.shootFarAction(),
+                                        BotActions.transferHold(SHOOTER_TIME),
+                                        new SleepAction(SHOOTER_TIME)
 
-                    ),
+                                ),
 
-                    Robot.transfer.transferStopAction()
+                                Robot.transfer.transferStopAction()
+                        )
                 )
-            )
         );
     }
 

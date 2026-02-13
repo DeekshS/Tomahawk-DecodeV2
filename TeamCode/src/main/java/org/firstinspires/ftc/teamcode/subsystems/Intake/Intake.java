@@ -97,6 +97,18 @@ public class Intake {
         };
     }
 
+    public Action intakeAction() {
+        return new Action() {
+            boolean init = false;
+
+            @Override
+            public boolean run(@NonNull TelemetryPacket telemetryPacket) {
+                intake();
+                return false;
+            }
+        };
+    }
+
     public Action intakeReverseTimeAction(double time) {
         return new Action() {
             final ElapsedTime timer = new ElapsedTime();
@@ -176,7 +188,8 @@ public class Intake {
 
             @Override
             public boolean run(@NonNull TelemetryPacket telemetryPacket) {
-                setPower(0);
+                setPower(-0.4);
+//                intakeStop();
                 return false;
             }
         };

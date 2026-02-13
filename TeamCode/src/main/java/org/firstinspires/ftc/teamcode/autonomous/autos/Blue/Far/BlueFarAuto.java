@@ -5,6 +5,8 @@
  import static org.firstinspires.ftc.teamcode.subsystems.Outtake.OuttakeConstants.FAR_HOOD1;
  import static org.firstinspires.ftc.teamcode.subsystems.Outtake.OuttakeConstants.FAR_VELOCITY1;
 
+ import androidx.annotation.NonNull;
+
  import com.acmerobotics.dashboard.config.Config;
  import com.acmerobotics.roadrunner.Action;
  import com.acmerobotics.roadrunner.Arclength;
@@ -32,11 +34,11 @@
  @Config
  public class BlueFarAuto extends LinearOpMode implements FCV2 {
 
-     public static double INTAKE_WAIT_TIME = 1.4;
+     public static double INTAKE_WAIT_TIME = 3.2;
 
      public static int ARTIFACT_SHOOT_VEL = FAR_VELOCITY1;
      public static double HOOD_POS = FAR_HOOD1;
-     public static double SHOOTER_TIME = 1.25;
+     public static double SHOOTER_TIME = 1.05;
 
 
      public void runOpMode() throws InterruptedException {
@@ -53,7 +55,12 @@
 
          Action gpp = drive.actionBuilder(new Pose2d(FCV2.BLUE_FAR_SHOOT, FCV2.BLUE_FAR_ANGLE))
              .setTangent(0)
-             .splineToSplineHeading(new Pose2d(new Vector2d(FCV2.GPP_BLUE_ARTIFACT.x, FCV2.GPP_BLUE_ARTIFACT.y+FCV2.ARTIFACT_DIST+10), FCV2.BLUE_ARTIFACT_ANGLE), Math.toRadians(90))
+             .splineToSplineHeading(new Pose2d(new Vector2d(FCV2.GPP_BLUE_ARTIFACT.x, FCV2.GPP_BLUE_ARTIFACT.y + FCV2.ARTIFACT_DIST + 19), FCV2.BLUE_ARTIFACT_ANGLE), Math.toRadians(90), new VelConstraint() {
+                 @Override
+                 public double maxRobotVel(@NonNull Pose2dDual<Arclength> pose2dDual, @NonNull PosePath posePath, double v) {
+                     return 40;
+                 }
+             })
              .build();
 
          Action gpp_return = drive.actionBuilder(new Pose2d(new Vector2d(FCV2.GPP_BLUE_ARTIFACT.x, FCV2.GPP_BLUE_ARTIFACT.y+FCV2.ARTIFACT_DIST+10), FCV2.BLUE_ARTIFACT_ANGLE))
@@ -69,18 +76,31 @@
 //                    return 20;
 //                }
 //            })
-             .strafeToLinearHeading(new Vector2d(FCV2.HP_BLUE_ARTIFACT.x, FCV2.HP_BLUE_ARTIFACT.y - 10), FCV2.BLUE_ARTIFACT_ANGLE)
-             .strafeToLinearHeading(new Vector2d(FCV2.HP_BLUE_ARTIFACT.x, FCV2.HP_BLUE_ARTIFACT.y), FCV2.BLUE_ARTIFACT_ANGLE)
+             .strafeToLinearHeading(new Vector2d(FCV2.HP_BLUE_ARTIFACT.x, FCV2.HP_BLUE_ARTIFACT.y - 13), FCV2.BLUE_ARTIFACT_ANGLE)
+                 .splineToLinearHeading(new Pose2d(FCV2.HP_BLUE_ARTIFACT.x, FCV2.HP_BLUE_ARTIFACT.y, FCV2.BLUE_ARTIFACT_ANGLE), 40, new VelConstraint() {
+                 @Override
+                 public double maxRobotVel(@NonNull Pose2dDual<Arclength> pose2dDual, @NonNull PosePath posePath, double v) {
+                     return 28;
+                 }
+             })
+
+//             .strafeToLinearHeading(new Vector2d(FCV2.HP_BLUE_ARTIFACT.x, FCV2.HP_BLUE_ARTIFACT.y - 19), FCV2.BLUE_ARTIFACT_ANGLE)
+//             .strafeToLinearHeading(new Vector2d(FCV2.HP_BLUE_ARTIFACT.x, FCV2.HP_BLUE_ARTIFACT.y), FCV2.BLUE_ARTIFACT_ANGLE)
              .build();
 //
          Action human1_return = drive.actionBuilder(new Pose2d(new Vector2d(FCV2.HP_BLUE_ARTIFACT.x, FCV2.HP_BLUE_ARTIFACT.y), FCV2.BLUE_ARTIFACT_ANGLE))
 //            .setTangent(Math.toRadians(0))
-             .strafeToSplineHeading(FCV2.BLUE_FAR_SHOOT, FCV2.BLUE_FAR_ANGLE)
+             .strafeToSplineHeading(FCV2.BLUE_FAR_SHOOT, FCV2.BLUE_FAR_ANGLE - Math.toRadians(2.5))
              .build();
 //
          Action human2 = drive.actionBuilder(new Pose2d(FCV2.BLUE_FAR_SHOOT, FCV2.BLUE_FAR_ANGLE))
              .turnTo(FCV2.BLUE_ARTIFACT_ANGLE)
-             .strafeToConstantHeading(FCV2.HP_BLUE_ARTIFACT)
+             .strafeToConstantHeading(FCV2.HP_BLUE_ARTIFACT, new VelConstraint() {
+                 @Override
+                 public double maxRobotVel(@NonNull Pose2dDual<Arclength> pose2dDual, @NonNull PosePath posePath, double v) {
+                     return 28;
+                 }
+             })
              .build();
 
          Action human2_return = drive.actionBuilder(new Pose2d(FCV2.HP_BLUE_ARTIFACT, FCV2.BLUE_ARTIFACT_ANGLE))
@@ -89,12 +109,21 @@
 
          Action human3 = drive.actionBuilder(new Pose2d(FCV2.BLUE_FAR_SHOOT, FCV2.BLUE_FAR_ANGLE))
              .turnTo(FCV2.BLUE_ARTIFACT_ANGLE)
-             .strafeToConstantHeading(FCV2.HP_BLUE_ARTIFACT)
+             .strafeToConstantHeading(FCV2.HP_BLUE_ARTIFACT, new VelConstraint() {
+                 @Override
+                 public double maxRobotVel(@NonNull Pose2dDual<Arclength> pose2dDual, @NonNull PosePath posePath, double v) {
+                     return 26;
+                 }
+             })
              .build();
 
          Action human3_return = drive.actionBuilder(new Pose2d(FCV2.HP_BLUE_ARTIFACT, FCV2.BLUE_ARTIFACT_ANGLE))
-             .strafeToLinearHeading(FCV2.BLUE_FAR_SHOOT, FCV2.BLUE_FAR_ANGLE)
+             .strafeToLinearHeading(FCV2.BLUE_FAR_SHOOT, FCV2.BLUE_FAR_ANGLE-Math.toRadians(2))
              .build();
+
+         Action human_up = drive.actionBuilder(new Pose2d(FCV2.BLUE_FAR_SHOOT, FCV2.BLUE_FAR_ANGLE))
+                 .strafeToLinearHeading(new Vector2d(FCV2.HP_BLUE_ARTIFACT.x+20, FCV2.HP_BLUE_ARTIFACT.y - 13), FCV2.BLUE_ARTIFACT_ANGLE)
+                 .build();
 
          waitForStart();
          if (isStopRequested()) return;
@@ -102,7 +131,7 @@
 
          Actions.runBlocking(
              new ParallelAction(
-                 Robot.outtake.hoodAction(HOOD_POS, 29.9),
+//                 Robot.outtake.hoodAction(HOOD_POS, 29.9),
 //                 robot.outtake.shootVelocityTimeAction(ARTIFACT_SHOOT_VEL, 29.9),
                  Robot.intake.intakeTimeAction(29.9),
 //                 robot.turret.alignAction(0, 29.9),
@@ -122,11 +151,11 @@
                      Robot.transfer.transferStopAction(),
 
                      new ParallelAction(
-                         gpp,
-                         Robot.intake.intakeTimeAction(INTAKE_WAIT_TIME)
+                         gpp
+//                         Robot.intake.intakeTimeAction(INTAKE_WAIT_TIME)
                      ),
 //
-                     Robot.intake.stop(),
+//                     Robot.intake.stop(),
 
 
                      new ParallelAction(
@@ -144,11 +173,11 @@
                      Robot.transfer.transferStopAction(),
 
                      new ParallelAction(
-                         human1,
-                         Robot.intake.intakeTimeAction(INTAKE_WAIT_TIME)
+                         human1
+//                         Robot.intake.intakeTimeAction(INTAKE_WAIT_TIME+2.5)
                      ),
 //
-                     Robot.intake.stop(),
+//                     Robot.intake.stop(),
 
 
                      new ParallelAction(
@@ -166,11 +195,11 @@
                      Robot.transfer.transferStopAction(),
 
                      new ParallelAction(
-                         human2,
-                         Robot.intake.intakeTimeAction(INTAKE_WAIT_TIME)
+                         human2
+//                         Robot.intake.intakeTimeAction(INTAKE_WAIT_TIME)
                      ),
 //
-                     Robot.intake.stop(),
+//                     Robot.intake.stop(),
 
 
                      new ParallelAction(
@@ -188,11 +217,11 @@
                      Robot.transfer.transferStopAction(),
 
                      new ParallelAction(
-                         human3,
-                         Robot.intake.intakeTimeAction(INTAKE_WAIT_TIME)
+                         human3
+//                         Robot.intake.intakeTimeAction(INTAKE_WAIT_TIME)
                      ),
 //
-                     Robot.intake.stop(),
+//                     Robot.intake.stop(),
 
 
                      new ParallelAction(
