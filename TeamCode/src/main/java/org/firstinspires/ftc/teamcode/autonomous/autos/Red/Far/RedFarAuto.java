@@ -21,6 +21,7 @@ import com.acmerobotics.roadrunner.ftc.Actions;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
+import org.firstinspires.ftc.teamcode.autonomous.autos.BotActions;
 import org.firstinspires.ftc.teamcode.autonomous.autos.FCV2;
 import org.firstinspires.ftc.teamcode.drive.MecanumDrive;
 import org.firstinspires.ftc.teamcode.subsystems.Robot;
@@ -84,7 +85,7 @@ public class RedFarAuto extends LinearOpMode implements FCV2 {
             .build();
 
         Action human2_return = drive.actionBuilder(new Pose2d(FCV2.HP_RED_ARTIFACT, FCV2.RED_ARTIFACT_ANGLE))
-            .strafeToLinearHeading(FCV2.RED_FAR_SHOOT, FCV2.RED_FAR_ANGLE)
+            .strafeToLinearHeading(FCV2.RED_FAR_SHOOT, FCV2.RED_FAR_ANGLE+Math.toRadians(4))
             .build();
 
         Action human3 = drive.actionBuilder(new Pose2d(FCV2.RED_FAR_SHOOT, FCV2.RED_FAR_ANGLE))
@@ -96,6 +97,10 @@ public class RedFarAuto extends LinearOpMode implements FCV2 {
             .strafeToLinearHeading(FCV2.RED_FAR_SHOOT, FCV2.RED_FAR_ANGLE)
             .build();
 
+        Action park = drive.actionBuilder(new Pose2d(FCV2.HP_RED_ARTIFACT, FCV2.RED_ARTIFACT_ANGLE))
+            .strafeToLinearHeading(FCV2.GPP_RED_ARTIFACT, FCV2.RED_ARTIFACT_ANGLE)
+            .build();
+
         waitForStart();
         if (isStopRequested()) return;
 
@@ -103,9 +108,9 @@ public class RedFarAuto extends LinearOpMode implements FCV2 {
         Actions.runBlocking(
             new ParallelAction(
                 Robot.outtake.hoodAction(HOOD_POS, 29.9),
-//                 Robot.outtake.shootVelocityTimeAction(ARTIFACT_SHOOT_VEL, 29.9),
+//                 robot.outtake.shootVelocityTimeAction(ARTIFACT_SHOOT_VEL, 29.9),
                 Robot.intake.intakeTimeAction(29.9),
-//                 Robot.turret.alignAction(0, 29.9),
+//                 robot.turret.alignAction(0, 29.9),
                 new SequentialAction(
                     new ParallelAction(
                         preload,
@@ -114,10 +119,11 @@ public class RedFarAuto extends LinearOpMode implements FCV2 {
 //
                     new ParallelAction(
                         Robot.outtake.shootFarAction(),
-                        Robot.transfer.intakeTransferTimeAction(SHOOTER_TIME),
+                        BotActions.transferHold(SHOOTER_TIME),
                         new SleepAction(SHOOTER_TIME)
 
                     ),
+
                     Robot.transfer.transferStopAction(),
 
                     new ParallelAction(
@@ -135,7 +141,7 @@ public class RedFarAuto extends LinearOpMode implements FCV2 {
 
                     new ParallelAction(
                         Robot.outtake.shootFarAction(),
-                        Robot.transfer.intakeTransferTimeAction(SHOOTER_TIME),
+                        BotActions.transferHold(SHOOTER_TIME),
                         new SleepAction(SHOOTER_TIME)
 
                     ),
@@ -157,7 +163,7 @@ public class RedFarAuto extends LinearOpMode implements FCV2 {
 
                     new ParallelAction(
                         Robot.outtake.shootFarAction(),
-                        Robot.transfer.intakeTransferTimeAction(SHOOTER_TIME),
+                        BotActions.transferHold(SHOOTER_TIME),
                         new SleepAction(SHOOTER_TIME)
 
                     ),
@@ -179,7 +185,7 @@ public class RedFarAuto extends LinearOpMode implements FCV2 {
 
                     new ParallelAction(
                         Robot.outtake.shootFarAction(),
-                        Robot.transfer.intakeTransferTimeAction(SHOOTER_TIME),
+                        BotActions.transferHold(SHOOTER_TIME),
                         new SleepAction(SHOOTER_TIME)
 
                     ),
@@ -201,7 +207,7 @@ public class RedFarAuto extends LinearOpMode implements FCV2 {
 
                     new ParallelAction(
                         Robot.outtake.shootFarAction(),
-                        Robot.transfer.intakeTransferTimeAction(SHOOTER_TIME),
+                        BotActions.transferHold(SHOOTER_TIME),
                         new SleepAction(SHOOTER_TIME)
 
                     ),

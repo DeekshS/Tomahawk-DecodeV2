@@ -71,17 +71,7 @@ public class DriveTrain {
         if (s.equals(State.ROBOTCENTRIC)) {
             double x = GamepadMappings.strafe;
             double y = -GamepadMappings.drive;
-//            double rx;
-
-
-            if (isAutoTurning) {
-                rx = calculateRotationPower();
-                if (Math.abs(GamepadMappings.turn) > 0.1) {
-                    isAutoTurning = false;
-                }
-            } else {
-                rx = GamepadMappings.turn;
-            }
+            double rx = GamepadMappings.turn;
 
 
             double flPower = y + x + rx;

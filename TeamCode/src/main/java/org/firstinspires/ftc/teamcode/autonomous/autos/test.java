@@ -56,7 +56,7 @@ public class test extends LinearOpMode implements FCV2 {
 //                                return false;
 //                            }
 //                        },
-                    Robot.outtake.shootCloseAction(),
+                    Robot.outtake.shootFarAction(),
                     Robot.intake.intakeTimeAction(30),
                     BotActions.transferHold(30)
                 )

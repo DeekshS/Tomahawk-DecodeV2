@@ -53,10 +53,10 @@
 
          Action gpp = drive.actionBuilder(new Pose2d(FCV2.BLUE_FAR_SHOOT, FCV2.BLUE_FAR_ANGLE))
              .setTangent(0)
-             .splineToSplineHeading(new Pose2d(new Vector2d(FCV2.GPP_BLUE_ARTIFACT.x, FCV2.GPP_BLUE_ARTIFACT.y+FCV2.ARTIFACT_DIST+10), FCV2.BLUE_ARTIFACT_ANGLE), Math.toRadians(90))
+             .splineToSplineHeading(new Pose2d(new Vector2d(FCV2.GPP_BLUE_ARTIFACT.x, FCV2.GPP_BLUE_ARTIFACT.y+FCV2.ARTIFACT_DIST+13), FCV2.BLUE_ARTIFACT_ANGLE), Math.toRadians(90))
              .build();
 
-         Action gpp_return = drive.actionBuilder(new Pose2d(new Vector2d(FCV2.GPP_BLUE_ARTIFACT.x, FCV2.GPP_BLUE_ARTIFACT.y+FCV2.ARTIFACT_DIST+10), FCV2.BLUE_ARTIFACT_ANGLE))
+         Action gpp_return = drive.actionBuilder(new Pose2d(new Vector2d(FCV2.GPP_BLUE_ARTIFACT.x, FCV2.GPP_BLUE_ARTIFACT.y+FCV2.ARTIFACT_DIST+13), FCV2.BLUE_ARTIFACT_ANGLE))
              .strafeToLinearHeading(FCV2.BLUE_FAR_SHOOT, FCV2.BLUE_FAR_ANGLE)
              .build();
 
@@ -70,10 +70,10 @@
 //                }
 //            })
              .strafeToLinearHeading(new Vector2d(FCV2.HP_BLUE_ARTIFACT.x, FCV2.HP_BLUE_ARTIFACT.y - 10), FCV2.BLUE_ARTIFACT_ANGLE)
-             .strafeToLinearHeading(new Vector2d(FCV2.HP_BLUE_ARTIFACT.x, FCV2.HP_BLUE_ARTIFACT.y), FCV2.BLUE_ARTIFACT_ANGLE)
+             .strafeToLinearHeading(new Vector2d(FCV2.HP_BLUE_ARTIFACT.x, FCV2.HP_BLUE_ARTIFACT.y+9), FCV2.BLUE_ARTIFACT_ANGLE)
              .build();
 //
-         Action human1_return = drive.actionBuilder(new Pose2d(new Vector2d(FCV2.HP_BLUE_ARTIFACT.x, FCV2.HP_BLUE_ARTIFACT.y), FCV2.BLUE_ARTIFACT_ANGLE))
+         Action human1_return = drive.actionBuilder(new Pose2d(new Vector2d(FCV2.HP_BLUE_ARTIFACT.x, FCV2.HP_BLUE_ARTIFACT.y+9), FCV2.BLUE_ARTIFACT_ANGLE))
 //            .setTangent(Math.toRadians(0))
              .strafeToSplineHeading(FCV2.BLUE_FAR_SHOOT, FCV2.BLUE_FAR_ANGLE)
              .build();
@@ -94,6 +94,10 @@
 
          Action human3_return = drive.actionBuilder(new Pose2d(FCV2.HP_BLUE_ARTIFACT, FCV2.BLUE_ARTIFACT_ANGLE))
              .strafeToLinearHeading(FCV2.BLUE_FAR_SHOOT, FCV2.BLUE_FAR_ANGLE)
+             .build();
+
+         Action park = drive.actionBuilder(new Pose2d(FCV2.HP_BLUE_ARTIFACT, FCV2.BLUE_ARTIFACT_ANGLE))
+             .strafeToLinearHeading(FCV2.GPP_BLUE_ARTIFACT, FCV2.BLUE_ARTIFACT_ANGLE)
              .build();
 
          waitForStart();
@@ -122,8 +126,8 @@
                      Robot.transfer.transferStopAction(),
 
                      new ParallelAction(
-                         gpp,
-                         Robot.intake.intakeTimeAction(INTAKE_WAIT_TIME)
+                         gpp
+//                         Robot.intake.intakeTimeAction(INTAKE_WAIT_TIME)
                      ),
 //
                      Robot.intake.stop(),
@@ -144,8 +148,8 @@
                      Robot.transfer.transferStopAction(),
 
                      new ParallelAction(
-                         human1,
-                         Robot.intake.intakeTimeAction(INTAKE_WAIT_TIME)
+                         human1
+//                         Robot.intake.intakeTimeAction(INTAKE_WAIT_TIME)
                      ),
 //
                      Robot.intake.stop(),
@@ -166,8 +170,8 @@
                      Robot.transfer.transferStopAction(),
 
                      new ParallelAction(
-                         human2,
-                         Robot.intake.intakeTimeAction(INTAKE_WAIT_TIME)
+                         human2
+//                         Robot.intake.intakeTimeAction(INTAKE_WAIT_TIME)
                      ),
 //
                      Robot.intake.stop(),
@@ -188,8 +192,8 @@
                      Robot.transfer.transferStopAction(),
 
                      new ParallelAction(
-                         human3,
-                         Robot.intake.intakeTimeAction(INTAKE_WAIT_TIME)
+                         human3
+//                         Robot.intake.intakeTimeAction(INTAKE_WAIT_TIME)
                      ),
 //
                      Robot.intake.stop(),
@@ -207,7 +211,8 @@
 
                      ),
 
-                     Robot.transfer.transferStopAction()
+                     Robot.transfer.transferStopAction(),
+                     park
                  )
              )
          );
