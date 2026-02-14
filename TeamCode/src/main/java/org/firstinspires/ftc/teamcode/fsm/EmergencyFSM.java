@@ -18,7 +18,6 @@ import org.firstinspires.ftc.teamcode.subsystems.Robot;
 @Config
 public class EmergencyFSM {
 
-    private LinearOpMode mode;
 
     private Intake intake;
     private Intake transfer;
@@ -30,7 +29,6 @@ public class EmergencyFSM {
     public String telemetry1;
     public static int transferPower = 1;
     public EmergencyFSM(LinearOpMode mode, Telemetry telemetry, GamepadMappings controls) {
-        this.mode = mode;
         Robot robot = new Robot(mode);
         this.intake = Robot.intake;
         this.transfer = Robot.transfer;
@@ -45,7 +43,7 @@ public class EmergencyFSM {
     // ---------------- Main update loop ----------------
     public void gazelleUpdate() {
         controls.update();
-        Robot.driveTrain.update(mode.getRuntime());
+        Robot.driveTrain.update();
         Robot.drive.localizer.update();
         Robot.driveTrain.setCurrentHeading(Robot.drive.localizer.getPose().heading.toDouble());
         //turret.update();

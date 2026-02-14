@@ -52,7 +52,7 @@ public class BlueFar {
             .build();
 
         Action human1 = drive.actionBuilder(new Pose2d(FCV2.BLUE_FAR_SHOOT, FCV2.BLUE_FAR_ANGLE))
-            .setTangent(0)
+//            .setTangent(0)
 //
 //            .splineToLinearHeading(new Pose2d(FCV2.HP_BLUE_ARTIFACT, Math.PI), Math.PI, new VelConstraint() {
 //                @Override
@@ -61,7 +61,7 @@ public class BlueFar {
 //                }
 //            })
             .strafeToLinearHeading(new Vector2d(FCV2.HP_BLUE_ARTIFACT.x, FCV2.HP_BLUE_ARTIFACT.y - 10), FCV2.BLUE_ARTIFACT_ANGLE)
-            .splineToLinearHeading(new Pose2d(FCV2.HP_BLUE_ARTIFACT.x, FCV2.HP_BLUE_ARTIFACT.y, FCV2.BLUE_ARTIFACT_ANGLE), 40)
+            .strafeToLinearHeading(new Vector2d(FCV2.HP_BLUE_ARTIFACT.x, FCV2.HP_BLUE_ARTIFACT.y), FCV2.BLUE_ARTIFACT_ANGLE)
             .build();
 //
         Action human1_return = drive.actionBuilder(new Pose2d(new Vector2d(FCV2.HP_BLUE_ARTIFACT.x, FCV2.HP_BLUE_ARTIFACT.y), FCV2.BLUE_ARTIFACT_ANGLE))

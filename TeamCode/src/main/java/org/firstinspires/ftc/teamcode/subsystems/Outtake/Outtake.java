@@ -321,12 +321,11 @@ public class Outtake {
             public boolean run(@NonNull TelemetryPacket telemetryPacket) {
 
 
-                setVelocity(OuttakeConstants.FAR_VELOCITY1);
-                hood.setPosition(OuttakeConstants.FAR_HOOD1);
+                shootVelocityAction(OuttakeConstants.FAR_VELOCITY1);
 //                bangController(OuttakeConstants.CLOSE_VELOCITY);
+                hood.setPosition(OuttakeConstants.FAR_HOOD1);
+                Robot.outtake.transferHold();
 
-//                Robot.outtake.transferHold();
-//                Robot.transfer.transferInAction(1);
 
                 double error = Math.abs(getVelocity() - Math.abs(OuttakeConstants.FAR_VELOCITY1));
 

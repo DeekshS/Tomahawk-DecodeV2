@@ -119,13 +119,13 @@ public interface FCV2 {
 
     //RED
     double RED_CLOSE_ANGLE = Math.toRadians(-45);
-    double RED_FAR_ANGLE = Math.toRadians(-20);
+    double RED_FAR_ANGLE = Math.toRadians(-15);
     double RED_ARTIFACT_ANGLE = Math.toRadians(-90);
 
 
     //BLUE
     double BLUE_CLOSE_ANGLE = Math.toRadians(45);
-    double BLUE_FAR_ANGLE = Math.toRadians(26);
+    double BLUE_FAR_ANGLE = Math.toRadians(15);
     double BLUE_ARTIFACT_ANGLE = Math.toRadians(90);
 
 
@@ -152,17 +152,17 @@ public interface FCV2 {
 
 
     // ======BLUE ARTIFACTS======
-    Vector2d GPP_BLUE_ARTIFACT = new Vector2d(-26, 18);
+    Vector2d GPP_BLUE_ARTIFACT = new Vector2d(-33, 18);
     Vector2d PGP_BLUE_ARTIFACT = new Vector2d(-13, 24);
     Vector2d PPG_BLUE_ARTIFACT = new Vector2d(10, 24);
-    Vector2d HP_BLUE_ARTIFACT = new Vector2d(-54,71);
+    Vector2d HP_BLUE_ARTIFACT = new Vector2d(-60,64);
     Vector2d HP_SIDE_BLUE_ARTIFACT = new Vector2d(-61,50);
 
 
 
     // ====== BLUE Shooting Locations======
     Vector2d BLUE_CLOSE_SHOOT = new Vector2d(12, 8);
-    Vector2d BLUE_FAR_SHOOT = new Vector2d(-55, 17);
+    Vector2d BLUE_FAR_SHOOT = new Vector2d(-58, 12);
 
 
 
@@ -179,7 +179,7 @@ public interface FCV2 {
 
 
     // ======STARTING POSITIONS======
-    Pose2d RED_FAR_START = new Pose2d(-61.25, -24, Math.toRadians(0));
+    Pose2d RED_FAR_START = new Pose2d(-61.25, -5, Math.toRadians(0));
 
 
 //    Pose2d RED_CLOSE_START = new Pose2d(55.5, -43.5, Math.toRadians(-47));

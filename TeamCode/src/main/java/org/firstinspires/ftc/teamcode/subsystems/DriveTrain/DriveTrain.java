@@ -1,17 +1,10 @@
 package org.firstinspires.ftc.teamcode.subsystems.DriveTrain;
 
 
-
-
 import com.acmerobotics.roadrunner.Pose2d;
-import com.qualcomm.hardware.limelightvision.Limelight3A;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
-import com.qualcomm.robotcore.hardware.Gamepad;
-import com.qualcomm.robotcore.util.Range;
-
-
 
 
 import org.firstinspires.ftc.teamcode.PoseStorage;
@@ -20,37 +13,18 @@ import org.firstinspires.ftc.teamcode.subsystems.IMUGyro;
 public class DriveTrain {
 
 
-
-
     private final IMUGyro imu;
-
-
 
 
     private final DcMotorEx fl;
     private final DcMotorEx fr;
     private final DcMotorEx bl;
     private final DcMotorEx br;
-    private final Limelight3A limelight;
-    private GamepadMappings controls;
-    private Gamepad gamepad1;
-    private Gamepad gamepad2;
     public double rx;
     private double targetHeading;
     private double currentHeading;
-    private double lastTime;
-    private double lastError;
-    private double goalX = 0;
-    public double result;
-    public double error;
-    public String text;
-    public double testingResult;
     public State s = State.ROBOTCENTRIC;
     private static boolean isAutoTurning = false;
-
-
-
-
 
 
 
@@ -58,29 +32,10 @@ public class DriveTrain {
     public DriveTrain(LinearOpMode mode) {
 
 
-
-
         fl = mode.hardwareMap.get(DcMotorEx.class, "fl");
         fr = mode.hardwareMap.get(DcMotorEx.class, "fr");
         bl = mode.hardwareMap.get(DcMotorEx.class, "bl");
         br = mode.hardwareMap.get(DcMotorEx.class, "br");
-
-
-        limelight = mode.hardwareMap.get(Limelight3A.class, "limelight");
-        gamepad1 = new Gamepad();
-        gamepad2 = new Gamepad();
-        controls = new GamepadMappings(gamepad1, gamepad2);
-
-        limelight.setPollRateHz(10);
-        limelight.pipelineSwitch((PoseStorage.side.equals(PoseStorage.SIDE.BLUE) ? 1 : 0));
-//        limelight.pipelineSwitch(1);
-        limelight.start();
-
-
-
-
-
-
 
 
 
@@ -93,21 +48,13 @@ public class DriveTrain {
 
 
 
-
-
-
-
         DcMotorEx[] motors = new DcMotorEx[]{fl, fr, bl, br};
         DcMotorEx[] reversedMotors = new DcMotorEx[]{fl, bl};
-
-
 
 
         for (DcMotorEx motor : motors) {
             motor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         }
-
-
 
 
         for (DcMotorEx motor : reversedMotors) {
@@ -120,52 +67,20 @@ public class DriveTrain {
 
 
 
-
-
-
-
-
-
-    public void update(double runTime) {
+    public void update() {
         if (s.equals(State.ROBOTCENTRIC)) {
             double x = GamepadMappings.strafe;
             double y = -GamepadMappings.drive;
-            double rx = GamepadMappings.turn;
-            testingResult = limelight.getLatestResult().getTx();
-            result = (limelight.getLatestResult().isValid() && limelight.getLatestResult() != null) ? limelight.getLatestResult().getTx() : Double.NaN;
+//            double rx;
 
 
-
-
-            if (true) {
-                error = goalX - result;
-
-
-                if (Math.abs(error) < DriveConstants.tolerance) {
-                    rx = 0;
-                    text = "pressed, inside of tolerance";
-
-                } else {
-                    text = "pressed, below tolerance";
-                    double p = error * DriveConstants.kP;
-
-
-                    double curTime = runTime;
-                    double dT = curTime - lastTime;
-                    double d = ((error - lastError) / dT) * DriveConstants.kD;
-
-
-                    rx = -(Range.clip(p + d, -0.4, 0.4));
-
-
-                    lastError = error;
-                    lastTime = curTime;
+            if (isAutoTurning) {
+                rx = calculateRotationPower();
+                if (Math.abs(GamepadMappings.turn) > 0.1) {
+                    isAutoTurning = false;
                 }
             } else {
-                lastTime = runTime;
-                lastError = 0;
                 rx = GamepadMappings.turn;
-                text = "NOT pressed";
             }
 
 
@@ -183,13 +98,9 @@ public class DriveTrain {
     }
 
 
-
-
     public void flipState() {
         s = (s.equals(State.ROBOTCENTRIC) ? State.FIELDCENTRIC : State.ROBOTCENTRIC);
     }
-
-
 
 
     public void addTelemetry() {
@@ -197,13 +108,9 @@ public class DriveTrain {
     }
 
 
-
-
     public void resetIMU() {
         imu.resetIMU();
     }
-
-
 
 
     public enum State {
@@ -213,24 +120,16 @@ public class DriveTrain {
         double error = angleWrap(targetHeading - currentHeading);
 
 
-
-
         if (Math.abs(error) < DriveConstants.tolerance) {
             return 0;
         }
 
 
-
-
         double power = error * DriveConstants.kP;
-
-
 
 
         return Math.max(-0.7, Math.min(0.7, power));
     }
-
-
 
 
     public double angleWrap(double degrees) {
@@ -241,8 +140,6 @@ public class DriveTrain {
     public double calculateHeading(Pose2d pose) {
         double robotX = pose.position.x;
         double robotY = pose.position.y;
-
-
 
 
         double deltaX = PoseStorage.goalX - robotX;
@@ -264,6 +161,4 @@ public class DriveTrain {
         return currentHeading;
     }
 }
-
-
 
