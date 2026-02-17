@@ -176,7 +176,7 @@ public class Intake {
 
             @Override
             public boolean run(@NonNull TelemetryPacket telemetryPacket) {
-                setPower(0);
+                setPower(-0.4);
                 return false;
             }
         };

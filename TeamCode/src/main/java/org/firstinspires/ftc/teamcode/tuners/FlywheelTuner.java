@@ -1,4 +1,128 @@
+//package org.firstinspires.ftc.teamcode.tuners;
+//
+//
+//import com.acmerobotics.dashboard.FtcDashboard;
+//import com.acmerobotics.dashboard.config.Config;
+//import com.acmerobotics.dashboard.telemetry.MultipleTelemetry;
+//import com.acmerobotics.roadrunner.Pose2d;
+//import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
+//import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
+//import com.qualcomm.robotcore.hardware.DcMotor;
+//import com.qualcomm.robotcore.hardware.DcMotorEx;
+//import com.qualcomm.robotcore.hardware.PIDFCoefficients;
+//import com.qualcomm.robotcore.hardware.Servo;
+//
+//
+//import org.firstinspires.ftc.teamcode.PoseStorage;
+//import org.firstinspires.ftc.teamcode.drive.MecanumDrive;
+//import org.firstinspires.ftc.teamcode.pid.MiniPID;
+//import org.firstinspires.ftc.teamcode.subsystems.Intake.Intake;
+//import org.firstinspires.ftc.teamcode.subsystems.Outtake.Outtake;
+//
+//
+//@TeleOp
+//@Config
+//public class FlywheelTuner extends LinearOpMode {
+//    public static double VELOCITY = -1330;
+//    public static double POS = 0.86;
+//    public static double POWER = 0.77;
+//    public static boolean intaking = true;
+//    public static boolean transfering = true;
+//    public static double transferPower = 1;
+//    public static double intakePower = 1;
+//    public static double velocityError = 150;
+//
+//    public static double P = 900, I = 0, D = 7, F = 14.8;
+//
+//
+//    Outtake flywheel;
+//    Intake intake;
+//    MecanumDrive drive;
+//
+//
+//    public void runOpMode() {
+//        flywheel = new Outtake(this);
+//        intake = new Intake(this);
+//        drive = new MecanumDrive(hardwareMap, new Pose2d(0, 0, 0));
+//        telemetry = new MultipleTelemetry(telemetry, FtcDashboard.getInstance().getTelemetry());
+////        flywheel.hood.setDirection(Servo.Direction.REVERSE);
+//
+//
+//        waitForStart();
+//        if (isStopRequested()) return;
+//
+//
+//        while (opModeIsActive()) {
+//            double currentVelocity = Math.abs(flywheel.getVelocity());
+//            double error = Math.abs(VELOCITY) - Math.abs(currentVelocity);
+//            drive.localizer.update();
+//            flywheel.hood.setPosition(POS);
+//
+////            flywheel.motor1.setVelocityPIDFCoefficients(P, I, D, F);
+////            flywheel.motor2.setVelocityPIDFCoefficients(P, I, D, F);
+////            flywheel.motor1.setPIDFCoefficients(DcMotor.RunMode.RUN_USING_ENCODER, new PIDFCoefficients(P, I, D, F));
+////            flywheel.motor2.setPIDFCoefficients(DcMotor.RunMode.RUN_USING_ENCODER, new PIDFCoefficients(P, I, D, F));
+//
+//            if (error > 50) {
+//                flywheel.motor1.setPower(-1);
+//                flywheel.motor2.setPower(-1);
+//            }
+//            else {
+//                flywheel.motor1.setPower(0);
+//                flywheel.motor2.setPower(0);
+//            }
+//
+//
+//
+////            flywheel.setVelocity(VELOCITY);
+//            if (intaking) {
+//                intake.intakePower(intakePower);
+//            }
+//            if (transfering) {
+//                if (Math.abs(currentVelocity) <= Math.abs(VELOCITY) - Math.abs(velocityError)) {
+//                    intake.transferOut(Math.min(transferPower - 0.2, 0.4));
+//                } else {
+//                    intake.transferIn(transferPower);
+//                }
+//            }
+//
+//
+//
+//            flywheel.setVelocity(VELOCITY);
+//
+//
+//
+//
+//
+//
+//
+//
+//            telemetry.addData("Transfer State", intake.transfer.getDirection());
+//            telemetry.addData("Intake State", intake.intakeMotor.getDirection());
+//            telemetry.addData("Error", error);
+//            telemetry.addData("Velocity", currentVelocity);
+//            telemetry.addData("Set point", VELOCITY);
+//            telemetry.addData("BotX", drive.localizer.getPose().position.x);
+//            telemetry.addData("BotY", drive.localizer.getPose().position.y);
+//            telemetry.addData("AutoVelo", flywheel.autoVelo);
+//            telemetry.addData("AutoHoodPos", flywheel.autoHoodPos);
+//            telemetry.addData("currentHoodPos", flywheel.currentHoodPos);
+//            telemetry.addData("Distance", flywheel.distCalc(drive.localizer.getPose()));
+//            telemetry.addData("goalX", PoseStorage.goalX);
+//            telemetry.addData("goalY", PoseStorage.goalY);
+//            telemetry.update();
+//        }
+//    }
+//
+//
+//
+//
+//}
+//
+
 package org.firstinspires.ftc.teamcode.tuners;
+
+
 
 
 import com.acmerobotics.dashboard.FtcDashboard;
@@ -13,11 +137,15 @@ import com.qualcomm.robotcore.hardware.PIDFCoefficients;
 import com.qualcomm.robotcore.hardware.Servo;
 
 
+
+
 import org.firstinspires.ftc.teamcode.PoseStorage;
 import org.firstinspires.ftc.teamcode.drive.MecanumDrive;
 import org.firstinspires.ftc.teamcode.pid.MiniPID;
 import org.firstinspires.ftc.teamcode.subsystems.Intake.Intake;
 import org.firstinspires.ftc.teamcode.subsystems.Outtake.Outtake;
+
+
 
 
 @TeleOp
@@ -32,12 +160,17 @@ public class FlywheelTuner extends LinearOpMode {
     public static double intakePower = 1;
     public static double velocityError = 150;
 
+
     public static double P = 900, I = 0, D = 7, F = 14.8;
+
+
 
 
     Outtake flywheel;
     Intake intake;
     MecanumDrive drive;
+
+
 
 
     public void runOpMode() {
@@ -48,8 +181,12 @@ public class FlywheelTuner extends LinearOpMode {
 //        flywheel.hood.setDirection(Servo.Direction.REVERSE);
 
 
+
+
         waitForStart();
         if (isStopRequested()) return;
+
+
 
 
         while (opModeIsActive()) {
@@ -72,8 +209,6 @@ public class FlywheelTuner extends LinearOpMode {
                 flywheel.motor2.setPower(0);
             }
 
-
-
 //            flywheel.setVelocity(VELOCITY);
             if (intaking) {
                 intake.intakePower(intakePower);
@@ -86,16 +221,7 @@ public class FlywheelTuner extends LinearOpMode {
                 }
             }
 
-
-
             flywheel.setVelocity(VELOCITY);
-
-
-
-
-
-
-
 
             telemetry.addData("Transfer State", intake.transfer.getDirection());
             telemetry.addData("Intake State", intake.intakeMotor.getDirection());
@@ -113,9 +239,4 @@ public class FlywheelTuner extends LinearOpMode {
             telemetry.update();
         }
     }
-
-
-
-
 }
-

@@ -70,12 +70,12 @@ public class Blue12Alliance extends LinearOpMode implements FCV2 {
 
 
         Action artifact3 = drive.actionBuilder(new Pose2d(FCV2.BLUE_CLOSE_SHOOT.x, FCV2.BLUE_CLOSE_SHOOT.y, FCV2.BLUE_CLOSE_ANGLE))
-            .strafeToLinearHeading(FCV2.GPP_BLUE_ARTIFACT, FCV2.BLUE_ARTIFACT_ANGLE)
-            .strafeToConstantHeading(new Vector2d(FCV2.GPP_BLUE_ARTIFACT.x, FCV2.GPP_BLUE_ARTIFACT.y+ARTIFACT_DIST+2))
+            .strafeToLinearHeading(FCV2.GPP_BLUE_ARTIFACT_CLOSE, FCV2.BLUE_ARTIFACT_ANGLE)
+            .strafeToConstantHeading(new Vector2d(FCV2.GPP_BLUE_ARTIFACT_CLOSE.x, FCV2.GPP_BLUE_ARTIFACT_CLOSE.y+ARTIFACT_DIST+2))
 //                .strafeToLinearHeading(FCV2.BLUE_GATE, 0)
             .build();
 
-        Action artifact3_return = drive.actionBuilder(new Pose2d(FCV2.GPP_BLUE_ARTIFACT.x, FCV2.GPP_BLUE_ARTIFACT.y + FCV2.ARTIFACT_DIST, FCV2.BLUE_ARTIFACT_ANGLE))
+        Action artifact3_return = drive.actionBuilder(new Pose2d(FCV2.GPP_BLUE_ARTIFACT_CLOSE.x, FCV2.GPP_BLUE_ARTIFACT_CLOSE.y + FCV2.ARTIFACT_DIST, FCV2.BLUE_ARTIFACT_ANGLE))
 
             //                .setReversed(true)
             .strafeToLinearHeading(FCV2.BLUE_CLOSE_SHOOT, FCV2.BLUE_CLOSE_ANGLE)

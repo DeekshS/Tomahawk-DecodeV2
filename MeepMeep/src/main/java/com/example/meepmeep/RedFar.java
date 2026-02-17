@@ -44,10 +44,10 @@ public class RedFar {
 
         Action gpp = drive.actionBuilder(new Pose2d(FCV2.RED_FAR_SHOOT, FCV2.RED_FAR_ANGLE))
 //            .setTangent(Math.toRadians(0))
-            .splineToLinearHeading(new Pose2d(new Vector2d(FCV2.GPP_RED_ARTIFACT.x, FCV2.GPP_RED_ARTIFACT.y-FCV2.ARTIFACT_DIST), FCV2.RED_ARTIFACT_ANGLE), Math.toRadians(90))
+            .splineToLinearHeading(new Pose2d(new Vector2d(FCV2.GPP_RED_ARTIFACT_CLOSE.x, FCV2.GPP_RED_ARTIFACT_CLOSE.y-FCV2.ARTIFACT_DIST), FCV2.RED_ARTIFACT_ANGLE), Math.toRadians(90))
             .build();
 
-        Action gpp_return = drive.actionBuilder(new Pose2d(new Vector2d(FCV2.GPP_RED_ARTIFACT.x, FCV2.GPP_RED_ARTIFACT.y-FCV2.ARTIFACT_DIST), FCV2.RED_ARTIFACT_ANGLE))
+        Action gpp_return = drive.actionBuilder(new Pose2d(new Vector2d(FCV2.GPP_RED_ARTIFACT_CLOSE.x, FCV2.GPP_RED_ARTIFACT_CLOSE.y-FCV2.ARTIFACT_DIST), FCV2.RED_ARTIFACT_ANGLE))
             .strafeToLinearHeading(FCV2.RED_FAR_SHOOT, FCV2.RED_FAR_ANGLE)
             .build();
 

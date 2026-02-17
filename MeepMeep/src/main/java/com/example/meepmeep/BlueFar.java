@@ -44,10 +44,10 @@ public class BlueFar {
 
         Action gpp = drive.actionBuilder(new Pose2d(FCV2.BLUE_FAR_SHOOT, FCV2.BLUE_FAR_ANGLE))
             .setTangent(0)
-            .splineToSplineHeading(new Pose2d(new Vector2d(FCV2.GPP_BLUE_ARTIFACT.x, FCV2.GPP_BLUE_ARTIFACT.y+FCV2.ARTIFACT_DIST+10), FCV2.BLUE_ARTIFACT_ANGLE), Math.toRadians(90))
+            .splineToSplineHeading(new Pose2d(new Vector2d(FCV2.GPP_BLUE_ARTIFACT_FAR.x, FCV2.GPP_BLUE_ARTIFACT_FAR.y+FCV2.ARTIFACT_DIST+10), FCV2.BLUE_ARTIFACT_ANGLE), Math.toRadians(90))
             .build();
 
-        Action gpp_return = drive.actionBuilder(new Pose2d(new Vector2d(FCV2.GPP_BLUE_ARTIFACT.x, FCV2.GPP_BLUE_ARTIFACT.y+FCV2.ARTIFACT_DIST+10), FCV2.BLUE_ARTIFACT_ANGLE))
+        Action gpp_return = drive.actionBuilder(new Pose2d(new Vector2d(FCV2.GPP_BLUE_ARTIFACT_FAR.x, FCV2.GPP_BLUE_ARTIFACT_FAR.y+FCV2.ARTIFACT_DIST+10), FCV2.BLUE_ARTIFACT_ANGLE))
             .strafeToLinearHeading(FCV2.BLUE_FAR_SHOOT, FCV2.BLUE_FAR_ANGLE)
             .build();
 

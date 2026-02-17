@@ -37,7 +37,7 @@ public class Red15 {
 
         Action artifact1 = drive.actionBuilder(new Pose2d(FCV2.RED_CLOSE_SHOOT.x, FCV2.RED_CLOSE_SHOOT.y, FCV2.RED_CLOSE_ANGLE))
             .strafeToLinearHeading(new Vector2d(FCV2.PPG_RED_ARTIFACT.x, FCV2.PPG_RED_ARTIFACT.y), FCV2.RED_ARTIFACT_ANGLE)
-            .lineToY(FCV2.PPG_RED_ARTIFACT.y - FCV2.ARTIFACT_DIST - 1)
+            .strafeToConstantHeading(new Vector2d(FCV2.PPG_RED_ARTIFACT.x, FCV2.PPG_RED_ARTIFACT.y - FCV2.ARTIFACT_DIST - 1))
             .strafeToLinearHeading(FCV2.RED_GATE, 0)
             .build();
 
@@ -52,7 +52,7 @@ public class Red15 {
 
             .setTangent(FCV2.RED_ARTIFACT_ANGLE)
 
-            .lineToY(FCV2.PGP_RED_ARTIFACT.y - FCV2.ARTIFACT_DIST- 2)
+            .strafeToConstantHeading(new Vector2d(FCV2.PGP_RED_ARTIFACT.x, FCV2.PGP_RED_ARTIFACT.y - FCV2.ARTIFACT_DIST- 2))
 //            .setReversed(true)
 //            .splineToLinearHeading(new Pose2d(FCV2.PGP_RED_ARTIFACT.x, FCV2.PGP_RED_ARTIFACT.y+FCV2.ARTIFACT_DIST, FCV2.RED_ARTIFACT_ANGLE), -Math.PI/2.2)
 
@@ -67,12 +67,12 @@ public class Red15 {
 
 
         Action artifact3 = drive.actionBuilder(new Pose2d(FCV2.RED_CLOSE_SHOOT.x, FCV2.RED_CLOSE_SHOOT.y, FCV2.RED_CLOSE_ANGLE))
-            .strafeToLinearHeading(FCV2.GPP_RED_ARTIFACT, FCV2.RED_ARTIFACT_ANGLE)
-            .strafeToConstantHeading(new Vector2d(FCV2.GPP_RED_ARTIFACT.x, FCV2.GPP_RED_ARTIFACT.y - FCV2.ARTIFACT_DIST - 2))
+            .strafeToLinearHeading(FCV2.GPP_RED_ARTIFACT_CLOSE, FCV2.RED_ARTIFACT_ANGLE)
+            .strafeToConstantHeading(new Vector2d(FCV2.GPP_RED_ARTIFACT_CLOSE.x, FCV2.GPP_RED_ARTIFACT_CLOSE.y - FCV2.ARTIFACT_DIST - 2))
 //                .strafeToLinearHeading(FCV2.RED_GATE, 0)
             .build();
 
-        Action artifact3_return = drive.actionBuilder(new Pose2d(FCV2.GPP_RED_ARTIFACT.x, FCV2.GPP_RED_ARTIFACT.y - FCV2.ARTIFACT_DIST, FCV2.RED_ARTIFACT_ANGLE))
+        Action artifact3_return = drive.actionBuilder(new Pose2d(FCV2.GPP_RED_ARTIFACT_CLOSE.x, FCV2.GPP_RED_ARTIFACT_CLOSE.y - FCV2.ARTIFACT_DIST, FCV2.RED_ARTIFACT_ANGLE))
 
             //                .setReversed(true)
             .strafeToLinearHeading(FCV2.RED_CLOSE_SHOOT, FCV2.RED_CLOSE_ANGLE)
@@ -107,12 +107,12 @@ public class Red15 {
         bot.runAction(
             new SequentialAction(
                 preload,
-//                artifact2,
-//                artifact2_return,
-//                artifact1,
-//                artifact1_return,
-//                artifact3,
-//                artifact3_return,
+                artifact2,
+                artifact2_return,
+                artifact1,
+                artifact1_return,
+                artifact3,
+                artifact3_return,
                 hp,
                 hp_return
             )

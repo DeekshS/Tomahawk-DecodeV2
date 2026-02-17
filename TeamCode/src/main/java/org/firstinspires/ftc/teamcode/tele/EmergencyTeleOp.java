@@ -1,35 +1,44 @@
 package org.firstinspires.ftc.teamcode.tele;
 
+
 import com.acmerobotics.dashboard.FtcDashboard;
 import com.acmerobotics.dashboard.telemetry.MultipleTelemetry;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
+
 
 import org.firstinspires.ftc.teamcode.R;
 import org.firstinspires.ftc.teamcode.fsm.EmergencyFSM;
 import org.firstinspires.ftc.teamcode.gamepad.GamepadMappings;
 import org.firstinspires.ftc.teamcode.subsystems.Robot;
 
+
 @TeleOp
 public class EmergencyTeleOp extends LinearOpMode {
+
 
     @Override
     public void runOpMode() throws InterruptedException {
         // Initialize controls first
         GamepadMappings controls = new GamepadMappings(gamepad1, gamepad2);
 
+
         // Initialize FSM with fully constructed Robot
         EmergencyFSM fsm = new EmergencyFSM(this, telemetry, controls);
         telemetry = new MultipleTelemetry(telemetry, FtcDashboard.getInstance().getTelemetry());
 
+
         telemetry.addLine("Initialization complete");
         telemetry.update();
 
+
         waitForStart();
+
 
         while (opModeIsActive()) {
             controls.update();
             fsm.gazelleUpdate();
+
 
             Robot.drive.localizer.update();
             telemetry.addData("Velocity", Robot.outtake.getVelocity());
@@ -38,9 +47,18 @@ public class EmergencyTeleOp extends LinearOpMode {
             telemetry.addData("botX", Robot.drive.localizer.getPose().position.x);
             telemetry.addData("botY", Robot.drive.localizer.getPose().position.y);
             telemetry.addData("botHeading", Math.toDegrees(Robot.drive.localizer.getPose().heading.toDouble()));
+            telemetry.addData("text", Robot.driveTrain.text);
+            telemetry.addData("autoTurnControl", controls.autoTurn.value());
+            telemetry.addData("isAutoTurning", Robot.driveTrain.isAutoTurning);
+            telemetry.addData("flywheelClose", controls.flywheelClose2.value());
+            telemetry.addData("flywheelFar", controls.flywheelFar1.value());
+
 
             // Optional telemetry
             telemetry.update();
         }
     }
 }
+
+
+

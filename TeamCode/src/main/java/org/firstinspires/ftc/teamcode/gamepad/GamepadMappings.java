@@ -49,9 +49,9 @@ public class GamepadMappings {
 
 
     //=============== OUTTAKE ===============
-    public Toggle flywheelClose1;
+//    public Toggle flywheelClose1;
     public Toggle flywheelClose2;
-    public Toggle flywheelClose3;
+//    public Toggle flywheelClose3;
     public Toggle flywheelFar1;
     public Toggle flywheelFar2;
 
@@ -85,9 +85,9 @@ public class GamepadMappings {
 
 
         //=============== OUTTAKE ===============
-        flywheelClose1 = new Toggle(false);
+//        flywheelClose1 = new Toggle(false);
         flywheelClose2 = new Toggle(false);
-        flywheelClose3 = new Toggle(false);
+//        flywheelClose3 = new Toggle(false);
 
 
         flywheelFar1 = new Toggle(false);
@@ -112,7 +112,7 @@ public class GamepadMappings {
         strafe = gamepad1.left_stick_x;
         turn = gamepad1.right_stick_x;
         reset.update(gamepad1.dpad_up);
-        autoTurn.update(gamepad1.dpad_left);
+        autoTurn.update(gamepad1.left_bumper);
     }
 
 

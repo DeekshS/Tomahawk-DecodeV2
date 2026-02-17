@@ -38,12 +38,12 @@ public class Red15New extends LinearOpMode implements FCV2 {
 
 
         Action preload = drive.actionBuilder(FCV2.RED_CLOSE_START)
-            .strafeToLinearHeading(FCV2.RED_CLOSE_SHOOT, FCV2.RED_CLOSE_ANGLE+Math.toRadians(13))
+            .strafeToLinearHeading(FCV2.RED_CLOSE_SHOOT, FCV2.RED_CLOSE_ANGLE)
             .build();
 
         Action artifact1 = drive.actionBuilder(new Pose2d(FCV2.RED_CLOSE_SHOOT.x, FCV2.RED_CLOSE_SHOOT.y, FCV2.RED_CLOSE_ANGLE))
             .strafeToLinearHeading(new Vector2d(FCV2.PPG_RED_ARTIFACT.x, FCV2.PPG_RED_ARTIFACT.y), FCV2.RED_ARTIFACT_ANGLE)
-            .lineToY(FCV2.PPG_RED_ARTIFACT.y - ARTIFACT_DIST - 1)
+            .strafeToConstantHeading(new Vector2d(FCV2.PPG_RED_ARTIFACT.x, FCV2.PPG_RED_ARTIFACT.y - FCV2.ARTIFACT_DIST - 1))
             .strafeToLinearHeading(FCV2.RED_GATE, 0)
             .build();
 
@@ -58,13 +58,13 @@ public class Red15New extends LinearOpMode implements FCV2 {
 
             .setTangent(FCV2.RED_ARTIFACT_ANGLE)
 
-            .lineToY(FCV2.PGP_RED_ARTIFACT.y - ARTIFACT_DIST - 4)
+            .strafeToConstantHeading(new Vector2d(FCV2.PGP_RED_ARTIFACT.x, FCV2.PGP_RED_ARTIFACT.y - FCV2.ARTIFACT_DIST- 2))
 //            .setReversed(true)
 //            .splineToLinearHeading(new Pose2d(FCV2.PGP_RED_ARTIFACT.x, FCV2.PGP_RED_ARTIFACT.y+FCV2.ARTIFACT_DIST, FCV2.RED_ARTIFACT_ANGLE), -Math.PI/2.2)
 
             .build();
 
-        Action artifact2_return = drive.actionBuilder(new Pose2d(FCV2.PGP_RED_ARTIFACT.x, FCV2.PGP_RED_ARTIFACT.y - ARTIFACT_DIST - 2, FCV2.RED_ARTIFACT_ANGLE))
+        Action artifact2_return = drive.actionBuilder(new Pose2d(FCV2.PGP_RED_ARTIFACT.x, FCV2.PGP_RED_ARTIFACT.y - FCV2.ARTIFACT_DIST - 2, FCV2.RED_ARTIFACT_ANGLE))
             .setReversed(true)
             .splineToLinearHeading(new Pose2d(FCV2.RED_CLOSE_SHOOT.x, FCV2.RED_CLOSE_SHOOT.y, FCV2.RED_CLOSE_ANGLE), Math.PI/8)
 
@@ -73,42 +73,21 @@ public class Red15New extends LinearOpMode implements FCV2 {
 
 
         Action artifact3 = drive.actionBuilder(new Pose2d(FCV2.RED_CLOSE_SHOOT.x, FCV2.RED_CLOSE_SHOOT.y, FCV2.RED_CLOSE_ANGLE))
-            .strafeToLinearHeading(FCV2.GPP_RED_ARTIFACT, FCV2.RED_ARTIFACT_ANGLE)
-            .strafeToConstantHeading(new Vector2d(FCV2.GPP_RED_ARTIFACT.x, FCV2.GPP_RED_ARTIFACT.y - ARTIFACT_DIST - 2))
+            .strafeToLinearHeading(FCV2.GPP_RED_ARTIFACT_CLOSE, FCV2.RED_ARTIFACT_ANGLE)
+            .strafeToConstantHeading(new Vector2d(FCV2.GPP_RED_ARTIFACT_CLOSE.x, FCV2.GPP_RED_ARTIFACT_CLOSE.y - FCV2.ARTIFACT_DIST - 2))
 //                .strafeToLinearHeading(FCV2.RED_GATE, 0)
             .build();
 
-        Action artifact3_return = drive.actionBuilder(new Pose2d(FCV2.GPP_RED_ARTIFACT.x, FCV2.GPP_RED_ARTIFACT.y - ARTIFACT_DIST, FCV2.RED_ARTIFACT_ANGLE))
+        Action artifact3_return = drive.actionBuilder(new Pose2d(FCV2.GPP_RED_ARTIFACT_CLOSE.x, FCV2.GPP_RED_ARTIFACT_CLOSE.y - FCV2.ARTIFACT_DIST, FCV2.RED_ARTIFACT_ANGLE))
 
             //                .setReversed(true)
-            .strafeToLinearHeading(FCV2.RED_CLOSE_SHOOT, FCV2.RED_CLOSE_ANGLE - 4)
+            .strafeToLinearHeading(FCV2.RED_CLOSE_SHOOT, FCV2.RED_CLOSE_ANGLE)
 
             .build();
 
-        Action park = drive.actionBuilder(new Pose2d(FCV2.RED_CLOSE_SHOOT.x, FCV2.RED_CLOSE_SHOOT.y, FCV2.RED_CLOSE_ANGLE - 4))
+        Action park = drive.actionBuilder(new Pose2d(FCV2.RED_CLOSE_SHOOT.x, FCV2.RED_CLOSE_SHOOT.y, FCV2.RED_CLOSE_ANGLE))
             .strafeTo(new Vector2d(FCV2.PGP_RED_ARTIFACT.x, FCV2.PGP_RED_ARTIFACT.y - 5))
             .build();
-
-//        Action hp = drive.actionBuilder(new Pose2d(FCV2.RED_CLOSE_SHOOT.x, FCV2.RED_CLOSE_SHOOT.y, FCV2.RED_CLOSE_ANGLE))
-//            .strafeToLinearHeading(new Vector2d(FCV2.HP_RED_ARTIFACT.x - 10, FCV2.HP_RED_ARTIFACT.y), Math.toRadians(180))
-//            .strafeTo(new Vector2d(FCV2.HP_RED_ARTIFACT.x, FCV2.HP_RED_ARTIFACT.y))
-//            .build();
-//
-//        Action hp_return = drive.actionBuilder(new Pose2d(FCV2.HP_RED_ARTIFACT.x, FCV2.HP_RED_ARTIFACT.y, Math.toRadians(180)))
-////                .strafeToLinearHeading(FCV2.RED_CLOSE_SHOOT, FCV2.RED_CLOSE_ANGLE)
-//            .setTangent(Math.toRadians(270))
-//            .splineToLinearHeading(new Pose2d(FCV2.RED_CLOSE_SHOOT, FCV2.RED_CLOSE_ANGLE), Math.toRadians(0))
-//            .build();
-//
-//        Action hp2 = drive.actionBuilder(new Pose2d(FCV2.RED_CLOSE_SHOOT.x, FCV2.RED_CLOSE_SHOOT.y, FCV2.RED_CLOSE_ANGLE))
-////            .strafeToLinearHeading(FCV2.HP_RED_ARTIFACT, Math.toRadians(180))
-//            .strafeToLinearHeading(new Vector2d(FCV2.HP_RED_ARTIFACT.x - 10, FCV2.HP_RED_ARTIFACT.y), Math.toRadians(180))
-//            .strafeTo(new Vector2d(FCV2.HP_RED_ARTIFACT.x, FCV2.HP_RED_ARTIFACT.y))
-//            .build();
-//
-//        Action hp_return2 = drive.actionBuilder(new Pose2d(FCV2.HP_RED_ARTIFACT.x, FCV2.HP_RED_ARTIFACT.y, Math.toRadians(180)))
-//            .strafeToLinearHeading(FCV2.RED_CLOSE_SHOOT, FCV2.RED_CLOSE_ANGLE)
-//            .build();
 
         Action hp = drive.actionBuilder(new Pose2d(FCV2.RED_CLOSE_SHOOT.x, FCV2.RED_CLOSE_SHOOT.y, FCV2.RED_CLOSE_ANGLE))
             .strafeToLinearHeading(new Vector2d(FCV2.HP_RED_ARTIFACT.x + 14, FCV2.HP_RED_ARTIFACT.y), Math.toRadians(-180))
@@ -121,12 +100,15 @@ public class Red15New extends LinearOpMode implements FCV2 {
             .splineToLinearHeading(new Pose2d(FCV2.RED_CLOSE_SHOOT, FCV2.RED_CLOSE_ANGLE), Math.toRadians(-180))
             .build();
 
-//        Action hp2 = drive.actionBuilder(new Pose2d(FCV2.RED_CLOSE_SHOOT.x, FCV2.RED_CLOSE_SHOOT.y, FCV2.RED_CLOSE_ANGLE))
-////            .strafeToLinearHeading(FCV2.HP_RED_ARTIFACT, Math.toRadians(180))
-//            .strafeToLinearHeading(new Vector2d(FCV2.HP_RED_ARTIFACT.x + 14, FCV2.HP_RED_ARTIFACT.y + 4), Math.toRadians(-180))
-//            .strafeTo(new Vector2d(FCV2.HP_RED_ARTIFACT.x, FCV2.HP_RED_ARTIFACT.y + 4))
-//            .build();
+        Action hp2 = drive.actionBuilder(new Pose2d(FCV2.RED_CLOSE_SHOOT.x, FCV2.RED_CLOSE_SHOOT.y, FCV2.RED_CLOSE_ANGLE))
+//            .strafeToLinearHeading(FCV2.HP_RED_ARTIFACT, Math.toRadians(180))
+            .strafeToLinearHeading(new Vector2d(FCV2.HP_RED_ARTIFACT.x - 10, FCV2.HP_RED_ARTIFACT.y), Math.toRadians(180))
+            .strafeTo(new Vector2d(FCV2.HP_RED_ARTIFACT.x, FCV2.HP_RED_ARTIFACT.y))
+            .build();
 
+        Action hp_return2 = drive.actionBuilder(new Pose2d(FCV2.HP_RED_ARTIFACT.x, FCV2.HP_RED_ARTIFACT.y, Math.toRadians(180)))
+            .strafeToLinearHeading(FCV2.RED_CLOSE_SHOOT, FCV2.RED_CLOSE_ANGLE)
+            .build();
 
 
         waitForStart();
@@ -134,6 +116,7 @@ public class Red15New extends LinearOpMode implements FCV2 {
 
         Actions.runBlocking(
             new ParallelAction(
+                Robot.intake.intakeTimeAction(29.9),
                 new SequentialAction(
                     new ParallelAction(
                         preload,
@@ -149,11 +132,11 @@ public class Red15New extends LinearOpMode implements FCV2 {
                     Robot.transfer.transferStopAction(),
                     //FIRST SPIKE
                     new ParallelAction(
-                        artifact2,
-                        Robot.intake.intakeTimeAction(INTAKE_WAIT_TIME)
+                        artifact2
+//                        Robot.intake.intakeTimeAction(INTAKE_WAIT_TIME)
                     ),
 //
-                    Robot.intake.stop(),
+//                    Robot.intake.stop(),
 
 
                     new ParallelAction(
@@ -172,12 +155,12 @@ public class Red15New extends LinearOpMode implements FCV2 {
 //
                     //SECOND SPIKE
                     new ParallelAction(
-                        artifact1,
-                        Robot.intake.intakeTimeAction(INTAKE_WAIT_TIME)
+                        artifact1
+//                        Robot.intake.intakeTimeAction(INTAKE_WAIT_TIME)
 
                     ),
 //
-                    Robot.intake.stop(),
+//                    Robot.intake.stop(),
 
                     new ParallelAction(
                         artifact1_return,
@@ -192,11 +175,11 @@ public class Red15New extends LinearOpMode implements FCV2 {
                     //THIRD SPIKE
                     Robot.transfer.transferStopAction(),
                     new ParallelAction(
-                        artifact3,
-                        Robot.intake.intakeTimeAction(INTAKE_WAIT_TIME)
+                        artifact3
+//                        Robot.intake.intakeTimeAction(INTAKE_WAIT_TIME)
                     ),
 
-                    Robot.intake.stop(),
+//                    Robot.intake.stop(),
                     new ParallelAction(
                         artifact3_return,
                         Robot.outtake.shootCloseAction()
@@ -209,11 +192,11 @@ public class Red15New extends LinearOpMode implements FCV2 {
                     ),
                     Robot.transfer.transferStopAction(),
                     new ParallelAction(
-                        hp,
-                        Robot.intake.intakeTimeAction(INTAKE_WAIT_TIME)
+                        hp
+//                        Robot.intake.intakeTimeAction(INTAKE_WAIT_TIME)
                     ),
 
-                    Robot.intake.stop(),
+//                    Robot.intake.stop(),
                     new ParallelAction(
                         hp_return
 //                                Robot.outtake.shootCloseAction(Robot)

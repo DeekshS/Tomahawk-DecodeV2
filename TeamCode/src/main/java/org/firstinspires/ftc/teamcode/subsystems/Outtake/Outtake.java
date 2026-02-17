@@ -60,16 +60,17 @@ public class Outtake {
 //        motor2.setDirection(DcMotorEx.Direction.REVERSE);
         hood = mode.hardwareMap.get(Servo.class, "hood");
 
+        hood.setDirection(Servo.Direction.REVERSE);
+
 
         motor1.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         motor2.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
 
-
-        motor1.setDirection(DcMotorEx.Direction.REVERSE);
-
-
         motor1.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         motor2.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+
+
+        motor1.setDirection(DcMotorEx.Direction.REVERSE);
 
         motor1.setPIDFCoefficients(DcMotor.RunMode.RUN_USING_ENCODER, new PIDFCoefficients(P, I, D, F));
         motor2.setPIDFCoefficients(DcMotor.RunMode.RUN_USING_ENCODER, new PIDFCoefficients(P, I, D, F));
@@ -102,10 +103,7 @@ public class Outtake {
 //        motor2.setPIDFCoefficients(DcMotor.RunMode.RUN_USING_ENCODER, new PIDFCoefficients(P, I, D, F));
         motor1.setVelocityPIDFCoefficients(P, I, D, F);
         motor2.setVelocityPIDFCoefficients(P, I, D, F);
-//
-//
-//
-//
+
         setVelocity(velocity);
 //        if (Math.abs(Math.abs(velocity) - getVelocity()) < 100) setVelocity(velocity);
 //        else bangController(velocity);

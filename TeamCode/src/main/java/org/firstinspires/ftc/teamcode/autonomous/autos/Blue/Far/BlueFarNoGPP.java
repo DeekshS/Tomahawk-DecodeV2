@@ -1,5 +1,8 @@
 package org.firstinspires.ftc.teamcode.autonomous.autos.Blue.Far;
 
+
+
+
 import static org.firstinspires.ftc.teamcode.subsystems.Outtake.OuttakeConstants.FAR_HOOD1;
 import static org.firstinspires.ftc.teamcode.subsystems.Outtake.OuttakeConstants.FAR_VELOCITY1;
 
@@ -31,7 +34,7 @@ import org.jetbrains.annotations.NotNull;
 
 @Autonomous
 @Config
-public class BlueFarAuto extends LinearOpMode implements FCV2 {
+public class BlueFarNoGPP extends LinearOpMode implements FCV2 {
 
 
     public static double INTAKE_WAIT_TIME = 1.4;
@@ -59,20 +62,6 @@ public class BlueFarAuto extends LinearOpMode implements FCV2 {
             .strafeToLinearHeading(FCV2.BLUE_FAR_SHOOT, FCV2.BLUE_FAR_ANGLE)
             .build();
 
-
-        Action gpp = drive.actionBuilder(new Pose2d(FCV2.BLUE_FAR_SHOOT, FCV2.BLUE_FAR_ANGLE))
-            .setTangent(0)
-            .strafeToLinearHeading(FCV2.GPP_BLUE_ARTIFACT_FAR, FCV2.BLUE_ARTIFACT_ANGLE)
-            .strafeToConstantHeading(new Vector2d(FCV2.GPP_BLUE_ARTIFACT_FAR.x, FCV2.GPP_BLUE_ARTIFACT_FAR.y+FCV2.ARTIFACT_DIST+13))
-//            .splineToSplineHeading(new Pose2d(new Vector2d(FCV2.GPP_BLUE_ARTIFACT_FAR.x, FCV2.GPP_BLUE_ARTIFACT_FAR.y+FCV2.ARTIFACT_DIST+13), FCV2.BLUE_ARTIFACT_ANGLE), Math.toRadians(90))
-            .build();
-
-
-        Action gpp_return = drive.actionBuilder(new Pose2d(new Vector2d(FCV2.GPP_BLUE_ARTIFACT_FAR.x, FCV2.GPP_BLUE_ARTIFACT_FAR.y+FCV2.ARTIFACT_DIST+13), FCV2.BLUE_ARTIFACT_ANGLE))
-            .strafeToLinearHeading(FCV2.BLUE_FAR_SHOOT, FCV2.BLUE_FAR_ANGLE)
-            .build();
-
-
         Action human1 = drive.actionBuilder(new Pose2d(FCV2.BLUE_FAR_SHOOT, FCV2.BLUE_FAR_ANGLE))
 //            .setTangent(0)
 //
@@ -88,17 +77,17 @@ public class BlueFarAuto extends LinearOpMode implements FCV2 {
 //
         Action human1_return = drive.actionBuilder(new Pose2d(new Vector2d(FCV2.HP_BLUE_ARTIFACT.x, FCV2.HP_BLUE_ARTIFACT.y+9), FCV2.BLUE_ARTIFACT_ANGLE))
 //            .setTangent(Math.toRadians(0))
-            .strafeToSplineHeading(FCV2.BLUE_FAR_SHOOT, FCV2.BLUE_FAR_ANGLE-Math.toRadians(4))
+            .strafeToSplineHeading(FCV2.BLUE_FAR_SHOOT, FCV2.BLUE_FAR_ANGLE)
             .build();
 //
-        Action human2 = drive.actionBuilder(new Pose2d(FCV2.BLUE_FAR_SHOOT, FCV2.BLUE_FAR_ANGLE-Math.toRadians(2)))
+        Action human2 = drive.actionBuilder(new Pose2d(FCV2.BLUE_FAR_SHOOT, FCV2.BLUE_FAR_ANGLE))
             .turnTo(FCV2.BLUE_ARTIFACT_ANGLE)
             .strafeToConstantHeading(FCV2.HP_BLUE_ARTIFACT)
             .build();
 
 
         Action human2_return = drive.actionBuilder(new Pose2d(FCV2.HP_BLUE_ARTIFACT, FCV2.BLUE_ARTIFACT_ANGLE))
-            .strafeToLinearHeading(FCV2.BLUE_FAR_SHOOT, FCV2.BLUE_FAR_ANGLE-Math.toRadians(2))
+            .strafeToLinearHeading(FCV2.BLUE_FAR_SHOOT, FCV2.BLUE_FAR_ANGLE)
             .build();
 
 
@@ -109,7 +98,17 @@ public class BlueFarAuto extends LinearOpMode implements FCV2 {
 
 
         Action human3_return = drive.actionBuilder(new Pose2d(FCV2.HP_BLUE_ARTIFACT, FCV2.BLUE_ARTIFACT_ANGLE))
-            .strafeToLinearHeading(FCV2.BLUE_FAR_SHOOT, FCV2.BLUE_FAR_ANGLE-Math.toRadians(2))
+            .strafeToLinearHeading(FCV2.BLUE_FAR_SHOOT, FCV2.BLUE_FAR_ANGLE)
+            .build();
+
+        Action human4 = drive.actionBuilder(new Pose2d(FCV2.BLUE_FAR_SHOOT, FCV2.BLUE_FAR_ANGLE))
+            .turnTo(FCV2.BLUE_ARTIFACT_ANGLE)
+            .strafeToConstantHeading(FCV2.HP_BLUE_ARTIFACT)
+            .build();
+
+
+        Action human4_return = drive.actionBuilder(new Pose2d(FCV2.HP_BLUE_ARTIFACT, FCV2.BLUE_ARTIFACT_ANGLE))
+            .strafeToLinearHeading(FCV2.BLUE_FAR_SHOOT, FCV2.BLUE_FAR_ANGLE)
             .build();
 
 
@@ -140,32 +139,6 @@ public class BlueFarAuto extends LinearOpMode implements FCV2 {
                         Robot.outtake.shootFarAction(),
                         BotActions.transferHold(SHOOTER_TIME),
                         new SleepAction(SHOOTER_TIME)
-                    ),
-
-
-                    Robot.transfer.transferStopAction(),
-
-
-                    new ParallelAction(
-                        gpp
-//                         Robot.intake.intakeTimeAction(INTAKE_WAIT_TIME)
-                    ),
-//
-//                    Robot.intake.stop(),
-
-
-
-
-                    new ParallelAction(
-                        gpp_return,
-                        Robot.outtake.shootFarAction()
-                    ),
-
-
-                    new ParallelAction(
-                        Robot.outtake.shootFarAction(),
-                        BotActions.transferHold(SHOOTER_TIME),
-                        new SleepAction(SHOOTER_TIME)
 
 
                     ),
@@ -175,8 +148,8 @@ public class BlueFarAuto extends LinearOpMode implements FCV2 {
 
 
                     new ParallelAction(
-                        human1
-//                         Robot.intake.intakeTimeAction(INTAKE_WAIT_TIME)
+                        human1,
+                        Robot.intake.intakeTimeAction(INTAKE_WAIT_TIME+0.6)
                     ),
 //
 //                    Robot.intake.stop(),
@@ -203,8 +176,8 @@ public class BlueFarAuto extends LinearOpMode implements FCV2 {
 
 
                     new ParallelAction(
-                        human2
-//                         Robot.intake.intakeTimeAction(INTAKE_WAIT_TIME)
+                        human2,
+                        Robot.intake.intakeTimeAction(INTAKE_WAIT_TIME)
                     ),
 //
 //                    Robot.intake.stop(),
@@ -231,8 +204,8 @@ public class BlueFarAuto extends LinearOpMode implements FCV2 {
 
 
                     new ParallelAction(
-                        human3
-//                         Robot.intake.intakeTimeAction(INTAKE_WAIT_TIME)
+                        human3,
+                        Robot.intake.intakeTimeAction(INTAKE_WAIT_TIME)
                     ),
 //
 //                    Robot.intake.stop(),
@@ -254,6 +227,31 @@ public class BlueFarAuto extends LinearOpMode implements FCV2 {
 
                     ),
 
+                    Robot.transfer.transferStopAction(),
+
+                    new ParallelAction(
+                        human4,
+                        Robot.intake.intakeTimeAction(INTAKE_WAIT_TIME)
+                    ),
+//
+//                    Robot.intake.stop(),
+
+
+
+
+                    new ParallelAction(
+                        human4_return,
+                        Robot.outtake.shootFarAction()
+                    ),
+
+
+                    new ParallelAction(
+                        Robot.outtake.shootFarAction(),
+                        BotActions.transferHold(SHOOTER_TIME),
+                        new SleepAction(SHOOTER_TIME)
+
+
+                    ),
 
                     Robot.transfer.transferStopAction(),
                     park
